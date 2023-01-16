@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import "./styles/App.css";
+
+import Home from "./components/Home";
+import Header from "./components/Header";
+import Navbar from "./components/NavBar";
+import Login from "./components/dashboard/login/Login"
+import Signup from "./components/dashboard/login/Signup"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+import AuthService from "./services/authService";
+import { Token } from "@mui/icons-material";
 
 function App() {
+
+  const [token] = useState(AuthService.getCurrentUser());
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Header />
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/login" element={token ? <Home />: <Login />} />
+          <Route path="/register" element={token ? <Home />:<Signup />} />
+        </Routes>
+        <Navbar />
+      </BrowserRouter>
     </div>
   );
 }
