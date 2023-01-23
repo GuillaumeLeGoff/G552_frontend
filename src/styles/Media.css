@@ -1,0 +1,25 @@
+.dropZone {
+  margin-top: 5%;
+  border: 2px #b5b5b9 dashed;
+  background-color: #172228;
+  padding: 5%;
+}
+.textDropZone {
+  margin: 0px;
+  color: #ffffff24;
+}
+.modal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.selected-image {
+  width: 100%;
+  
+}
+
+.image {
+  width: 100%;
+  opacity: 0.75;
+}

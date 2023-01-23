@@ -14,13 +14,21 @@ class UploadService {
       });
   }
   upload(file) {
+    console.log(file.file);
     return axios
-      .post(URL_API + "/upload", file, {
+      .post(URL_API + "/upload", { 
+        fileName:file.name,
+        format:file.format,
+        user:file._user,
+        path:file.path,
+        file:file.file,
+      }, {
         headers: {
           "content-type": "multipart/form-data",
         },
       })
       .catch((error) => {
+        console.log('error:');
         console.log(error);
       });
   }

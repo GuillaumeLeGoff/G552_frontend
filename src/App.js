@@ -7,18 +7,23 @@ import Navbar from "./components/NavBar";
 import Login from "./components/dashboard/login/Login";
 import Signup from "./components/dashboard/login/Signup";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AuthService from "./services/authService";
-import { Token } from "@mui/icons-material";
 import { Container } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
+import { appTheme } from "./themes/theme.ts";
+
+
+
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
   return (
+    <ThemeProvider theme={appTheme}>
     <div className="App">
       <BrowserRouter>
         <Header />
-        <Container >
+        <Container maxWidth={false}>
           <Routes>
             <Route index element={<Home />} />
             <Route path="/create" element={token ? <Event /> : <Login />} />
@@ -29,6 +34,7 @@ function App() {
         <Navbar />
       </BrowserRouter>
     </div>
+    </ThemeProvider>
   );
 }
 
