@@ -1,17 +1,18 @@
 import React from "react";
 import Media from "./Media";
-import EventParam from "./EventParam";
-import Grid from "@mui/material/Unstable_Grid2";
-import { Accordion } from "@mui/material";
+import EventList from "./EventList";
+import Grid from "@mui/material/Grid";
 
 function Event() {
   return (
-    <div>
-      <Grid container spacing={2}>
-        <Grid xs={8}><EventParam/></Grid>
-        <Grid xs={4}><Media/></Grid>
+    <Grid container spacing={2}>
+      <Grid item xs={8}>
+        <EventList />
       </Grid>
-    </div>
+      <Grid item xs={4}>
+        <Media />
+      </Grid>
+    </Grid>
   );
 }
 

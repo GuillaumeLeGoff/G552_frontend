@@ -17,7 +17,7 @@ export const appTheme = createTheme({
           secondary: 'rgba(173,171,171,0.5)',
         },
         error: {
-          main: '#d50000',
+          main: '#EC1C0C',
         },
       },
 });

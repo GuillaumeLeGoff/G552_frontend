@@ -23,7 +23,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <Header />
-        <Container maxWidth={false}>
+        <Container >
           <Routes>
             <Route index element={<Home />} />
             <Route path="/create" element={token ? <Event /> : <Login />} />

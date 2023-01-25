@@ -23,3 +23,25 @@
   width: 100%;
   opacity: 0.75;
 }
+
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #1e454d #ffffff00;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    display: none;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #ffffff00;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #1e454d;
+    /* border-radius: 16px; */
+    /* border: 3px solid #ffffff; */
+  }
