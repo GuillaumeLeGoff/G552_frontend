@@ -36,12 +36,10 @@ const style = {
 function EventParam() {
   const [modalOpen, setModalOpen] = useState(false);
 
-  function handleOpenModal() {
-    setModalOpen(true);
+  function toggleModal() {
+    setModalOpen(!modalOpen);
   }
-  function handleCloseModal() {
-    setModalOpen(false);
-  }
+
   return (
     <div>
       <Paper
@@ -85,7 +83,7 @@ function EventParam() {
           ))}
         </TableBody> */}
             <Fab
-              onClick={handleOpenModal}
+              onClick={toggleModal}
               color="secondary"
               size="small"
               sx={{ position: "absolute", bottom: 16, right: 16 }}
@@ -95,11 +93,11 @@ function EventParam() {
           </Table>
         </Box>
       </Paper>
-      <Modal open={modalOpen} onClose={handleCloseModal}>
+      <Modal open={modalOpen} onClose={toggleModal}>
         <Box sx={style}>
           <IconButton
             style={{ position: "absolute", right: "5px", top: "5px" }}
-            onClick={handleCloseModal}
+            onClick={toggleModal}
           >
             <CloseIcon color="secondary" />
           </IconButton>

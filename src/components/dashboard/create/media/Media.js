@@ -23,11 +23,11 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useDropzone } from "react-dropzone";
 
 import React, { useEffect, useState } from "react";
-import authService from "../../../services/authService";
-import uploadService from "../../../services/uploadService";
-import fileService from "../../../services/fileService";
+import authService from "../../../../services/authService";
+import uploadService from "../../../../services/uploadService";
+import fileService from "../../../../services/fileService";
 
-import "../../../styles/Media.css";
+import "../../../../styles/Media.css";
 
 const style = {
   position: "absolute",
@@ -41,9 +41,11 @@ const style = {
 };
 
 function Media() {
+  const [selectedImage, setSelectedImage] = useState(null);
   const [uploadFile, setUploadFile] = useState();
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpenUpload, setModalOpenUpload] = useState(false);
   const [modalOpenSup, setModalOpenSup] = useState(false);
+  const [FileToDelete, setFileToDelete] = useState();
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -55,37 +57,45 @@ function Media() {
   useEffect(() => {
     getUploadFile();
   }, []);
-
+  function DeleteFile() {
+    console.log("result");
+    uploadService.delete(FileToDelete).then(() => {
+      handleCloseModalSup();
+      getUploadFile();
+    });
+  }
   function handleOpenModalUpload() {
-    setModalOpen(true);
+    setModalOpenUpload(true);
   }
   function handleCloseModal() {
-    setModalOpen(false);
+    setModalOpenUpload(false);
   }
-  function handleOpenModalSup() {
+  function handleOpenModalSup(file) {
     setModalOpenSup(true);
+    setFileToDelete(file);
   }
   function handleCloseModalSup() {
     setModalOpenSup(false);
   }
 
   function getUploadFile() {
-    fileService.get().then((result) => {
+    uploadService.get().then((result) => {
       setUploadFile(result.data);
     });
   }
 
   function uploadOneFile(event) {
-    console.log(event);
-
-    uploadService.upload(event[0]).then((result) => {
-      console.log(result);
-    });
+    uploadService
+      .upload(event[0])
+      .then(() => {
+        getUploadFile();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
 
     handleCloseModal();
   }
-
-  const [selectedImage, setSelectedImage] = useState(null);
 
   function handleImageClick(imageId) {
     if (imageId === selectedImage) {
@@ -114,25 +124,33 @@ function Media() {
           <ImageList variant="masonry" cols={2} gap={8}>
             {uploadFile
               ? uploadFile.map((file) => (
-                  <ImageListItem key={file._id}>
+                  <ImageListItem key={file.id}>
                     {file.type.split("/").splice(0, 1).toString() ===
                     "image" ? (
-                      <img
-                        onClick={() => handleImageClick(file._id)}
-                        src={file.path}
-                        alt={file.title}
-                        className={`${
-                          file._id === selectedImage
-                            ? "image"
-                            : "selected-image"
-                        }`}
-                        loading="lazy"
-                      />
+                      <div>
+                        <img
+                          onClick={() => handleImageClick(file.id)}
+                          src={file.path}
+                          alt={file.title}
+                          className={`${
+                            file.id === selectedImage
+                              ? "image"
+                              : "selected-image"
+                          }`}
+                          loading="lazy"
+                        />
+                        {file.id === selectedImage && (
+                          <DeleteIcon
+                            onClick={() => handleOpenModalSup(file)}
+                            color="warning"
+                            sx={{ position: "absolute", top: 5, right: 5 }}
+                          />
+                        )}
+                      </div>
                     ) : (
                       <video
-                        src={`${file.path}?w=248&fit=crop&auto=format`}
-                        srcSet={`${file.path}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                        style={{ width: "100%", height: "100%" }}
+                        src={`${file.path}`}
+                        sx={{ width: "100%", height: "100%" }}
                       />
                     )}
                   </ImageListItem>
@@ -149,8 +167,8 @@ function Media() {
           </Fab>
         </Box>
       </Paper>
-
-      <Modal open={modalOpen} onClose={handleCloseModal}>
+      {/* Modal upload  */}
+      <Modal open={modalOpenUpload} onClose={handleCloseModal}>
         <Box sx={style}>
           <IconButton
             style={{ position: "absolute", right: "5px", top: "5px" }}
@@ -182,6 +200,8 @@ function Media() {
           </section>
         </Box>
       </Modal>
+
+      {/* Modal confirm suppression file */}
       <Modal open={modalOpenSup} onClose={handleCloseModalSup}>
         <Box sx={style}>
           <IconButton
@@ -200,11 +220,13 @@ function Media() {
             Delete Media
           </Typography>
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" disableElevation color="secondary">
+            <Button
+              onClick={DeleteFile}
+              variant="contained"
+              disableElevation
+              color="secondary"
+            >
               Confirme
-            </Button>
-            <Button variant="contained" disableElevation color="secondary">
-              Cancel
             </Button>
           </Stack>
         </Box>

@@ -1,6 +1,6 @@
 import React from "react";
-import Media from "./Media";
-import EventList from "./EventList";
+import Media from "./media/Media";
+import EventList from "./event/EventList";
 import Grid from "@mui/material/Grid";
 
 function Event() {

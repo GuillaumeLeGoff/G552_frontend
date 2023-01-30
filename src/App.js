@@ -1,7 +1,7 @@
 import "./styles/App.css";
 
 import Home from "./components/Home";
-import Event from "./components/dashboard/create/Event";
+import Event from "./components/dashboard/create/Create";
 import Header from "./components/Header";
 import Navbar from "./components/NavBar";
 import Login from "./components/dashboard/login/Login";

@@ -2,16 +2,17 @@ import axios from "axios";
 import Config from "../config.json";
 const URL_API = Config.SERVER_URL;
 class UploadService {
+  get() {
+    const data = {};
+    return axios.get(URL_API + "/medias", JSON.stringify(data));
+  }
+
   delete(file) {
-    return axios
-      .post(URL_API + "/delete", {
-        fileName: file.fileName,
-        format: file.format,
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
-      });
+    console.log('delete');
+    return axios.delete(URL_API + "/medias/" + file.id).catch((error) => {
+      console.log("error:");
+      console.log(error);
+    });
   }
   upload(file) {
     let formData = new FormData();
