@@ -1,13 +1,13 @@
 import React from "react";
-import Media from "./media/Media";
-import EventList from "./event/EventList";
+import Media from "./media/Medias";
+import Event from "./event/Event";
 import Grid from "@mui/material/Grid";
 
-function Event() {
+function Create() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={8}>
-        <EventList />
+        <Event/>
       </Grid>
       <Grid item xs={4}>
         <Media />
@@ -16,4 +16,4 @@ function Event() {
   );
 }
 
-export default Event;
+export default Create;

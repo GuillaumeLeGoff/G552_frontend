@@ -12,29 +12,34 @@ import AuthService from "./services/authService";
 import { Container } from "@mui/material";
 import { ThemeProvider } from "@mui/material";
 import { appTheme } from "./themes/theme.ts";
-
-
-
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
   return (
-    <ThemeProvider theme={appTheme}>
-    <div className="App">
-      <BrowserRouter>
-        <Header />
-        <Container >
-          <Routes>
-            <Route index element={<Home />} />
-            <Route path="/create" element={token ? <Event /> : <Login />} />
-            <Route path="/login" element={token ? <Home /> : <Login />} />
-            <Route path="/register" element={token ? <Home /> : <Signup />} />
-          </Routes>
-        </Container>
-        <Navbar />
-      </BrowserRouter>
-    </div>
-    </ThemeProvider>
+    <DndProvider backend={HTML5Backend}>
+      <ThemeProvider theme={appTheme}>
+        <div className="App">
+          <BrowserRouter>
+            <Header />
+            <Container>
+              <Routes>
+                <Route index element={<Home />} />
+                <Route path="create" element={token ? <Event /> : <Login />} />
+                <Route path="create/:id" element={<Event />} />
+                <Route path="login" element={token ? <Home /> : <Login />} />
+                <Route
+                  path="register"
+                  element={token ? <Home /> : <Signup />}
+                />
+              </Routes>
+            </Container>
+            <Navbar />
+          </BrowserRouter>
+        </div>
+      </ThemeProvider>
+    </DndProvider>
   );
 }
 

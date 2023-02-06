@@ -1,10 +1,12 @@
 import {
   Button,
   Fab,
+  Grid,
   Modal,
   Paper,
   Stack,
   Table,
+  TableBody,
   TableCell,
   TableHead,
   TableRow,
@@ -18,8 +20,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
+import eventService from "../../../../services/eventService";
+import EditIcon from "@mui/icons-material/Edit";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 
 const style = {
@@ -33,66 +37,89 @@ const style = {
   p: 4,
 };
 
-function EventParam() {
+function EventList({ onEventClick }) {
+  useEffect(() => {
+    getEvent();
+  }, []);
+  const [name, setName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [event, setEvent] = useState();
 
+  function getEvent() {
+    eventService.get().then((result) => {
+      setEvent(result.data);
+      console.log(result.data);
+    });
+  }
   function toggleModal() {
     setModalOpen(!modalOpen);
   }
 
+  function addEvent() {
+    eventService.create(name).then(() => {
+      toggleModal();
+      getEvent();
+    });
+  }
+
   return (
     <div>
-      <Paper
-        sx={{
-          backgroundColor: "primary.main",
-          position: "relative",
-        }}
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        spacing={2}
       >
-        <Stack direction="row" spacing={0}>
+        <div style={{ display: "flex", alignItems: "center" }}>
           <IconButton sx={{ ml: 2 }}>
             <PermMediaIcon sx={{ color: "white" }} />
           </IconButton>
-          <Typography variant="h6" color={"white"} sx={{ padding: 2 }}>
+          <Typography variant="h6" color="white" sx={{ padding: 2 }}>
             Event
           </Typography>
-        </Stack>
-        <Box p={1}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="right">Durée</TableCell>
+        </div>
 
-                <TableCell align="right">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            {/*  <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+        <IconButton onClick={toggleModal}>
+          <AddIcon color="secondary" />
+        </IconButton>
+      </Stack>
+
+      <Box p={1}>
+        <Table stickyHeader size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Durée</TableCell>
+
+              <TableCell align="right">Action</TableCell>
             </TableRow>
-          ))}
-        </TableBody> */}
-            <Fab
-              onClick={toggleModal}
-              color="secondary"
-              size="small"
-              sx={{ position: "absolute", bottom: 16, right: 16 }}
-            >
-              <AddIcon />
-            </Fab>
-          </Table>
-        </Box>
-      </Paper>
+          </TableHead>
+          <TableBody>
+            {event
+              ? event.map((row) => (
+                  <TableRow
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "secondary.main",
+                      },
+                    }}
+                    onClick={() => onEventClick(row.id)}
+                    key={row.id}
+                  >
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell align="right">00:00</TableCell>
+                    <TableCell align="right">
+                      <IconButton size="small">
+                        <EditIcon sx={{ fontSize: 15 }} color="secondary" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : ""}
+          </TableBody>
+        </Table>
+      </Box>
+
       <Modal open={modalOpen} onClose={toggleModal}>
         <Box sx={style}>
           <IconButton
@@ -115,9 +142,16 @@ function EventParam() {
             id="standard-basic"
             label="Name"
             variant="standard"
+            onChange={(e) => setName(e.target.value)}
           />
           <Stack direction="row" spacing={2}>
-            <Button variant="contained" disableElevation color="secondary">
+            <Button
+              disabled={!name}
+              variant="contained"
+              disableElevation
+              color="secondary"
+              onClick={addEvent}
+            >
               Add
             </Button>
             <Button variant="contained" disableElevation color="secondary">
@@ -130,4 +164,4 @@ function EventParam() {
   );
 }
 
-export default EventParam;
+export default EventList;
