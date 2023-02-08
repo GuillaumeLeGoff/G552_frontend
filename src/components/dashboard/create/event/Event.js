@@ -4,7 +4,8 @@ import EventList from "./EventList";
 import { Paper } from "@mui/material";
 import { Navigate, Route, Router, useNavigate, useParams } from "react-router-dom";
 
-function Event() {
+function Event({eventMedia,setEventMedia }) {
+
   const { id } = useParams()
   let navigate = useNavigate();
   function idEventClick(id) {
@@ -15,7 +16,7 @@ function Event() {
   }
   useEffect(() => {
     console.log(id);
-    }, [id]);
+    }, []);
 
  
 
@@ -30,7 +31,7 @@ function Event() {
       {id === undefined ? (
         <EventList onEventClick={idEventClick} />
       ) : (
-        <EventParam id={id} onEventClick={idEventClick}/>
+        <EventParam eventMedia={eventMedia} setEventMedia={setEventMedia}id={id} onEventClick={idEventClick}/>
       )}
       </Paper>
     </div>

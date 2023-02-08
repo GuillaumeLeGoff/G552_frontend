@@ -1,53 +1,51 @@
-import { Accordion, Box, Button, ImageList, ImageListItem, Stack } from "@mui/material";
+import {
+  Accordion,
+  Box,
+  Button,
+  ImageList,
+  ImageListItem,
+  Stack,
+} from "@mui/material";
 
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton from "@mui/material/IconButton";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import CloseIcon from "@mui/icons-material/Close";
 import Media from "../media/Media";
-
 import React, { useCallback, useEffect, useState } from "react";
+import { Droppable } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 
-import { Navigate } from "react-router-dom";
 import eventService from "../../../../services/eventService";
 import eventMediaService from "../../../../services/eventmediaService";
 
-function EventParam({ id, onEventClick }) {
+function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
   const [event, setEvent] = useState({});
-  const [eventMedia, setEventMedia] = useState([]);
+
+  const onDragEnd = result => {
+    const {destination, source, draggableId} = result;
+    console.log(destination, source, draggableId);
+    if(!destination){
+      return;
+    }
+
+  };
+
+  
   useEffect(() => {
     eventService
       .getById(id)
       .then((result) => {
         setEvent(result.data);
-        console.log(result.data);
+
         eventMediaService.getAllByEvent(id).then((result) => {
           setEventMedia(result.data);
-          console.log(result.data);
         });
       })
       .catch((error) => {
         onEventClick("");
       });
-  }, [id]);
-
-  const movePetListItem = useCallback(
-    (dragIndex, hoverIndex) => {
-        const dragItem = eventMedia[dragIndex]
-        const hoverItem = eventMedia[hoverIndex]
-        setEventMedia(eventMedia => {
-            const updatedEventMedia = [...eventMedia]
-            updatedEventMedia[dragIndex] = hoverItem
-            updatedEventMedia[hoverIndex] = dragItem
-            return updatedEventMedia
-        })
-    },
-    [eventMedia],
-)
-  
+  }, [id, onEventClick, setEventMedia]);
 
   return (
     <div>
@@ -69,16 +67,19 @@ function EventParam({ id, onEventClick }) {
           </Typography>
         </div>
       </Stack>
-      <Box p={1}>
-        
-        {eventMedia.map((item, index) => (
-          <Media  key={item.id}
-          index={index}
-          path={item.path}
-          moveListItem={movePetListItem} />
-        ))}
-        
-      </Box>
+      
+        <Box p={1}>
+          <Droppable droppableId={id.toString()}>
+            {(provider) => (
+              <div {...provider.droppableProps} ref={provider.innerRef}>
+                {eventMedia.map((item, index) => (
+                  <Media key={item.id} index={index} item={item} />
+                ))}
+              </div>
+            )}
+          </Droppable>
+        </Box>
+      
     </div>
   );
 }

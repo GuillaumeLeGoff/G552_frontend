@@ -40,7 +40,7 @@ const style = {
   p: 4,
 };
 
-function Media() {
+function Medias() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [uploadFile, setUploadFile] = useState();
   const [modalOpenUpload, setModalOpenUpload] = useState(false);
@@ -139,6 +139,7 @@ function Media() {
                     {file.type.split("/").splice(0, 1).toString() ===
                     "image" ? (
                       <div>
+                        
                         <img
                           onClick={() => handleImageClick(file.id)}
                           src={file.path}
@@ -238,4 +239,4 @@ function Media() {
   );
 }
 
-export default Media;
+export default Medias;
