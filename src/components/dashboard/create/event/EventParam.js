@@ -22,25 +22,19 @@ import eventMediaService from "../../../../services/eventmediaService";
 function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
   const [event, setEvent] = useState({});
 
-  const onDragEnd = result => {
-    const {destination, source, draggableId} = result;
+  const onDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
     console.log(destination, source, draggableId);
-    if(!destination){
+    if (!destination) {
       return;
     }
-
   };
 
-  
   useEffect(() => {
     eventService
       .getById(id)
       .then((result) => {
         setEvent(result.data);
-
-        eventMediaService.getAllByEvent(id).then((result) => {
-          setEventMedia(result.data);
-        });
       })
       .catch((error) => {
         onEventClick("");
@@ -67,19 +61,19 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
           </Typography>
         </div>
       </Stack>
-      
-        <Box p={1}>
-          <Droppable droppableId={id.toString()}>
-            {(provider) => (
-              <div {...provider.droppableProps} ref={provider.innerRef}>
-                {eventMedia.map((item, index) => (
-                  <Media key={item.id} index={index} item={item} />
-                ))}
-              </div>
-            )}
-          </Droppable>
-        </Box>
-      
+
+      <Box p={1}>
+        <Droppable droppableId={`${eventMedia[0].id}`}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {eventMedia[0].medias.map((item, index) => (
+                <Media key={item.id} index={index} item={item} />
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </Box>
     </div>
   );
 }

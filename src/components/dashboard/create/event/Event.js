@@ -4,9 +4,9 @@ import EventList from "./EventList";
 import { Paper } from "@mui/material";
 import { Navigate, Route, Router, useNavigate, useParams } from "react-router-dom";
 
-function Event({eventMedia,setEventMedia }) {
+function Event({eventMedia,setEventMedia,id }) {
 
-  const { id } = useParams()
+ 
   let navigate = useNavigate();
   function idEventClick(id) {
     console.log(id);

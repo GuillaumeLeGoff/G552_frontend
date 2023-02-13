@@ -2,17 +2,18 @@ import React, { useEffect, useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 function Media({ index, item }) {
-
   return (
-    <Draggable draggableId={item.id.toString()} index={index}>
-      {(provider) => (
+    <Draggable draggableId={item.id} index={index} key={item.id}>
+      {(provided) => (
         <div
-          {...provider.draggableProps}
-          {...provider.dragHandleProps}
-          ref={provider.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
         >
           <img src={item.path} />
+          {provided.placeholder} 
         </div>
+       
       )}
     </Draggable>
   );

@@ -39,6 +39,7 @@ const style = {
 
 function EventList({ onEventClick }) {
   useEffect(() => {
+    console.log('test');
     getEvent();
   }, []);
   const [name, setName] = useState("");

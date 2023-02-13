@@ -28,6 +28,7 @@ import uploadService from "../../../../services/uploadService";
 import fileService from "../../../../services/fileService";
 
 import "../../../../styles/Media.css";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 
 const style = {
   position: "absolute",
@@ -40,30 +41,27 @@ const style = {
   p: 4,
 };
 
-function Medias() {
+function Medias({ eventMedia, setEventMedia }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  const [uploadFile, setUploadFile] = useState();
+
   const [modalOpenUpload, setModalOpenUpload] = useState(false);
   const [modalOpenSup, setModalOpenSup] = useState(false);
   const [FileToDelete, setFileToDelete] = useState();
-  const { getRootProps, getInputProps } = useDropzone({
+  /*  const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/png": [],
     },
     onDrop: (files) => uploadOneFile(files),
-  });
+  }); */
 
-  useEffect(() => {
-    getUploadFile();
-  }, []);
-  function DeleteFile() {
+  /*  function DeleteFile() {
     console.log("result");
     uploadService.delete(FileToDelete).then(() => {
       handleCloseModalSup();
       getUploadFile();
     });
-  }
+  } */
   function handleOpenModalUpload() {
     setModalOpenUpload(true);
   }
@@ -78,13 +76,13 @@ function Medias() {
     setModalOpenSup(false);
   }
 
-  function getUploadFile() {
+  /* function getUploadFile() {
     uploadService.get().then((result) => {
       setUploadFile(result.data);
     });
   }
-
-  function uploadOneFile(event) {
+ */
+  /*  function uploadOneFile(event) {
     uploadService
       .upload(event[0])
       .then(() => {
@@ -95,7 +93,7 @@ function Medias() {
       });
 
     handleCloseModal();
-  }
+  } */
 
   function handleImageClick(imageId) {
     if (imageId === selectedImage) {
@@ -112,7 +110,7 @@ function Medias() {
           position: "relative",
         }}
       >
-       <Stack
+        <Stack
           direction="row"
           justifyContent="space-between"
           alignItems="center"
@@ -131,48 +129,69 @@ function Medias() {
             <AddIcon color="secondary" />
           </IconButton>
         </Stack>
-        <Box p={1} sx={{ overflowY: "auto", maxHeight: "calc(100vh - 250px)" }}>
+        <Box p={1} sx={{ maxHeight: "calc(100vh - 250px)" }}>
           <ImageList variant="masonry" cols={2} gap={8}>
-            {uploadFile
-              ? uploadFile.map((file) => (
-                  <ImageListItem key={file.id}>
-                    {file.type.split("/").splice(0, 1).toString() ===
-                    "image" ? (
-                      <div>
-                        
-                        <img
-                          onClick={() => handleImageClick(file.id)}
-                          src={file.path}
-                          alt={file.title}
-                          className={`${
-                            file.id === selectedImage
-                              ? "image"
-                              : "selected-image"
-                          }`}
-                          loading="lazy"
-                        />
-                        {file.id === selectedImage && (
-                          <DeleteIcon
-                            onClick={() => handleOpenModalSup(file)}
-                            color="warning"
-                            sx={{ position: "absolute", top: 5, right: 5 }}
-                          />
-                        )}
-                      </div>
-                    ) : (
-                      <video
-                        src={`${file.path}`}
-                        sx={{ width: "100%", height: "100%" }}
-                      />
-                    )}
-                  </ImageListItem>
-                ))
-              : ""}
+            <Droppable
+              key={eventMedia[1]}
+              droppableId={`${eventMedia[1].id}`}
+              isDropDisabled={true}
+            >
+              {(provided, snapshot) => (
+                <div
+                  ref={provided.innerRef}
+                  isDraggingOver={snapshot.isDraggingOver}
+                >
+                  {eventMedia
+                    ? eventMedia[1].medias.map((file, index) => (
+                        <ImageListItem key={file.id}>
+                          <Draggable
+                            key={file.id}
+                            draggableId={file.id.toString()}
+                            index={index}
+                          >
+                            {(provided) => (
+                              <div
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                ref={provided.innerRef}
+                              >
+                                <img
+                                  onClick={() => handleImageClick(file.id)}
+                                  src={file.path}
+                                  alt={file.title}
+                                  className={`${
+                                    file.id === selectedImage
+                                      ? "image"
+                                      : "selected-image"
+                                  }`}
+                                  loading="lazy"
+                                />
+                                {file.id === selectedImage && (
+                                  <DeleteIcon
+                                    onClick={() => handleOpenModalSup(file)}
+                                    color="warning"
+                                    sx={{
+                                      position: "absolute",
+                                      top: 5,
+                                      right: 5,
+                                    }}
+                                  />
+                                )}
+                              </div>
+                            )}
+                          </Draggable>
+                        </ImageListItem>
+                      ))
+                    : ""}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
           </ImageList>
         </Box>
       </Paper>
       {/* Modal upload  */}
-      <Modal open={modalOpenUpload} onClose={handleCloseModal}>
+      {/* <Modal open={modalOpenUpload} onClose={handleCloseModal}>
         <Box sx={style}>
           <IconButton
             style={{ position: "absolute", right: "5px", top: "5px" }}
@@ -203,10 +222,10 @@ function Medias() {
             </div>
           </section>
         </Box>
-      </Modal>
+      </Modal> */}
 
       {/* Modal confirm suppression file */}
-      <Modal open={modalOpenSup} onClose={handleCloseModalSup}>
+      {/* <Modal open={modalOpenSup} onClose={handleCloseModalSup}>
         <Box sx={style}>
           <IconButton
             style={{ position: "absolute", right: "5px", top: "5px" }}
@@ -234,7 +253,7 @@ function Medias() {
             </Button>
           </Stack>
         </Box>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }
