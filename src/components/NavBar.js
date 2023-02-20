@@ -1,92 +1,133 @@
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
-import ScreenshotMonitorIcon from "@mui/icons-material/ScreenshotMonitor";
 
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Paper,
+} from "@mui/material";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import AuthService from "../services/authService";
 
 function NavBar() {
-  const [token] = useState(AuthService.getCurrentUser());
+  /* const [token] = useState(AuthService.getCurrentUser()); */
+  const token = true;
+  const location = useLocation();
+  const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
+
+  const isMobile = useMediaQuery("(max-width: 600px)");
+
+
+  function handleLogoutDialogOpen() {
+    setLogoutDialogOpen(true);
+  }
+
+  function handleLogoutDialogClose() {
+    setLogoutDialogOpen(false);
+  }
+
   function logout() {
-    console.log("test");
     AuthService.logout();
+  }
+
+  function getIconColor(path) {
+    return location.pathname.startsWith(path) ? "red" : "white";
   }
 
   return (
     <Paper
-      sx={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: "1000",
-      }}
+    sx={{
+      position: "absolute",
+      bottom: 0,
+      width: "100%",
+      
+    }}
     >
-      <BottomNavigation style={{ backgroundColor: "#203038" }}>
-        {token ? (
-          <div>
-            <BottomNavigationAction
-              component={Link}
-              to="/signal"
-              label="Évenements"
-              icon={<PermMediaIcon sx={{ color: "white" }} />}
-            />
+      {token ? (
+        <BottomNavigation
+          value={location.pathname}
+        >
+          <BottomNavigationAction
+            component={Link}
+            to="/create"
+            label="Évenements"
+            icon={<PermMediaIcon sx={{ color: getIconColor("/create") }} />}
+          />
 
-            <BottomNavigationAction
-              component={Link}
-              to="/signal"
-              label="Macro"
-              icon={<KeyboardIcon sx={{ color: "white" }} />}
-            />
+          <BottomNavigationAction
+            component={Link}
+            to="/macro"
+            label="Macro"
+            icon={<KeyboardIcon sx={{ color: getIconColor("/macro") }} />}
+          />
 
-            <BottomNavigationAction
-              component={Link}
-              to="/signal"
-              label="Controller"
-              icon={<ScreenshotMonitorIcon sx={{ color: "white" }} />}
-            />
+         {/*  <BottomNavigationAction
+            component={Link}
+            to="/signal"
+            label="Controller"
+            icon={
+              <ScreenshotMonitorIcon sx={{ color: getIconColor("/signal") }} />
+            }
+          /> */}
 
-            <BottomNavigationAction
-              component={Link}
-              to="/signal"
-              label="Profil"
-              icon={<AccountCircleIcon sx={{ color: "white" }} />}
-            />
+          <BottomNavigationAction
+            component={Link}
+            to="/profile"
+            label="Profile"
+            icon={
+              <AccountCircleIcon sx={{ color: getIconColor("/profile") }} />
+            }
+          />
 
+          <BottomNavigationAction
+            onClick={handleLogoutDialogOpen}
+            label="Déconnexion"
+            icon={<LogoutIcon sx={{ color: getIconColor("/login") }} />}
+          />
+        </BottomNavigation>
+      ) : (
+        <BottomNavigation
+          value={location.pathname}
+        >
+          <Link to={"/login"}>
             <BottomNavigationAction
-              component={Link}
-              to="/signal"
-              onClick={() => logout()}
-              label="Déconnexion"
-              icon={<LogoutIcon sx={{ color: "white" }} />}
+              label="Login"
+              icon={<LoginIcon sx={{ color: getIconColor("/login") }} />}
             />
-          </div>
-        ) : (
-          <div>
-            <Link to={"/login"}>
-              <BottomNavigationAction
-                label="Profil"
-                icon={<LoginIcon sx={{ color: "white" }} />}
-              />
-            </Link>
-            <Link to={"/register"}>
-              <BottomNavigationAction
-                label="Créer un compte"
-                icon={<PersonAddAltIcon sx={{ color: "white" }} />}
-              />
-            </Link>
-          </div>
-        )}
-      </BottomNavigation>
+          </Link>
+          <Link to={"/register"}>
+            <BottomNavigationAction
+              label="Créer un compte"
+              icon={
+                <PersonAddAltIcon sx={{ color: getIconColor("/register") }} />
+              }
+            />
+          </Link>
+        </BottomNavigation>
+      )}
+
+      <Dialog open={logoutDialogOpen} onClose={handleLogoutDialogClose}>
+        <DialogTitle>{"Déconnexion"}</DialogTitle>
+        <DialogContent>
+          <div>Voulez-vous vraiment vous déconnecter ?</div>
+        </DialogContent>
+        <DialogActions>
+          <Button  sx={{ color: "white" }} onClick={handleLogoutDialogClose}>Annuler</Button>
+          <Button sx={{ color: "white" }} onClick={logout}>Déconnexion</Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 }
-
 export default NavBar;

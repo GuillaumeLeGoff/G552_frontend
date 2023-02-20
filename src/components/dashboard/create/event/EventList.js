@@ -1,7 +1,5 @@
 import {
   Button,
-  Fab,
-  Grid,
   Modal,
   Paper,
   Stack,
@@ -39,7 +37,7 @@ const style = {
 
 function EventList({ onEventClick }) {
   useEffect(() => {
-    console.log('test');
+    console.log("test");
     getEvent();
   }, []);
   const [name, setName] = useState("");
@@ -65,61 +63,64 @@ function EventList({ onEventClick }) {
 
   return (
     <div>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        spacing={2}
+      <Paper
+        sx={{
+          position: "relative",
+          maxHeight: "calc(83vh )",
+          minHeight: "calc(83vh )",
+        }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <IconButton sx={{ ml: 2 }}>
-            <PermMediaIcon sx={{ color: "white" }} />
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IconButton sx={{ ml: 2 }}>
+              <PermMediaIcon sx={{ color: "white" }} />
+            </IconButton>
+            <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+              Event
+            </Typography>
+          </div>
+
+          <IconButton onClick={toggleModal}>
+            <AddIcon color="secondary" />
           </IconButton>
-          <Typography variant="h6" color="white" sx={{ padding: 2 }}>
-            Event
-          </Typography>
-        </div>
+        </Stack>
 
-        <IconButton onClick={toggleModal}>
-          <AddIcon color="secondary" />
-        </IconButton>
-      </Stack>
-
-      <Box p={1}>
-        <Table stickyHeader size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell align="right">Durée</TableCell>
-
-              <TableCell align="right">Action</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {event
-              ? event.map((row) => (
-                  <TableRow
-                    sx={{
-                      "&:hover": {
-                        backgroundColor: "secondary.main",
-                      },
-                    }}
-                    onClick={() => onEventClick(row.id)}
-                    key={row.id}
-                  >
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell align="right">00:00</TableCell>
-                    <TableCell align="right">
-                      <IconButton size="small">
-                        <EditIcon sx={{ fontSize: 15 }} color="secondary" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))
-              : ""}
-          </TableBody>
-        </Table>
-      </Box>
+        <Box p={1} style={{ overflow: "auto" }}>
+          <Table stickyHeader size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell align="right">Durée</TableCell>
+                <TableCell align="right">Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {event
+                ? event.map((row) => (
+                    <TableRow
+                      hover
+                      onClick={() => onEventClick(row.id)}
+                      key={row.id}
+                    >
+                      <TableCell>{row.name}</TableCell>
+                      <TableCell align="right">00:00</TableCell>
+                      <TableCell align="right">
+                        <IconButton size="small">
+                          <EditIcon sx={{ fontSize: 15 }} color="secondary" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                : ""}
+            </TableBody>
+          </Table>
+        </Box>
+      </Paper>
 
       <Modal open={modalOpen} onClose={toggleModal}>
         <Box sx={style}>

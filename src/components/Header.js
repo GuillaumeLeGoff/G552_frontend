@@ -15,7 +15,6 @@ function Header() {
     >
       <Toolbar
         style={{
-          backgroundColor: "#203038",
           justifyContent: "center",
           padding: "0",
         }}

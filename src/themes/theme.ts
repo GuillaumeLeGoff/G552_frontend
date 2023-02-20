@@ -11,6 +11,7 @@ export const appTheme = createTheme({
         },
         background: {
           default: '#172228',
+          paper: '#203038',
         },
         text: {
           primary: 'rgba(255,255,255,0.87)',

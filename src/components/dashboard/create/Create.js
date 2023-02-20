@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import eventmediaService from "../../../services/eventmediaService";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import uploadService from "../../../services/uploadService";
 
 function Create() {
@@ -33,7 +33,7 @@ function Create() {
         setEventMedia((prevState) => {
           return prevState.map((column) => {
             if (column.id === 0) {
-              return { ...column, medias: newMedias};
+              return { ...column, medias: newMedias };
             }
             return column;
           });
@@ -47,7 +47,7 @@ function Create() {
       setEventMedia((prevState) => {
         return prevState.map((column) => {
           if (column.id === 1) {
-            return { ...column, medias: newMedias};
+            return { ...column, medias: newMedias };
           }
           return column;
         });
@@ -97,7 +97,7 @@ function Create() {
       console.log(source);
       const startMedias = Array.from(start.medias);
       startMedias.splice(source.index, 1);
-      
+
       const finishMedias = Array.from(finish.medias);
       finishMedias.splice(destination.index, 0, draggableId);
 
@@ -115,17 +115,17 @@ function Create() {
     }
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
+    <DragDropContext  onDragEnd={onDragEnd}>
+      <Grid  container spacing={2}>
+        <Grid item xs={12} md={8}>
           <Event
             eventMedia={eventMedia}
             setEventMedia={setEventMedia}
             id={id}
           />
         </Grid>
-        <Grid item xs={4}>
-          <Media eventMedia={eventMedia} setEventMedia={setEventMedia} />
+        <Grid item xs={12} md={4}>
+          <Media  eventMedia={eventMedia} setEventMedia={setEventMedia} />
         </Grid>
       </Grid>
     </DragDropContext>
