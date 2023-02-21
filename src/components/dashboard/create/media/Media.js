@@ -1,19 +1,18 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 function Media({ index, item }) {
   return (
-    <Draggable draggableId={item.id} index={index} key={item.id}>
-      {(provided) => (
+    <Draggable draggableId={item.id.toString()} index={index} key={item.id}>
+      {(provided, snapshot) => (
         <div
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
           <img src={item.path} />
-          {provided.placeholder} 
+          {provided.placeholder}
         </div>
-       
       )}
     </Draggable>
   );

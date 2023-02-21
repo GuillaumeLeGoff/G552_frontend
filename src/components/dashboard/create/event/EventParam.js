@@ -64,8 +64,11 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
 
       <Box p={1}>
         <Droppable droppableId={`${eventMedia[0].id}`}>
-          {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef}>
+          {(provided, snapshot) => (
+            <div
+             
+              ref={provided.innerRef}
+            >
               {eventMedia[0].medias.map((item, index) => (
                 <Media key={item.id} index={index} item={item} />
               ))}

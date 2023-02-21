@@ -139,7 +139,7 @@ function Medias({ eventMedia, setEventMedia }) {
               {(provided, snapshot) => (
                 <div
                   ref={provided.innerRef}
-                  isDraggingOver={snapshot.isDraggingOver}
+                
                 >
                   {eventMedia
                     ? eventMedia[1].medias.map((file, index) => (
@@ -149,7 +149,7 @@ function Medias({ eventMedia, setEventMedia }) {
                             draggableId={file.id.toString()}
                             index={index}
                           >
-                            {(provided) => (
+                              {(provided, snapshot) => (
                               <div
                                 {...provided.draggableProps}
                                 {...provided.dragHandleProps}

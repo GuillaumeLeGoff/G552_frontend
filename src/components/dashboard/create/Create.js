@@ -5,7 +5,7 @@ import Grid from "@mui/material/Grid";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import eventmediaService from "../../../services/eventmediaService";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import uploadService from "../../../services/uploadService";
 
 function Create() {
@@ -33,7 +33,7 @@ function Create() {
         setEventMedia((prevState) => {
           return prevState.map((column) => {
             if (column.id === 0) {
-              return { ...column, medias: newMedias};
+              return { ...column, medias: newMedias };
             }
             return column;
           });
@@ -47,7 +47,7 @@ function Create() {
       setEventMedia((prevState) => {
         return prevState.map((column) => {
           if (column.id === 1) {
-            return { ...column, medias: newMedias};
+            return { ...column, medias: newMedias };
           }
           return column;
         });
@@ -55,28 +55,103 @@ function Create() {
     });
   }, [id, setEventMedia]);
 
-  const onDragEnd = (result) => {
-    console.log(eventMedia);
-    const { destination, source, draggableId } = result;
+  /**
+   * Moves an item from one list to another list.
+   */
+  const copy = (source, destination, droppableSource, droppableDestination) => {
+    console.log("==> dest", destination);
 
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(destination);
+    const item = sourceClone[droppableSource.index];
+
+    destClone.splice(droppableDestination.index, 0, { ...item, id: uuidv4() });
+    return destClone;
+  };
+
+  const move = (source, destination, droppableSource, droppableDestination) => {
+    const sourceClone = Array.from(source);
+    const destClone = Array.from(destination);
+    const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+    destClone.splice(droppableDestination.index, 0, removed);
+
+    const result = {};
+    result[droppableSource.droppableId] = sourceClone;
+    result[droppableDestination.droppableId] = destClone;
+
+    return result;
+  };
+
+  const onDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+    console.log(source.droppableId);
     if (!destination) {
       console.log("no destination");
       return;
     }
-    if (
+    /* if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
     ) {
       console.log("no destination");
       return;
-    }
+    } */
     const start = eventMedia[source.droppableId];
     const finish = eventMedia[destination.droppableId];
+
+    switch (source.droppableId) {
+      case destination.droppableId:
+        console.log("meme colonne");
+        const newMedias = Array.from(start.medias);
+        newMedias.splice(source.index, 1);
+        newMedias.splice(
+          destination.index,
+          0,
+          eventMedia[source.droppableId].medias[source.index]
+        );
+        setEventMedia((prevState) => {
+          return prevState.map((column) => {
+            if (column.id === start.id) {
+              return { ...column, medias: newMedias };
+            }
+            return column;
+          });
+        });
+        break;
+      case "1":
+        console.log("copy");
+        const sourceClone = Array.from(source);
+        const destClone = Array.from(destination);
+     /*    const item = sourceClone[droppableSource.index]; */
+
+        this.setState({
+          [destination.droppableId]: copy(
+            eventMedia[0].medias,
+            this.state[destination.droppableId],
+            source,
+            destination
+          ),
+        });
+        break;
+      default:
+        console.log("move");
+        this.setState(
+          move(
+            this.state[source.droppableId],
+            this.state[destination.droppableId],
+            source,
+            destination
+          )
+        );
+        break;
+    }
+    /* 
+
 
     if (start === finish) {
       console.log("start === finish");
       const newMedias = Array.from(start.medias);
-      console.log(source);
       newMedias.splice(source.index, 1);
 
       newMedias.splice(
@@ -112,7 +187,7 @@ function Create() {
           return column;
         });
       });
-    }
+    } */
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
