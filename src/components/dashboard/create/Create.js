@@ -172,7 +172,7 @@ function Create() {
       console.log(source);
       const startMedias = Array.from(start.medias);
       startMedias.splice(source.index, 1);
-      
+
       const finishMedias = Array.from(finish.medias);
       finishMedias.splice(destination.index, 0, draggableId);
 
@@ -190,17 +190,17 @@ function Create() {
     } */
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container spacing={2}>
-        <Grid item xs={8}>
+    <DragDropContext  onDragEnd={onDragEnd}>
+      <Grid  container spacing={2}>
+        <Grid item xs={12} md={8}>
           <Event
             eventMedia={eventMedia}
             setEventMedia={setEventMedia}
             id={id}
           />
         </Grid>
-        <Grid item xs={4}>
-          <Media eventMedia={eventMedia} setEventMedia={setEventMedia} />
+        <Grid item xs={12} md={4}>
+          <Media  eventMedia={eventMedia} setEventMedia={setEventMedia} />
         </Grid>
       </Grid>
     </DragDropContext>

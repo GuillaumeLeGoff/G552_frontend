@@ -29,7 +29,7 @@ function Login() {
     <Container className="center" maxWidth="sm" component="main">
       <Paper
         elevation={3}
-        sx={{ display: "flex", borderRadius: 2, backgroundColor: "#203038" }}
+        sx={{ display: "flex", borderRadius: 2}}
       >
         <form onSubmit={handleSubmit}>
           <TextField

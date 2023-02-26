@@ -1,31 +1,11 @@
-import {
-  Accordion,
-  ImageList,
-  ImageListItem,
-  Fab,
-  Modal,
-  Box,
-  Stack,
-  Button,
-  Paper,
-} from "@mui/material";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
+import { ImageList, ImageListItem, Box, Stack, Paper } from "@mui/material";
+
 import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import ImageIcon from "@mui/icons-material/Image";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-
-import { useDropzone } from "react-dropzone";
-
-import React, { useEffect, useState } from "react";
-import authService from "../../../../services/authService";
-import uploadService from "../../../../services/uploadService";
-import fileService from "../../../../services/fileService";
+import React, { useState } from "react";
 
 import "../../../../styles/Media.css";
 import { Draggable, Droppable } from "react-beautiful-dnd";
@@ -106,8 +86,8 @@ function Medias({ eventMedia, setEventMedia }) {
     <div>
       <Paper
         sx={{
-          backgroundColor: "primary.main",
           position: "relative",
+          minHeight: "calc(83vh )",
         }}
       >
         <Stack
@@ -129,7 +109,8 @@ function Medias({ eventMedia, setEventMedia }) {
             <AddIcon color="secondary" />
           </IconButton>
         </Stack>
-        <Box p={1} sx={{ maxHeight: "calc(100vh - 250px)" }}>
+
+        <Box p={1} style={{ overflow: "auto" }}>
           <ImageList variant="masonry" cols={2} gap={8}>
             <Droppable
               key={eventMedia[1]}
