@@ -85,8 +85,8 @@ function Create() {
 
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
-    console.log(source.droppableId);
     if (!destination) {
+      console.log(destination);
       console.log("no destination");
       return;
     }
@@ -120,19 +120,24 @@ function Create() {
         });
         break;
       case "1":
-        console.log("copy");
-        const sourceClone = Array.from(source);
-        const destClone = Array.from(destination);
-     /*    const item = sourceClone[droppableSource.index]; */
+        const sourceClone = Array.from(eventMedia[1].medias);
+        const destClone = Array.from(eventMedia[destination.droppableId].medias);
+        const item = sourceClone[source.index];
 
-        this.setState({
-          [destination.droppableId]: copy(
-            eventMedia[0].medias,
-            this.state[destination.droppableId],
-            source,
-            destination
-          ),
+        destClone.splice(destination.index, 0, { ...item, id: uuidv4() });
+        setEventMedia((prevState) => {
+          return prevState.map((column) => {
+            if (column.id === 0) {
+              return { ...column, medias: destClone };
+            }
+            return column;
+          });
         });
+        
+        console.log(item);
+        console.log(destClone);
+        console.log("copy");
+      
         break;
       default:
         console.log("move");
@@ -190,8 +195,8 @@ function Create() {
     } */
   };
   return (
-    <DragDropContext  onDragEnd={onDragEnd}>
-      <Grid  container spacing={2}>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Grid container spacing={2}>
         <Grid item xs={12} md={8}>
           <Event
             eventMedia={eventMedia}
@@ -200,7 +205,7 @@ function Create() {
           />
         </Grid>
         <Grid item xs={12} md={4}>
-          <Media  eventMedia={eventMedia} setEventMedia={setEventMedia} />
+          <Media eventMedia={eventMedia} setEventMedia={setEventMedia} />
         </Grid>
       </Grid>
     </DragDropContext>

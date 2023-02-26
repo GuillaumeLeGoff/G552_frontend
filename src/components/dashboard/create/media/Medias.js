@@ -113,15 +113,11 @@ function Medias({ eventMedia, setEventMedia }) {
         <Box p={1} style={{ overflow: "auto" }}>
           <ImageList variant="masonry" cols={2} gap={8}>
             <Droppable
-              key={eventMedia[1]}
               droppableId={`${eventMedia[1].id}`}
               isDropDisabled={true}
             >
               {(provided, snapshot) => (
-                <div
-                  ref={provided.innerRef}
-                
-                >
+                <div ref={provided.innerRef}>
                   {eventMedia
                     ? eventMedia[1].medias.map((file, index) => (
                         <ImageListItem key={file.id}>
@@ -130,35 +126,37 @@ function Medias({ eventMedia, setEventMedia }) {
                             draggableId={file.id.toString()}
                             index={index}
                           >
-                              {(provided, snapshot) => (
-                              <div
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                ref={provided.innerRef}
-                              >
-                                <img
-                                  onClick={() => handleImageClick(file.id)}
-                                  src={file.path}
-                                  alt={file.title}
-                                  className={`${
-                                    file.id === selectedImage
-                                      ? "image"
-                                      : "selected-image"
-                                  }`}
-                                  loading="lazy"
-                                />
-                                {file.id === selectedImage && (
-                                  <DeleteIcon
-                                    onClick={() => handleOpenModalSup(file)}
-                                    color="warning"
-                                    sx={{
-                                      position: "absolute",
-                                      top: 5,
-                                      right: 5,
-                                    }}
+                            {(provided, snapshot) => (
+                              <React.Fragment>
+                                <div
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  ref={provided.innerRef}
+                                >
+                                  <img
+                                    onClick={() => handleImageClick(file.id)}
+                                    src={file.path}
+                                    alt={file.title}
+                                    className={`${
+                                      file.id === selectedImage
+                                        ? "image"
+                                        : "selected-image"
+                                    }`}
+                                    loading="lazy"
                                   />
-                                )}
-                              </div>
+                                  {file.id === selectedImage && (
+                                    <DeleteIcon
+                                      onClick={() => handleOpenModalSup(file)}
+                                      color="warning"
+                                      sx={{
+                                        position: "absolute",
+                                        top: 5,
+                                        right: 5,
+                                      }}
+                                    />
+                                  )}
+                                </div>
+                              </React.Fragment>
                             )}
                           </Draggable>
                         </ImageListItem>

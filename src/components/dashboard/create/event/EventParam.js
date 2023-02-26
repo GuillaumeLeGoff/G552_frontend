@@ -30,7 +30,9 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
           position: "relative",
           maxHeight: "calc(83vh )",
           minHeight: "calc(83vh )",
+          
         }}
+        
       >
         <Stack
           direction="row"
@@ -51,19 +53,22 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
           </div>
         </Stack>
 
-      <Box p={1}>
+      <Box sx={{ maxHeight: "calc(80vh - 66px)", overflowY: "scroll" }} p={1}>
         <Droppable droppableId={`${eventMedia[0].id}`}>
           {(provided, snapshot) => (
             <div
              
               ref={provided.innerRef}
+              isDragging={snapshot.isDragging}
             >
               {eventMedia[0].medias.map((item, index) => (
                 <Media key={item.id} index={index} item={item} />
               ))}
               {provided.placeholder}
             </div>
+            
           )}
+         
         </Droppable>
       </Box>
       </Paper>
