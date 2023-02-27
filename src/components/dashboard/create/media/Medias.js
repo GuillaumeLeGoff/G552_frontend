@@ -1,79 +1,83 @@
-import { ImageList, ImageListItem, Box, Stack, Paper } from "@mui/material";
-
+import {
+  ImageList,
+  ImageListItem,
+  Box,
+  Stack,
+  Paper,
+  Dialog,
+  Button,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+} from "@mui/material";
+import EventMediaService from "../../../../services/eventMediaService";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import mediaService from "../../../../services/mediaService";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import ImageIcon from "@mui/icons-material/Image";
 import DeleteIcon from "@mui/icons-material/Delete";
 import React, { useState } from "react";
+import CloseIcon from "@mui/icons-material/Close";
+import { v4 as uuidv4 } from "uuid";
+import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 
 import "../../../../styles/Media.css";
 import { Draggable, Droppable } from "react-beautiful-dnd";
+import { useDropzone } from "react-dropzone";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "#203038",
-  boxShadow: 24,
-  p: 4,
-};
-
-function Medias({ eventMedia, setEventMedia }) {
+function Medias(props) {
   const [selectedImage, setSelectedImage] = useState(null);
-
-  const [modalOpenUpload, setModalOpenUpload] = useState(false);
-  const [modalOpenSup, setModalOpenSup] = useState(false);
+  const [dialogUpload, setDialogUpload] = useState(false);
+  const [dialogDelete, setDialogDelete] = useState(false);
   const [FileToDelete, setFileToDelete] = useState();
-  /*  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/png": [],
+      "video/mp4": [],
     },
     onDrop: (files) => uploadOneFile(files),
-  }); */
+  });
 
-  /*  function DeleteFile() {
+  function DeleteFile() {
     console.log("result");
-    uploadService.delete(FileToDelete).then(() => {
-      handleCloseModalSup();
-      getUploadFile();
+
+    mediaService.delete(FileToDelete).then(() => {
+      EventMediaService.deleteAllByMedia(FileToDelete.idBdd).then((result) => {
+        console.log(result);
+        displayDialogDelete(false);
+        props.getMedias();
+        props.getEvents();
+      });
     });
-  } */
-  function handleOpenModalUpload() {
-    setModalOpenUpload(true);
   }
-  function handleCloseModal() {
-    setModalOpenUpload(false);
+
+  function displayDialogUpload() {
+    setDialogUpload(!dialogUpload);
   }
-  function handleOpenModalSup(file) {
-    setModalOpenSup(true);
+
+  function OpenDialogDelete(file) {
+    displayDialogDelete(true);
     setFileToDelete(file);
   }
-  function handleCloseModalSup() {
-    setModalOpenSup(false);
+  function displayDialogDelete() {
+    setDialogDelete(!dialogDelete);
   }
 
-  /* function getUploadFile() {
-    uploadService.get().then((result) => {
-      setUploadFile(result.data);
-    });
-  }
- */
-  /*  function uploadOneFile(event) {
-    uploadService
+  function uploadOneFile(event) {
+    mediaService
       .upload(event[0])
       .then(() => {
-        getUploadFile();
+        props.getMedias();
       })
       .catch((error) => {
         console.error(error);
       });
-
-    handleCloseModal();
-  } */
+    displayDialogUpload();
+  }
 
   function handleImageClick(imageId) {
     if (imageId === selectedImage) {
@@ -82,12 +86,14 @@ function Medias({ eventMedia, setEventMedia }) {
       setSelectedImage(imageId);
     }
   }
+
   return (
     <div>
       <Paper
-        sx={{
-          position: "relative",
-          minHeight: "calc(83vh )",
+        className="paper-container"
+        style={{
+          maxHeight: "calc(94vh - 56px )",
+          minHeight: "calc(94vh - 56px )",
         }}
       >
         <Stack
@@ -105,23 +111,27 @@ function Medias({ eventMedia, setEventMedia }) {
             </Typography>
           </div>
 
-          <IconButton onClick={handleOpenModalUpload}>
+          <IconButton onClick={displayDialogUpload}>
             <AddIcon color="secondary" />
           </IconButton>
         </Stack>
 
-        <Box p={1} style={{ overflow: "auto" }}>
+        <Box
+          sx={{ maxHeight: "calc(94vh - 120px)", overflowY: "scroll" }}
+          p={1}
+        >
           <ImageList variant="masonry" cols={2} gap={8}>
             <Droppable
-              droppableId={`${eventMedia[1].id}`}
+              droppableId={`${props.eventMedia[1].id}`}
               isDropDisabled={true}
             >
-              {(provided, snapshot) => (
+              {(provided) => (
                 <div ref={provided.innerRef}>
-                  {eventMedia
-                    ? eventMedia[1].medias.map((file, index) => (
+                  {props.eventMedia
+                    ? props.eventMedia[1].medias.map((file, index) => (
                         <ImageListItem key={file.id}>
                           <Draggable
+                            disableInteractiveElementBlocking
                             key={file.id}
                             draggableId={file.id.toString()}
                             index={index}
@@ -133,20 +143,40 @@ function Medias({ eventMedia, setEventMedia }) {
                                   {...provided.dragHandleProps}
                                   ref={provided.innerRef}
                                 >
-                                  <img
-                                    onClick={() => handleImageClick(file.id)}
-                                    src={file.path}
-                                    alt={file.title}
-                                    className={`${
-                                      file.id === selectedImage
-                                        ? "image"
-                                        : "selected-image"
-                                    }`}
-                                    loading="lazy"
-                                  />
+                                  {file.type === "video" ? (
+                                    <video
+                                      onClick={() => handleImageClick(file.id)}
+                                      alt={file.title}
+                                      className={`${
+                                        file.id === selectedImage
+                                          ? "image"
+                                          : "selected-image"
+                                      }`}
+                                    >
+                                      <source
+                                        src={file.path}
+                                        type="video/mp4"
+                                      />
+                                    </video>
+                                  ) : (
+                                    <div>
+                                      <img
+                                        onClick={() =>
+                                          handleImageClick(file.id)
+                                        }
+                                        src={file.path}
+                                        alt={file.title}
+                                        className={`${
+                                          file.id === selectedImage
+                                            ? "image"
+                                            : "selected-image"
+                                        }`}
+                                      />
+                                    </div>
+                                  )}
                                   {file.id === selectedImage && (
                                     <DeleteIcon
-                                      onClick={() => handleOpenModalSup(file)}
+                                      onClick={() => OpenDialogDelete(file)}
                                       color="warning"
                                       sx={{
                                         position: "absolute",
@@ -156,6 +186,27 @@ function Medias({ eventMedia, setEventMedia }) {
                                     />
                                   )}
                                 </div>
+                                {/* {snapshot.isDragging && (
+                                  <div>
+                                    {file.type === "video" ? (
+                                      <video
+                                      alt={file.title}
+                                      className="selected-image"
+                                    >
+                                      <source
+                                        src={file.path}
+                                        type="video/mp4"
+                                      />
+                                    </video>
+                                    ) : (<img
+                                      style={{ display: "none !important" }}
+                                      src={file.path}
+                                      alt={file.title}
+                                      className="selected-image"
+                                    />
+                                    )}
+                                  </div>
+                                )} */}
                               </React.Fragment>
                             )}
                           </Draggable>
@@ -170,69 +221,44 @@ function Medias({ eventMedia, setEventMedia }) {
         </Box>
       </Paper>
       {/* Modal upload  */}
-      {/* <Modal open={modalOpenUpload} onClose={handleCloseModal}>
-        <Box sx={style}>
-          <IconButton
-            style={{ position: "absolute", right: "5px", top: "5px" }}
-            onClick={handleCloseModal}
-          >
-            <CloseIcon color="secondary" />
-          </IconButton>
-          <Typography
-            color={"white"}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
-            Upload
-          </Typography>
+      <Dialog open={dialogUpload} onClose={displayDialogUpload}>
+        <DialogTitle>{"Upload"}</DialogTitle>
+        <DialogContent>
           <section className="dropZone">
             <div {...getRootProps({ className: "dropzone" })}>
               <input onDrop={(e) => uploadOneFile(e)} {...getInputProps()} />
               <div className="modal">
                 <CloudUploadIcon style={{ color: "white", fontSize: "4rem" }} />
-                <em className="textDropZone">
-                  Drag 'n' drop some files here, or click to select files
-                </em>
+                <em className="textDropZone">Click to select files</em>
                 <em className="textDropZone">
                   (Only images and videos will be accepted)
                 </em>
               </div>
             </div>
           </section>
-        </Box>
-      </Modal> */}
+        </DialogContent>
+        <DialogActions>
+          <Button sx={{ color: "white" }} onClick={displayDialogUpload}>
+            Annuler
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       {/* Modal confirm suppression file */}
-      {/* <Modal open={modalOpenSup} onClose={handleCloseModalSup}>
-        <Box sx={style}>
-          <IconButton
-            style={{ position: "absolute", right: "5px", top: "5px" }}
-            onClick={handleCloseModalSup}
-          >
-            <CloseIcon color="secondary" />
-          </IconButton>
-          <Typography
-            mb={2}
-            color={"white"}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
-            Delete Media
-          </Typography>
-          <Stack direction="row" spacing={2}>
-            <Button
-              onClick={DeleteFile}
-              variant="contained"
-              disableElevation
-              color="secondary"
-            >
-              Confirme
-            </Button>
-          </Stack>
-        </Box>
-      </Modal> */}
+      <Dialog open={dialogDelete} onClose={displayDialogDelete}>
+        <DialogTitle>{"Delete Media"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Voulez-vous supprimer ce media?</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button sx={{ color: "white" }} onClick={DeleteFile}>
+            Confirme
+          </Button>
+          <Button sx={{ color: "white" }} onClick={displayDialogDelete}>
+            Annuler
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

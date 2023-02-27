@@ -64,11 +64,7 @@ function EventList({ onEventClick }) {
   return (
     <div>
       <Paper
-        sx={{
-          position: "relative",
-          maxHeight: "calc(83vh )",
-          minHeight: "calc(83vh )",
-        }}
+       style={{  minHeight: "calc(94vh - 56px )"}}
       >
         <Stack
           direction="row"

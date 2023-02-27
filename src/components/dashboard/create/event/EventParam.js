@@ -25,15 +25,7 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
 
   return (
     <div>
-      <Paper
-        sx={{
-          position: "relative",
-          maxHeight: "calc(83vh )",
-          minHeight: "calc(83vh )",
-          
-        }}
-        
-      >
+      <Paper style={{ minHeight: "calc(94vh - 56px )" }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -53,24 +45,18 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
           </div>
         </Stack>
 
-      <Box sx={{ maxHeight: "calc(80vh - 66px)", overflowY: "scroll" }} p={1}>
-        <Droppable droppableId={`${eventMedia[0].id}`}>
-          {(provided, snapshot) => (
-            <div
-             
-              ref={provided.innerRef}
-              isDragging={snapshot.isDragging}
-            >
-              {eventMedia[0].medias.map((item, index) => (
-                <Media key={item.id} index={index} item={item} />
-              ))}
-              {provided.placeholder}
-            </div>
-            
-          )}
-         
-        </Droppable>
-      </Box>
+        <Box p={1}>
+          <Droppable droppableId={`${eventMedia[0].id}`}>
+            {(provided, snapshot) => (
+              <div ref={provided.innerRef} isDragging={snapshot.isDragging}>
+                {eventMedia[0].medias.map((item, index) => (
+                  <Media key={item.id} index={index} item={item} />
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </Box>
       </Paper>
     </div>
   );

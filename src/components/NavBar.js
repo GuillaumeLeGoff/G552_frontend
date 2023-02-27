@@ -26,9 +26,6 @@ function NavBar() {
   const location = useLocation();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
-  const isMobile = useMediaQuery("(max-width: 600px)");
-
-
   function handleLogoutDialogOpen() {
     setLogoutDialogOpen(true);
   }
@@ -46,18 +43,9 @@ function NavBar() {
   }
 
   return (
-    <Paper
-    sx={{
-      position: "absolute",
-      bottom: 0,
-      width: "100%",
-      
-    }}
-    >
+    <div style={{ position: "fixed", bottom: "0", width: "100%"  }}>
       {token ? (
-        <BottomNavigation
-          value={location.pathname}
-        >
+        <BottomNavigation value={location.pathname}>
           <BottomNavigationAction
             component={Link}
             to="/create"
@@ -71,15 +59,6 @@ function NavBar() {
             label="Macro"
             icon={<KeyboardIcon sx={{ color: getIconColor("/macro") }} />}
           />
-
-         {/*  <BottomNavigationAction
-            component={Link}
-            to="/signal"
-            label="Controller"
-            icon={
-              <ScreenshotMonitorIcon sx={{ color: getIconColor("/signal") }} />
-            }
-          /> */}
 
           <BottomNavigationAction
             component={Link}
@@ -97,9 +76,7 @@ function NavBar() {
           />
         </BottomNavigation>
       ) : (
-        <BottomNavigation
-          value={location.pathname}
-        >
+        <BottomNavigation value={location.pathname}>
           <Link to={"/login"}>
             <BottomNavigationAction
               label="Login"
@@ -123,11 +100,15 @@ function NavBar() {
           <div>Voulez-vous vraiment vous déconnecter ?</div>
         </DialogContent>
         <DialogActions>
-          <Button  sx={{ color: "white" }} onClick={handleLogoutDialogClose}>Annuler</Button>
-          <Button sx={{ color: "white" }} onClick={logout}>Déconnexion</Button>
+          <Button sx={{ color: "white" }} onClick={handleLogoutDialogClose}>
+            Annuler
+          </Button>
+          <Button sx={{ color: "white" }} onClick={logout}>
+            Déconnexion
+          </Button>
         </DialogActions>
       </Dialog>
-    </Paper>
+    </div>
   );
 }
 export default NavBar;

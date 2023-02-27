@@ -45,71 +45,64 @@ function Macro() {
   }
 
   return (
-    <div>
-      <Paper
-        sx={{
-          maxHeight: "calc(80vh )",
-          minHeight: "calc(80vh )",
-          "&::-webkit-scrollbar-thumb": {
-            borderRadius: "10px",
-            "-webkit-box-shadow": "inset 0 0 6px rgba(0, 0, 0, 0.1)",
-          },
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={2}
-        >
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton sx={{ ml: 2 }}>
-              <KeyboardIcon sx={{ color: "white" }} />
-            </IconButton>
-            <Typography variant="h6" color="white" sx={{ padding: 2 }}>
-              Macro
-            </Typography>
-          </div>
-        </Stack>
-        <Box sx={{ maxHeight: "calc(80vh - 66px)", overflowY: "scroll" }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Event</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {macros.map((macro) => (
-                <TableRow key={macro.id}>
-                  <TableCell>{macro.name}</TableCell>
-                  <TableCell>
-                    <Select
-                      value={macro.event}
-                      onChange={(event) =>
-                        setMacros((prevMacros) =>
-                          prevMacros.map((prevMacro) =>
-                            prevMacro.id === macro.id
-                              ? { ...prevMacro, event: event.target.value }
-                              : prevMacro
-                          )
-                        )
-                      }
-                    >
-                      {events.map((event) => (
-                        <MenuItem key={event.id} value={event}>
-                          {event.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </TableCell>
+    <Grid item xs={12}>
+      <div>
+        <Paper style={{ maxHeight: "calc(94vh - 56px )"}}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            spacing={2}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <IconButton sx={{ ml: 2 }}>
+                <KeyboardIcon sx={{ color: "white" }} />
+              </IconButton>
+              <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+                Macro
+              </Typography>
+            </div>
+          </Stack>
+          <Box sx={{ maxHeight: "calc(94vh - 120px)", overflowY: "scroll" }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Event</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </Box>
-      </Paper>
-    </div>
+              </TableHead>
+              <TableBody>
+                {macros.map((macro) => (
+                  <TableRow key={macro.id}>
+                    <TableCell>{macro.name}</TableCell>
+                    <TableCell>
+                      <Select
+                        value={macro.event}
+                        onChange={(event) =>
+                          setMacros((prevMacros) =>
+                            prevMacros.map((prevMacro) =>
+                              prevMacro.id === macro.id
+                                ? { ...prevMacro, event: event.target.value }
+                                : prevMacro
+                            )
+                          )
+                        }
+                      >
+                        {events.map((event) => (
+                          <MenuItem key={event.id} value={event}>
+                            {event.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Box>
+        </Paper>
+      </div>
+    </Grid>
   );
 }
 

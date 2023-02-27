@@ -9,7 +9,7 @@ class UploadService {
 
   delete(file) {
     console.log('delete');
-    return axios.delete(URL_API + "/medias/" + file.id).catch((error) => {
+    return axios.delete(URL_API + "/medias/" + file.idBdd).catch((error) => {
       console.log("error:");
       console.log(error);
     });

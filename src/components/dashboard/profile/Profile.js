@@ -3,11 +3,14 @@ import {
   Box,
   Button,
   Container,
+  Grid,
+  IconButton,
   Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
-
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
 function Profile() {
   const style = {
     position: "absolute",
@@ -35,45 +38,58 @@ function Profile() {
   };
 
   return (
-    <Paper
-      sx={{
-        position: "relative",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-      >
-      <Box sx={{ padding: 3, textAlign: "center", mt: 4 }}>
-        <Typography variant="h5" component="h2">
-          Sport: {username}
-        </Typography>
-
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            Change Password:
+    <Grid item xs={12}>
+      <Paper>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+        >
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <IconButton sx={{ ml: 2 }}>
+              <AccountBoxIcon sx={{ color: "white" }} />
+            </IconButton>
+            <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+              Media
+            </Typography>
+          </div>
+        </Stack>
+        <Box
+          sx={{ minHeight: "calc(94vh - 120px)", overflowY: "scroll" }}
+          p={1}
+        >
+          <Typography variant="h5" component="h2">
+            Sport: {username}
           </Typography>
-          <TextField
-            fullWidth
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            type="password"
-            label="Current Password"
-          />
-          <TextField
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            label="New Password"
-          />
-          <Box sx={{ mt: 2 }}>
-            <Button variant="contained" onClick={handlePasswordChange}>
-              Change Password
-            </Button>
+
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h6" component="h2" gutterBottom>
+              Change Password:
+            </Typography>
+            <TextField
+              fullWidth
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+              type="password"
+              label="Current Password"
+            />
+            <TextField
+              fullWidth
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              type="password"
+              label="New Password"
+            />
+            <Box sx={{ mt: 2 }}>
+              <Button variant="contained" onClick={handlePasswordChange}>
+                Change Password
+              </Button>
+            </Box>
           </Box>
         </Box>
-      </Box>
-    </Paper>
+      </Paper>
+    </Grid>
   );
 }
 
