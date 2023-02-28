@@ -1,27 +1,65 @@
-import { Box, Paper, Stack } from "@mui/material";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import PermMediaIcon from "@mui/icons-material/PermMedia";
 import CloseIcon from "@mui/icons-material/Close";
-import Media from "../media/Media";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Paper,
+  Stack,
+  Table,
+  TableBody, TableContainer, TableRow
+} from "@mui/material";
+
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
-
 import eventService from "../../../../services/eventService";
+import "../../../../styles/App.css";
+import Media from "../media/Media";
 
-function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
+function EventParam(props) {
   const [event, setEvent] = useState({});
-
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
+  const [hoveredRow, setHoveredRow] = useState(null);
   useEffect(() => {
-    eventService
-      .getById(id)
-      .then((result) => {
-        setEvent(result.data);
-      })
-      .catch((error) => {
-        onEventClick("");
-      });
-  }, [id, onEventClick, setEventMedia]);
+    props.getEvents();
+    getMediasByID();
+  }, []);
+  function getMediasByID() {
+    eventService.getById(props.id).then((result) => {
+      console.log(result.data);
+      setEvent(result.data);
+      console.log(result.data);
+    });
+  }
+  function handleRowHover(rowId) {
+    setHoveredRow(rowId);
+  }
+
+  function openDeleteDialog(index) {
+    setDeleteDialogOpen(true);
+    setEventToDelete(index);
+  }
+
+  function closeDeleteDialog() {
+    setDeleteDialogOpen(false);
+    setEventToDelete(null);
+  }
+
+  function deleteEvent() {
+    console.log(eventToDelete);
+    eventService.delete(eventToDelete).then((result) => {
+      console.log(result);
+      getMediasByID();
+      closeDeleteDialog();
+    });
+  }
 
   return (
     <div>
@@ -33,7 +71,7 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
           spacing={2}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton onClick={() => onEventClick("")} sx={{ ml: 2 }}>
+            <IconButton onClick={() => props.onEventClick("")} sx={{ ml: 2 }}>
               <CloseIcon color="secondary" />
             </IconButton>
             <IconButton sx={{ ml: 2 }}>
@@ -45,19 +83,64 @@ function EventParam({ eventMedia, setEventMedia, id, onEventClick }) {
           </div>
         </Stack>
 
-        <Box p={1}>
-          <Droppable droppableId={`${eventMedia[0].id}`}>
-            {(provided, snapshot) => (
-              <div ref={provided.innerRef} isDragging={snapshot.isDragging}>
-                {eventMedia[0].medias.map((item, index) => (
-                  <Media key={item.id} index={index} item={item} />
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </Box>
+        <TableContainer
+          sx={{
+            maxHeight: "calc(94vh - 120px)",
+            overflowY: "scroll",
+            border: props.isDragging ? "1px dashed grey" : "none", // ajout de la bordure pointillée
+          }}
+        >
+          <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
+            <Droppable
+              droppableId={`${props.eventMedia[0].id}`}
+
+            >
+              {(provided, snapshot) => (
+                <TableBody
+                  ref={provided.innerRef}
+                 
+                >
+                  {props.eventMedia[0].medias.length ? (
+                    props.eventMedia[0].medias.map((item, index) => (
+                      
+                       
+                          <Media handleRowHover={handleRowHover} openDeleteDialog={openDeleteDialog} hoveredRow={hoveredRow} key={item.id} index={index} item={item} />
+                      
+                     
+                    ))
+                  ) : (
+                    <Box
+                      className='drop-zone'
+                    >
+                      <Typography variant="body1" color="text.secondary">
+                        Drop medias here
+                        
+                      </Typography>
+                    </Box>
+                  )}
+                  {provided.placeholder}
+                </TableBody>
+              )}
+            </Droppable>
+          </Table>
+        </TableContainer>
       </Paper>
+      <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
+        <DialogTitle>Confirmer la suppression</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Êtes-vous sûr de vouloir supprimer l'événement{" "}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog} color="secondary">
+            Annuler
+          </Button>
+          <Button onClick={deleteEvent} color="secondary">
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

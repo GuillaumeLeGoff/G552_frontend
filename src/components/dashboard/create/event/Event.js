@@ -3,7 +3,7 @@ import EventParam from "./EventParam";
 import EventList from "./EventList";
 import { useNavigate } from "react-router-dom";
 
-function Event({ eventMedia, setEventMedia, id }) {
+function Event(props) {
   let navigate = useNavigate();
   function idEventClick(id) {
     console.log(id);
@@ -11,13 +11,15 @@ function Event({ eventMedia, setEventMedia, id }) {
   }
   return (
     <div>
-      {id === undefined ? (
+      {props.id === undefined ? (
         <EventList onEventClick={idEventClick} />
       ) : (
         <EventParam
-          eventMedia={eventMedia}
-          setEventMedia={setEventMedia}
-          id={id}
+        getEvents={props.getEvents}
+          eventMedia={props.eventMedia}
+          setEventMedia={props.setEventMedia}
+          id={props.id}
+          isDragging={props.isDragging}
           onEventClick={idEventClick}
         />
       )}

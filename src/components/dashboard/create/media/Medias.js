@@ -1,32 +1,22 @@
-import {
-  ImageList,
-  ImageListItem,
-  Box,
-  Stack,
-  Paper,
-  Dialog,
-  Button,
-  DialogTitle,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-} from "@mui/material";
-import EventMediaService from "../../../../services/eventMediaService";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import mediaService from "../../../../services/mediaService";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import ImageIcon from "@mui/icons-material/Image";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ImageIcon from "@mui/icons-material/Image";
+import {
+  Box, Button, Dialog, DialogActions,
+  DialogContent,
+  DialogContentText, DialogTitle, ImageList,
+  ImageListItem, Paper, Stack
+} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
-import CloseIcon from "@mui/icons-material/Close";
-import { v4 as uuidv4 } from "uuid";
-import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
+import EventMediaService from "../../../../services/eventMediaService";
+import mediaService from "../../../../services/mediaService";
 
-import "../../../../styles/Media.css";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useDropzone } from "react-dropzone";
+import "../../../../styles/Media.css";
 
 function Medias(props) {
   const [selectedImage, setSelectedImage] = useState(null);

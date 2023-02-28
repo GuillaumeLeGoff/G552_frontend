@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import mediaService from "../../../services/mediaService";
 
 function Create() {
+  const [isDragging, setIsDragging] = useState(false);
   const [eventMedia, setEventMedia] = useState([
     {
       id: 0,
@@ -25,11 +26,9 @@ function Create() {
   const { id } = useParams();
 
   useEffect(() => {
-    getEvents()
+    getEvents();
     getMedias();
-    
-  }, [id, setEventMedia]);
-
+  }, []);
 
   const move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
@@ -44,16 +43,21 @@ function Create() {
 
     return result;
   };
-  function  getEvents(){
+  function getEvents() {
     if (id != undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
         const newMedias = result.data.map((media) => {
-          return { ...media, id: uuidv4() , idBdd:media.id };
+          return { ...media, id: uuidv4(), idBdd: media.id };
         });
         setEventMedia((prevState) => {
+          console.log(newMedias);
           return prevState.map((column) => {
             if (column.id === 0) {
-              return { ...column, medias: newMedias };
+              if (newMedias.length > 0) {
+                return { ...column, medias: newMedias };
+              } else {
+                return { ...column, medias: newMedias };
+              }
             }
             return column;
           });
@@ -61,23 +65,26 @@ function Create() {
       });
     }
   }
-  function getMedias(){
-    console.log("getMedias");
-      mediaService.get().then((result) => {
-        const newMedias = result.data.map((media) => {
-          return { ...media, id: uuidv4(),idBdd:media.id };
-        });
-        setEventMedia((prevState) => {
-          return prevState.map((column) => {
-            if (column.id === 1) {
-              return { ...column, medias: newMedias };
-            }
-            return column;
-          });
+  function getMedias() {
+    mediaService.get().then((result) => {
+      const newMedias = result.data.map((media) => {
+        return { ...media, id: uuidv4(), idBdd: media.id };
+      });
+      setEventMedia((prevState) => {
+        return prevState.map((column) => {
+          if (column.id === 1) {
+            return { ...column, medias: newMedias };
+          }
+          return column;
         });
       });
-    }
+    });
+  }
+  const onDragStart = () => {
+    setIsDragging(true);
+  };
   const onDragEnd = (result) => {
+    setIsDragging(false);
     const { destination, source, draggableId } = result;
     if (!destination) {
       console.log(destination);
@@ -85,7 +92,6 @@ function Create() {
       return;
     }
     const start = eventMedia[source.droppableId];
-
 
     switch (source.droppableId) {
       case destination.droppableId:
@@ -109,7 +115,9 @@ function Create() {
       case "1":
         console.log("copy");
         const sourceClone = Array.from(eventMedia[1].medias);
-        const destClone = Array.from(eventMedia[destination.droppableId].medias);
+        const destClone = Array.from(
+          eventMedia[destination.droppableId].medias
+        );
         const item = sourceClone[source.index];
 
         destClone.splice(destination.index, 0, { ...item, id: uuidv4() });
@@ -121,6 +129,7 @@ function Create() {
             return column;
           });
         });
+        console.log(id);
         EventMediaService.create({
           mediaId: item.idBdd,
           eventId: id,
@@ -142,21 +151,26 @@ function Create() {
         );
         break;
     }
-    
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-        <Grid item xs={12} md={8} >
-          <Event 
-            eventMedia={eventMedia}
-            setEventMedia={setEventMedia}
-            id={id}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Media eventMedia={eventMedia} setEventMedia={setEventMedia} getEvents={getEvents} getMedias={getMedias}/>
-        </Grid>
-      
+    <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+      <Grid item xs={12} md={8}>
+        <Event
+          eventMedia={eventMedia}
+          setEventMedia={setEventMedia}
+          id={id}
+          isDragging={isDragging}
+          getEvents={getEvents}
+        />
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <Media
+          eventMedia={eventMedia}
+          setEventMedia={setEventMedia}
+          getEvents={getEvents}
+          getMedias={getMedias}
+        />
+      </Grid>
     </DragDropContext>
   );
 }

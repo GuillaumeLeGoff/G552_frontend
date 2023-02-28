@@ -23,6 +23,9 @@ class Eventservice {
     const data = {};
     return axios.get(URL_API + "/events/" + id, JSON.stringify(data));
   }
+  delete(id) {
+    return axios.delete(URL_API + "/events/" + id);
+  }
 }
 
 

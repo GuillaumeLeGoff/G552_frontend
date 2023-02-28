@@ -28,6 +28,10 @@ class EventMediaService {
   create(eventMedia) {
     return axios.post(URL_API + "/eventmedias", eventMedia);  
   }
+  delete(id) {
+    console.log(id);
+    return axios.delete(URL_API + "/eventmedias/" + id);
+  }
 }
 
 export default new EventMediaService();

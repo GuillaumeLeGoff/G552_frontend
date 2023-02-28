@@ -22,7 +22,7 @@ import AuthService from "../services/authService";
 
 function NavBar() {
   /* const [token] = useState(AuthService.getCurrentUser()); */
-  const token = true;
+   const token = true;
   const location = useLocation();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
@@ -39,11 +39,11 @@ function NavBar() {
   }
 
   function getIconColor(path) {
-    return location.pathname.startsWith(path) ? "red" : "white";
+    return location.pathname.startsWith(path) ? "secondary" : "white";
   }
 
   return (
-    <div style={{ position: "fixed", bottom: "0", width: "100%"  }}>
+    <div style={{ position: "fixed", bottom: "0", width: "100%" }}>
       {token ? (
         <BottomNavigation value={location.pathname}>
           <BottomNavigationAction
@@ -77,20 +77,21 @@ function NavBar() {
         </BottomNavigation>
       ) : (
         <BottomNavigation value={location.pathname}>
-          <Link to={"/login"}>
-            <BottomNavigationAction
-              label="Login"
-              icon={<LoginIcon sx={{ color: getIconColor("/login") }} />}
-            />
-          </Link>
-          <Link to={"/register"}>
-            <BottomNavigationAction
-              label="Créer un compte"
-              icon={
-                <PersonAddAltIcon sx={{ color: getIconColor("/register") }} />
-              }
-            />
-          </Link>
+          <BottomNavigationAction
+            component={Link}
+            label="Login"
+            to="/login"
+            icon={<LoginIcon sx={{ color: getIconColor("/login") }} />}
+          />
+
+          <BottomNavigationAction
+            component={Link}
+            label="Créer un compte"
+            to="/register"
+            icon={
+              <PersonAddAltIcon sx={{ color: getIconColor("/register") }} />
+            }
+          />
         </BottomNavigation>
       )}
 

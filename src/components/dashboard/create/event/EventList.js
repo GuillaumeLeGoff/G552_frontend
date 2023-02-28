@@ -1,5 +1,10 @@
 import {
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Modal,
   Paper,
   Stack,
@@ -19,7 +24,7 @@ import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import eventService from "../../../../services/eventService";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
@@ -43,6 +48,9 @@ function EventList({ onEventClick }) {
   const [name, setName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [event, setEvent] = useState();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [eventToDelete, setEventToDelete] = useState(null);
+  const [hoveredRow, setHoveredRow] = useState(null);
 
   function getEvent() {
     eventService.get().then((result) => {
@@ -60,12 +68,30 @@ function EventList({ onEventClick }) {
       getEvent();
     });
   }
+  function handleRowHover(rowId) {
+    setHoveredRow(rowId);
+  }
+
+  function openDeleteDialog(event) {
+    setDeleteDialogOpen(true);
+    setEventToDelete(event);
+  }
+
+  function closeDeleteDialog() {
+    setDeleteDialogOpen(false);
+    setEventToDelete(null);
+  }
+
+  function deleteEvent() {
+    eventService.delete(eventToDelete.id).then(() => {
+      closeDeleteDialog();
+      getEvent();
+    });
+  }
 
   return (
     <div>
-      <Paper
-       style={{  minHeight: "calc(94vh - 56px )"}}
-      >
+      <Paper style={{ minHeight: "calc(94vh - 56px )" }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -76,7 +102,7 @@ function EventList({ onEventClick }) {
             <IconButton sx={{ ml: 2 }}>
               <PermMediaIcon sx={{ color: "white" }} />
             </IconButton>
-            <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+            <Typography color="white" sx={{ padding: 2 }}>
               Event
             </Typography>
           </div>
@@ -91,24 +117,36 @@ function EventList({ onEventClick }) {
             <TableHead>
               <TableRow>
                 <TableCell>Name</TableCell>
-                <TableCell align="right">Durée</TableCell>
-                <TableCell align="right">Action</TableCell>
+                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {event
                 ? event.map((row) => (
                     <TableRow
+                      onMouseEnter={() => handleRowHover(row.id)}
+                      onMouseLeave={() => handleRowHover(null)}
                       hover
                       onClick={() => onEventClick(row.id)}
                       key={row.id}
                     >
                       <TableCell>{row.name}</TableCell>
-                      <TableCell align="right">00:00</TableCell>
                       <TableCell align="right">
-                        <IconButton size="small">
-                          <EditIcon sx={{ fontSize: 15 }} color="secondary" />
-                        </IconButton>
+                        {hoveredRow === row.id && (
+                          <IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openDeleteDialog(row);
+                            }}
+                          >
+                            <DeleteIcon
+                              sx={{ fontSize: 15 }}
+                              color="secondary"
+                            />
+                          </IconButton>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))
@@ -117,47 +155,59 @@ function EventList({ onEventClick }) {
           </Table>
         </Box>
       </Paper>
+      <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
+        <DialogTitle>Confirmer la suppression</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Êtes-vous sûr de vouloir supprimer l'événement{" "}
+            {eventToDelete && eventToDelete.name} ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteDialog} color="secondary">
+            Annuler
+          </Button>
+          <Button onClick={deleteEvent} color="secondary">
+            Supprimer
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-      <Modal open={modalOpen} onClose={toggleModal}>
-        <Box sx={style}>
+      <Dialog open={modalOpen} onClose={toggleModal}>
+        <DialogTitle>
+          <Typography variant="h6">New Event</Typography>
           <IconButton
-            style={{ position: "absolute", right: "5px", top: "5px" }}
+            style={{ position: "absolute", top: 0, right: 0 }}
             onClick={toggleModal}
           >
-            <CloseIcon color="secondary" />
+            <CloseIcon />
           </IconButton>
-          <Typography
-            color={"white"}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
-            New Event
-          </Typography>
-
+        </DialogTitle>
+        <DialogContent>
           <TextField
+            fullWidth
             margin="normal"
             id="standard-basic"
             label="Name"
-            variant="standard"
+            value={name}
             onChange={(e) => setName(e.target.value)}
           />
+        </DialogContent>
+        <DialogActions>
           <Stack direction="row" spacing={2}>
-            <Button
-              disabled={!name}
-              variant="contained"
-              disableElevation
-              color="secondary"
-              onClick={addEvent}
-            >
+            <Button disableElevation sx={{ color: "white" }} onClick={addEvent}>
               Add
             </Button>
-            <Button variant="contained" disableElevation color="secondary">
+            <Button
+              sx={{ color: "white" }}
+              disableElevation
+              onClick={toggleModal}
+            >
               Cancel
             </Button>
           </Stack>
-        </Box>
-      </Modal>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

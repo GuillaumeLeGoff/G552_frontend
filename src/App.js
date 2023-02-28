@@ -1,20 +1,17 @@
-import "./styles/App.css";
+import { Grid, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import Home from "./components/Home";
+import { BrowserRouter, Route, Routes,Navigate } from "react-router-dom";
 import Create from "./components/dashboard/create/Create";
-import Header from "./components/Header";
-import Navbar from "./components/NavBar";
 import Login from "./components/dashboard/login/Login";
-import Profile from "./components/dashboard/profile/Profile";
 import Signup from "./components/dashboard/login/Signup";
 import Macro from "./components/dashboard/macro/Macro";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Container, Grid } from "@mui/material";
-import { ThemeProvider } from "@mui/material";
+import Profile from "./components/dashboard/profile/Profile";
+import Navbar from "./components/NavBar";
+import "./styles/App.css";
 import { appTheme } from "./themes/theme.ts";
 
 function App() {
-  /*  const [token] = useState(AuthService.getCurrentUser()); */
+  /* const [token] = useState(authService.getCurrentUser()); */
   const token = true;
 
   return (
@@ -23,18 +20,31 @@ function App() {
       <BrowserRouter>
         {/*  <Header /> */}
         <div className="Container">
-          <Grid container spacing={2}>
-            <Routes>
-              <Route index element={<Home />} />
-              <Route path="create" element={token ? <Create /> : <Login />} />
-              <Route path="create/:id" element={<Create />} />
-              <Route path="login" element={token ? <Home /> : <Login />} />
-              <Route path="macro" element={token ? <Macro /> : <Login />} />
-              <Route path="profile" element={token ? <Profile /> : <Login />} />
-
-              <Route path="register" element={token ? <Home /> : <Signup />} />
-            </Routes>
-          </Grid>
+          {token ? (
+            <Grid container spacing={2}>
+              <Routes>
+                <Route path="*" element={ <Navigate to="/create" />} />
+                <Route path="create" element={<Create />} />
+                <Route path="create/:id" element={<Create />} />
+                <Route path="macro" element={<Macro />} />
+                <Route path="profile" element={<Profile />} />
+              </Routes>
+            </Grid>
+          ) : (
+            <Grid
+              container
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              style={{ minHeight: "calc(94vh - 56px)" }}
+              spacing={2}
+            >
+              <Routes>
+                <Route path="login" element={<Login />} />
+                <Route path="signup" element={<Signup />} />
+              </Routes>
+            </Grid>
+          )}
         </div>
         <Navbar />
       </BrowserRouter>

@@ -1,6 +1,16 @@
 import { blue, pink } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
+/*
+couleurs STRAMATEL :
 
+GRIS : #31434f
+BORDEAU : #982d23
+ROUGE : #c93028
+ORANGE : #fb6a22
+JAUNE : #fe9b19
+
+
+ */
 export const appTheme = createTheme({
     palette: {
         primary: {

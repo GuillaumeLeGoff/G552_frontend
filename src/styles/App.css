@@ -1,8 +1,32 @@
-
+.media{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .Container {
     margin: 3vh;
 }
 
+.drop-zone{
+    display: flex;
+   justify-content: center;
+    align-items: center;
+    min-height: calc(94vh - 120px ) ;
+    width: 100%;
+   
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 
 
