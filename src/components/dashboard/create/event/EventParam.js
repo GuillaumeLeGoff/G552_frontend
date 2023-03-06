@@ -33,9 +33,7 @@ function EventParam(props) {
   }, []);
   function getMediasByID() {
     eventService.getById(props.id).then((result) => {
-      console.log(result.data);
       setEvent(result.data);
-      console.log(result.data);
     });
   }
   function handleRowHover(rowId) {

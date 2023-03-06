@@ -10,6 +10,7 @@ class AuthService {
                 username,
                 password
             }).then(response => {
+                console.log(response.data.accessToken);
                 if (response.data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(response.data));
                 }
@@ -19,6 +20,7 @@ class AuthService {
     
     logout() {
         localStorage.removeItem("user");
+        window.location.reload()
     }
     register(username, password, role) {
          let roles = [];

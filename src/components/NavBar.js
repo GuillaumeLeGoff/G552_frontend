@@ -21,8 +21,8 @@ import { Link, useLocation } from "react-router-dom";
 import AuthService from "../services/authService";
 
 function NavBar() {
-  /* const [token] = useState(AuthService.getCurrentUser()); */
-   const token = true;
+  const [token] = useState(AuthService.getCurrentUser());
+   /* const token = true; */
   const location = useLocation();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
 
@@ -76,23 +76,7 @@ function NavBar() {
           />
         </BottomNavigation>
       ) : (
-        <BottomNavigation value={location.pathname}>
-          <BottomNavigationAction
-            component={Link}
-            label="Login"
-            to="/login"
-            icon={<LoginIcon sx={{ color: getIconColor("/login") }} />}
-          />
-
-          <BottomNavigationAction
-            component={Link}
-            label="Créer un compte"
-            to="/register"
-            icon={
-              <PersonAddAltIcon sx={{ color: getIconColor("/register") }} />
-            }
-          />
-        </BottomNavigation>
+        ""
       )}
 
       <Dialog open={logoutDialogOpen} onClose={handleLogoutDialogClose}>

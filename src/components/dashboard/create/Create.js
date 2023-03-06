@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import EventMediaService from "../../../services/eventMediaService";
 import { v4 as uuidv4 } from "uuid";
 import mediaService from "../../../services/mediaService";
+import authService from "../../../services/authService";
 
 function Create() {
   const [isDragging, setIsDragging] = useState(false);
@@ -46,6 +47,7 @@ function Create() {
   function getEvents() {
     if (id != undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
+        
         const newMedias = result.data.map((media) => {
           return { ...media, id: uuidv4(), idBdd: media.id };
         });
@@ -129,11 +131,13 @@ function Create() {
             return column;
           });
         });
-        console.log(id);
+
+        console.log();
         EventMediaService.create({
           mediaId: item.idBdd,
           eventId: id,
           duration: 0,
+          userId:authService.getCurrentUser().user.id
         }).then((result) => {
           console.log(result);
         });

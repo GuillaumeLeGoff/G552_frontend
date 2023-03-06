@@ -1,10 +1,11 @@
 import axios from "axios";
 import Config from "../config.json";
+import authService from "./authService";
 const URL_API = Config.SERVER_URL;
 class UploadService {
   get() {
     const data = {};
-    return axios.get(URL_API + "/medias", JSON.stringify(data));
+    return axios.get(URL_API + "/medias/" + authService.getCurrentUser().user.username, JSON.stringify(data));
   }
 
   delete(file) {
@@ -17,9 +18,8 @@ class UploadService {
   upload(file) {
     let formData = new FormData();
     formData.append("file", file);
-    console.log(file);
     return axios
-      .post(URL_API + "/medias", formData, {
+      .post(URL_API + "/medias/" + authService.getCurrentUser().user.username , formData, {
         headers: {
           "content-type": `multipart/form-data;boundary=${formData._boundary}`,
         },

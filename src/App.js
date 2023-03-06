@@ -1,5 +1,6 @@
 import { Grid, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
+import { useState } from "react";
 import { BrowserRouter, Route, Routes,Navigate } from "react-router-dom";
 import Create from "./components/dashboard/create/Create";
 import Login from "./components/dashboard/login/Login";
@@ -7,12 +8,14 @@ import Signup from "./components/dashboard/login/Signup";
 import Macro from "./components/dashboard/macro/Macro";
 import Profile from "./components/dashboard/profile/Profile";
 import Navbar from "./components/NavBar";
+import authService from "./services/authService";
 import "./styles/App.css";
 import { appTheme } from "./themes/theme.ts";
 
 function App() {
-  /* const [token] = useState(authService.getCurrentUser()); */
-  const token = true;
+  const [token] = useState(authService.getCurrentUser());
+  console.log(token);
+  /* const token = true; */
 
   return (
     <ThemeProvider theme={appTheme}>
@@ -40,8 +43,8 @@ function App() {
               spacing={2}
             >
               <Routes>
+              <Route path="*" element={ <Navigate to="/login" />} />
                 <Route path="login" element={<Login />} />
-                <Route path="signup" element={<Signup />} />
               </Routes>
             </Grid>
           )}

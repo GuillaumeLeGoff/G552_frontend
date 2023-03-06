@@ -19,18 +19,13 @@ function Login() {
   const [error, setError] = useState(null);
 
   async function handleSubmit() {
-    const data = AuthService.login(user, password);
-    console.log(data);
-    if (data.status === "success") {
-      localStorage.setItem("token", data.token);
-    } else {
-      setError(data.message);
-    }
+    AuthService.login(user, password);
+   
   }
 
   return (
     <Grid item xs={10} style={{ maxWidth: "calc(70vh)" }}>
-      <Paper >
+      <Paper>
         <Stack>
           <div style={{ display: "flex", alignItems: "center" }}>
             <IconButton sx={{ ml: 2 }}></IconButton>
@@ -39,7 +34,13 @@ function Login() {
             </Typography>
           </div>
         </Stack>
-        <Box display="flex" justifyContent="center" alignItems="center" paddingX={5} pb={5}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          paddingX={5}
+          pb={5}
+        >
           <form onSubmit={handleSubmit}>
             <TextField
               label="Nom d'utilisateur"
