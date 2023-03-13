@@ -1,8 +1,6 @@
-
-
 @media (max-width: 599px) {
   .paper-container {
-    margin-bottom: 56px ;
+    margin-bottom: 56px;
   }
 }
 
@@ -24,7 +22,6 @@
 
 .selected-image {
   width: 100%;
-  
 }
 
 .image {
@@ -33,23 +30,35 @@
 }
 
 /* ===== Scrollbar CSS ===== */
-  /* Firefox */
-  * {
-    scrollbar-width: auto;
-    scrollbar-color: #1e454d #ffffff00;
-  }
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #1e454d #ffffff00;
+}
 
-  /* Chrome, Edge, and Safari */
-  *::-webkit-scrollbar {
-    display: none;
-  }
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  display: none;
+}
 
-  *::-webkit-scrollbar-track {
-    background: #ffffff00;
-  }
+*::-webkit-scrollbar-track {
+  background: #ffffff00;
+}
 
-  *::-webkit-scrollbar-thumb {
-    background-color: #1e454d;
-    /* border-radius: 16px; */
-    /* border: 3px solid #ffffff; */
-  }
+*::-webkit-scrollbar-thumb {
+  background-color: #1e454d;
+  /* border-radius: 16px; */
+  /* border: 3px solid #ffffff; */
+}
+.notransition {
+  /* Supprime la transition des éléments lorsqu'ils sont déplacés */
+  transition: none !important;
+}
+
+.crop-container {
+  position: absolute;
+  top: 15vh;
+  left: 20vh;
+  right: 20vh;
+  bottom: 15vh;
+}

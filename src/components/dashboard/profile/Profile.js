@@ -12,19 +12,8 @@ import {
 } from "@mui/material";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 function Profile() {
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "#203038",
-    boxShadow: 24,
-    p: 4,
-  };
   const [isEditMode, setIsEditMode] = useState(false);
   const [username, setUsername] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
   const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
 
@@ -51,19 +40,24 @@ function Profile() {
               <AccountBoxIcon sx={{ color: "white" }} />
             </IconButton>
             <Typography variant="h6" color="white" sx={{ padding: 2 }}>
-              Media
+              Profile
             </Typography>
           </div>
         </Stack>
         <Box
-          sx={{ minHeight: "calc(94vh - 120px)", overflowY: "scroll" }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            minHeight: "calc(94vh - 120px)",
+            overflowY: "scroll",
+          }}
           p={1}
         >
-          <Typography variant="h5" component="h2">
-            Sport: {username}
-          </Typography>
-
           <Box sx={{ mt: 4 }}>
+            <Typography variant="h5" component="h2">
+              Sport: {username}
+            </Typography>
+
             <Typography variant="h6" component="h2" gutterBottom>
               Change Password:
             </Typography>

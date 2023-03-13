@@ -2,27 +2,70 @@ import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
+import Cropper from "react-easy-crop";
 import {
-  Box, Button, Dialog, DialogActions,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
   DialogContent,
-  DialogContentText, DialogTitle, ImageList,
-  ImageListItem, Paper, Stack
+  DialogContentText,
+  DialogTitle,
+  ImageList,
+  ImageListItem,
+  Modal,
+  Paper,
+  Stack,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import EventMediaService from "../../../../services/eventMediaService";
 import mediaService from "../../../../services/mediaService";
 
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useDropzone } from "react-dropzone";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 import "../../../../styles/Media.css";
-
 function Medias(props) {
+  const style = {
+    height: "100%",
+    width: "100%",
+    bgcolor: "#203038",
+    p: 4,
+  };
   const [selectedImage, setSelectedImage] = useState(null);
   const [dialogUpload, setDialogUpload] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const [FileToDelete, setFileToDelete] = useState();
+  const [crop, setCrop] = useState({ x: 0, y: 0});
+  const [zoom, setZoom] = useState(1);
+  let cropSize = { width: 460, height: 380 };
+
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    console.log(croppedArea, croppedAreaPixels);
+  }, []);
+
+  // Fonction pour centrer l'image dans le crop
+  function centerImageInCrop() {
+    const { width, height } = crop;
+    setCrop({
+      ...crop,
+      x: width < 1 ? 0 : (1 - width) / 2,
+      y: height < 1 ? 0 : (1 - height) / 2,
+    });
+  }
+
+  // Fonction pour mettre à jour le zoom
+  function handleZoomChange(zoom) {
+    setZoom(zoom);
+    if (zoom < 0.1) {
+      centerImageInCrop();
+    }
+  }
+  const [croppedImage, setCroppedImage] = useState(undefined);
+  const [imageToCrop, setImageToCrop] = useState(undefined);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -58,15 +101,13 @@ function Medias(props) {
   }
 
   function uploadOneFile(event) {
-    mediaService
-      .upload(event[0])
-      .then(() => {
-        props.getMedias();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    displayDialogUpload();
+    console.log(event);
+
+    const reader = new FileReader();
+
+    reader.addEventListener("load", () => setImageToCrop(reader.result));
+
+    reader.readAsDataURL(event[0]);
   }
 
   function handleImageClick(imageId) {
@@ -211,28 +252,58 @@ function Medias(props) {
         </Box>
       </Paper>
       {/* Modal upload  */}
-      <Dialog open={dialogUpload} onClose={displayDialogUpload}>
-        <DialogTitle>{"Upload"}</DialogTitle>
-        <DialogContent>
-          <section className="dropZone">
-            <div {...getRootProps({ className: "dropzone" })}>
-              <input onDrop={(e) => uploadOneFile(e)} {...getInputProps()} />
-              <div className="modal">
-                <CloudUploadIcon style={{ color: "white", fontSize: "4rem" }} />
-                <em className="textDropZone">Click to select files</em>
-                <em className="textDropZone">
-                  (Only images and videos will be accepted)
-                </em>
-              </div>
+      <Modal open={dialogUpload} onClose={displayDialogUpload}>
+        <Box sx={style}>
+          {/* <IconButton
+            style={{ position: "absolute", right: "5px", top: "5px" }}
+            onClick={displayDialogUpload}
+          >
+            <CloseIcon color="secondary" />
+          </IconButton> */}
+          <Typography
+            color={"white"}
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+          >
+            Upload
+          </Typography>
+          {imageToCrop ? (
+            <div  className="crop-container">
+              <Cropper
+               
+                image={imageToCrop}
+                crop={crop}
+                zoom={zoom}
+                maxZoom={5}
+                aspect={16/9}
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                onZoomChange={handleZoomChange}
+                minZoom={0.1}  // dézoom complet
+                zoomSpeed={0.1}
+                restrictPosition={false}
+                cropSize={cropSize}
+              />
             </div>
-          </section>
-        </DialogContent>
-        <DialogActions>
-          <Button sx={{ color: "white" }} onClick={displayDialogUpload}>
-            Annuler
-          </Button>
-        </DialogActions>
-      </Dialog>
+          ) : (
+            <section className="dropZone">
+              <div {...getRootProps({ className: "dropzone" })}>
+                <input onDrop={(e) => uploadOneFile(e)} {...getInputProps()} />
+                <div className="modal">
+                  <CloudUploadIcon
+                    style={{ color: "white", fontSize: "4rem" }}
+                  />
+                  <em className="textDropZone">Click to select files</em>
+                  <em className="textDropZone">
+                    (Only images and videos will be accepted)
+                  </em>
+                </div>
+              </div>
+            </section>
+          )}
+        </Box>
+      </Modal>
 
       {/* Modal confirm suppression file */}
       <Dialog open={dialogDelete} onClose={displayDialogDelete}>
