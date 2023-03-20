@@ -15,7 +15,7 @@ import { appTheme } from "./themes/theme.ts";
 function App() {
   const [token] = useState(authService.getCurrentUser());
   console.log(token);
-  /* const token = true; */
+  /* const token = false; */
 
   return (
     <ThemeProvider theme={appTheme}>

@@ -58,7 +58,7 @@
 .crop-container {
   position: absolute;
   top: 15vh;
-  left: 20vh;
-  right: 20vh;
+  left: 10vh;
+  right: 10vh;
   bottom: 15vh;
 }

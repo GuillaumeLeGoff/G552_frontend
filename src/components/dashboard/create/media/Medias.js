@@ -2,7 +2,8 @@ import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
-import Cropper from "react-easy-crop";
+import Crop from "./crop/Crop";
+
 import {
   Box,
   Button,
@@ -20,12 +21,10 @@ import {
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import React, { useCallback, useState } from "react";
-import EventMediaService from "../../../../services/eventMediaService";
-import mediaService from "../../../../services/mediaService";
-
+import EventMediaService from "../../../../services/eventmediaService";
+import mediaService from "../../../../services/UploadService";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useDropzone } from "react-dropzone";
-import ReactCrop from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import "../../../../styles/Media.css";
 function Medias(props) {
@@ -39,40 +38,15 @@ function Medias(props) {
   const [dialogUpload, setDialogUpload] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const [FileToDelete, setFileToDelete] = useState();
-  const [crop, setCrop] = useState({ x: 0, y: 0});
-  const [zoom, setZoom] = useState(1);
-  let cropSize = { width: 460, height: 380 };
-
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
-    console.log(croppedArea, croppedAreaPixels);
-  }, []);
-
-  // Fonction pour centrer l'image dans le crop
-  function centerImageInCrop() {
-    const { width, height } = crop;
-    setCrop({
-      ...crop,
-      x: width < 1 ? 0 : (1 - width) / 2,
-      y: height < 1 ? 0 : (1 - height) / 2,
-    });
-  }
-
-  // Fonction pour mettre à jour le zoom
-  function handleZoomChange(zoom) {
-    setZoom(zoom);
-    if (zoom < 0.1) {
-      centerImageInCrop();
-    }
-  }
-  const [croppedImage, setCroppedImage] = useState(undefined);
   const [imageToCrop, setImageToCrop] = useState(undefined);
+  const [originalName, setOriginalName] = useState(null);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/png": [],
       "video/mp4": [],
     },
-    onDrop: (files) => uploadOneFile(files),
+    onDrop: (files) => goToCrop(files),
   });
 
   function DeleteFile() {
@@ -100,14 +74,31 @@ function Medias(props) {
     setDialogDelete(!dialogDelete);
   }
 
-  function uploadOneFile(event) {
-    console.log(event);
+  
 
+  function goToCrop(event) {
+    setOriginalName(event[0].name);
     const reader = new FileReader();
-
     reader.addEventListener("load", () => setImageToCrop(reader.result));
-
     reader.readAsDataURL(event[0]);
+  }
+
+  function uploadMediaCroped(event) {
+    console.log(event[0]);
+    const fileWithOriginalName = {
+      ...event,
+      originalFileName: [originalName],
+    };
+    
+    mediaService
+      .upload(fileWithOriginalName)
+      .then(() => {
+        props.getMedias();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    displayDialogUpload();
   }
 
   function handleImageClick(imageId) {
@@ -269,27 +260,13 @@ function Medias(props) {
             Upload
           </Typography>
           {imageToCrop ? (
-            <div  className="crop-container">
-              <Cropper
-               
-                image={imageToCrop}
-                crop={crop}
-                zoom={zoom}
-                maxZoom={5}
-                aspect={16/9}
-                onCropChange={setCrop}
-                onCropComplete={onCropComplete}
-                onZoomChange={handleZoomChange}
-                minZoom={0.1}  // dézoom complet
-                zoomSpeed={0.1}
-                restrictPosition={false}
-                cropSize={cropSize}
-              />
-            </div>
+            <>
+              <Crop imageToCrop={imageToCrop} uploadMediaCroped={uploadMediaCroped}/>
+            </>
           ) : (
             <section className="dropZone">
               <div {...getRootProps({ className: "dropzone" })}>
-                <input onDrop={(e) => uploadOneFile(e)} {...getInputProps()} />
+                <input onDrop={(e) => goToCrop(e)} {...getInputProps()} />
                 <div className="modal">
                   <CloudUploadIcon
                     style={{ color: "white", fontSize: "4rem" }}

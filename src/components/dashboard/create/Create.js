@@ -4,11 +4,11 @@ import Event from "./event/Event";
 import Grid from "@mui/material/Grid";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
-import EventMediaService from "../../../services/eventMediaService";
-import { v4 as uuidv4 } from "uuid";
-import mediaService from "../../../services/mediaService";
-import authService from "../../../services/authService";
 
+import { v4 as uuidv4 } from "uuid";
+import mediaService from "../../../services/UploadService";
+import authService from "../../../services/authService";
+import EventMediaService from "../../../services/eventmediaService"
 function Create() {
   const [isDragging, setIsDragging] = useState(false);
   const [eventMedia, setEventMedia] = useState([

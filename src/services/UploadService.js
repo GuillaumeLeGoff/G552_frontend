@@ -19,7 +19,7 @@ class UploadService {
     let formData = new FormData();
     formData.append("file", file);
     return axios
-      .post(URL_API + "/medias/" + authService.getCurrentUser().user.username , formData, {
+      .post(URL_API + "/medias/" + authService.getCurrentUser().user.username, formData, {
         headers: {
           "content-type": `multipart/form-data;boundary=${formData._boundary}`,
         },

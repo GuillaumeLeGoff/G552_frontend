@@ -18,7 +18,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import eventService from "../../../../services/eventService";
+import eventService from "../../../../services/EventService";
 import "../../../../styles/App.css";
 import Media from "../media/Media";
 

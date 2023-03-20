@@ -23,7 +23,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
-import eventService from "../../../../services/eventService";
+import eventService from "../../../../services/EventService";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import React, { useEffect, useState } from "react";

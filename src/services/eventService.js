@@ -9,7 +9,7 @@ class Eventservice {
     return axios
       .post(URL_API + "/events", {
         name: name,
-        userId: authService.getCurrentUser().user.id 
+        userId: authService.getCurrentUser().id 
       })
       .then((res) => {
         console.log(res);
@@ -18,12 +18,12 @@ class Eventservice {
   }
   get() {
    
-    return axios.get(URL_API + "/events/"+  authService.getCurrentUser().user.id );
+    return axios.get(URL_API + "/events/"+  authService.getCurrentUser().id );
   }
 
   getById(id) {
     const data = {
-      userId: authService.getCurrentUser().user.id
+      userId: authService.getCurrentUser().id
     };
     return axios.get(URL_API + "/events/" + id, { params: data });
   }
