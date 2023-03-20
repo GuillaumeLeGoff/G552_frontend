@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import mediaService from "../../../services/UploadService";
 import authService from "../../../services/authService";
-import EventMediaService from "../../../services/eventmediaService"
+import EventMediaService from "../../../services/eventMediaService"
 function Create() {
   const [isDragging, setIsDragging] = useState(false);
   const [eventMedia, setEventMedia] = useState([

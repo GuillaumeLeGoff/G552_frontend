@@ -2,8 +2,9 @@ import AddIcon from "@mui/icons-material/Add";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
-import Crop from "./crop/Crop";
-
+import Crop from "./crop/CropImage";
+import CloseIcon from "@mui/icons-material/Close";
+import UploadIcon from "@mui/icons-material/Upload";
 import {
   Box,
   Button,
@@ -20,8 +21,8 @@ import {
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import React, { useCallback, useState } from "react";
-import EventMediaService from "../../../../services/eventmediaService";
+import React, {  useState } from "react";
+import EventMediaService from "../../../../services/eventMediaService";
 import mediaService from "../../../../services/UploadService";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useDropzone } from "react-dropzone";
@@ -38,7 +39,7 @@ function Medias(props) {
   const [dialogUpload, setDialogUpload] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
   const [FileToDelete, setFileToDelete] = useState();
-  const [imageToCrop, setImageToCrop] = useState(undefined);
+  const [imageToCrop, setImageToCrop] = useState(null);
   const [originalName, setOriginalName] = useState(null);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -64,6 +65,7 @@ function Medias(props) {
 
   function displayDialogUpload() {
     setDialogUpload(!dialogUpload);
+    setImageToCrop(null);
   }
 
   function OpenDialogDelete(file) {
@@ -74,8 +76,6 @@ function Medias(props) {
     setDialogDelete(!dialogDelete);
   }
 
-  
-
   function goToCrop(event) {
     setOriginalName(event[0].name);
     const reader = new FileReader();
@@ -84,22 +84,21 @@ function Medias(props) {
   }
 
   function uploadMediaCroped(event) {
-    console.log(event[0]);
-    const fileWithOriginalName = {
-      ...event,
-      originalFileName: [originalName],
-    };
-    
-    mediaService
-      .upload(fileWithOriginalName)
-      .then(() => {
-        props.getMedias();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    displayDialogUpload();
-  }
+  const fileWithOriginalName = new File([event[0]], originalName, {
+    type: "image/jpeg",
+  });
+
+  mediaService
+    .upload(fileWithOriginalName)
+    .then(() => {
+      props.getMedias();
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  displayDialogUpload();
+  setImageToCrop(null);
+}
 
   function handleImageClick(imageId) {
     if (imageId === selectedImage) {
@@ -108,6 +107,7 @@ function Medias(props) {
       setSelectedImage(imageId);
     }
   }
+
 
   return (
     <div>
@@ -128,7 +128,7 @@ function Medias(props) {
             <IconButton sx={{ ml: 2 }}>
               <ImageIcon sx={{ color: "white" }} />
             </IconButton>
-            <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+            <Typography color="white" sx={{ padding: 2 }}>
               Media
             </Typography>
           </div>
@@ -138,19 +138,23 @@ function Medias(props) {
           </IconButton>
         </Stack>
 
-        <Box
-          sx={{ maxHeight: "calc(94vh - 120px)", overflowY: "scroll" }}
-          p={1}
+        <Droppable
+          droppableId={`${props.eventMedia[1].id}`}
+          isDropDisabled={true}
         >
-          <ImageList variant="masonry" cols={2} gap={8}>
-            <Droppable
-              droppableId={`${props.eventMedia[1].id}`}
-              isDropDisabled={true}
-            >
-              {(provided) => (
-                <div ref={provided.innerRef}>
-                  {props.eventMedia
-                    ? props.eventMedia[1].medias.map((file, index) => (
+          {(provided) => (
+            <div ref={provided.innerRef}>
+              {props.eventMedia[1].medias ? (
+                props.eventMedia[1].medias.length > 0 ? (
+                  <Box
+                    sx={{
+                      maxHeight: "calc(94vh - 120px)",
+                      overflowY: "scroll",
+                    }}
+                    p={1}
+                  >
+                    <ImageList variant="masonry" cols={2} gap={8}>
+                      {props.eventMedia[1].medias.map((file, index) => (
                         <ImageListItem key={file.id}>
                           <Draggable
                             disableInteractiveElementBlocking
@@ -233,35 +237,51 @@ function Medias(props) {
                             )}
                           </Draggable>
                         </ImageListItem>
-                      ))
-                    : ""}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </ImageList>
-        </Box>
+                      ))}
+                    </ImageList>
+                  </Box>
+                ) : (
+                  <Box className="Info">
+                    <Typography variant="body1" color="text.secondary">
+                      Ajouter media "+"
+                    </Typography>
+                  </Box>
+                )
+              ) : null}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </Paper>
       {/* Modal upload  */}
       <Modal open={dialogUpload} onClose={displayDialogUpload}>
         <Box sx={style}>
-          {/* <IconButton
-            style={{ position: "absolute", right: "5px", top: "5px" }}
-            onClick={displayDialogUpload}
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            spacing={2}
           >
-            <CloseIcon color="secondary" />
-          </IconButton> */}
-          <Typography
-            color={"white"}
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-          >
-            Upload
-          </Typography>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <IconButton sx={{ ml: 2 }}>
+                <UploadIcon sx={{ color: "white" }} />
+              </IconButton>
+              <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+                Upload
+              </Typography>
+            </div>
+
+            <IconButton onClick={displayDialogUpload}>
+              <CloseIcon color="secondary" />
+            </IconButton>
+          </Stack>
+
           {imageToCrop ? (
             <>
-              <Crop imageToCrop={imageToCrop} uploadMediaCroped={uploadMediaCroped}/>
+              <Crop
+                imageToCrop={imageToCrop}
+                uploadMediaCroped={uploadMediaCroped}
+              />
             </>
           ) : (
             <section className="dropZone">
@@ -297,6 +317,7 @@ function Medias(props) {
           </Button>
         </DialogActions>
       </Dialog>
+      
     </div>
   );
 }

@@ -15,28 +15,26 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-
-/* import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary"; */
 import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
-import eventService from "../../../../services/EventService";
+import eventService from "../../../../services/eventService";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
+import "../../../../styles/App.css";
 
 function EventList({ onEventClick }) {
   useEffect(() => {
-
     getEvent();
+    console.log("event" + event);
   }, []);
   const [name, setName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  const [event, setEvent] = useState();
+  const [event, setEvent] = useState(undefined);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
@@ -44,8 +42,8 @@ function EventList({ onEventClick }) {
   function getEvent() {
     eventService.get().then((result) => {
       setEvent(result.data);
-      console.log(result.data);
     });
+    console.log("event" + event);
   }
   function toggleModal() {
     setModalOpen(!modalOpen);
@@ -80,7 +78,12 @@ function EventList({ onEventClick }) {
 
   return (
     <div>
-      <Paper style={{ minHeight: "calc(94vh - 56px )" }}>
+      <Paper
+        style={{
+          maxHeight: "calc(94vh - 56px )",
+          minHeight: "calc(94vh - 56px )",
+        }}
+      >
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -95,54 +98,52 @@ function EventList({ onEventClick }) {
               Event
             </Typography>
           </div>
-
           <IconButton onClick={toggleModal}>
             <AddIcon color="secondary" />
           </IconButton>
         </Stack>
 
-        <Box p={1} style={{ overflow: "auto" }}>
-          <Table stickyHeader size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell align="right"></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {event
-                ? event.map((row) => (
-                    <TableRow
-                      onMouseEnter={() => handleRowHover(row.id)}
-                      onMouseLeave={() => handleRowHover(null)}
-                      hover
-                      onClick={() => onEventClick(row.id)}
-                      key={row.id}
-                    >
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell align="right">
-                        {hoveredRow === row.id && (
-                          <IconButton
-                            sx={{ p: 0 }}
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openDeleteDialog(row);
-                            }}
-                          >
-                            <DeleteIcon
-                              sx={{ fontSize: 15 }}
-                              color="secondary"
-                            />
-                          </IconButton>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  ))
-                : ""}
-            </TableBody>
-          </Table>
-        </Box>
+        {event !== undefined ? (
+          event.length > 0 ? (
+            event.map((row) => (
+              <Table size="small">
+                <TableBody>
+                  <TableRow 
+                    onMouseEnter={() => handleRowHover(row.id)}
+                    onMouseLeave={() => handleRowHover(null)}
+                    hover
+                    onClick={() => onEventClick(row.id)}
+                    key={row.id}
+                  >
+                    <TableCell >{row.name}</TableCell>
+                    <TableCell p={0} align="right">
+                      {hoveredRow === row.id && (
+                        <IconButton
+                          sx={{ p: 0 }}
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openDeleteDialog(row);
+                          }}
+                        >
+                          <DeleteIcon sx={{ fontSize: 15 }} color="secondary" />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            ))
+          ) : (
+            <Box className="Info">
+              <Typography variant="body1" color="text.secondary">
+                Ajouter event "+"
+              </Typography>
+            </Box>
+          )
+        ) : (
+          ""
+        )}
       </Paper>
       <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
         <DialogTitle>Confirmer la suppression</DialogTitle>

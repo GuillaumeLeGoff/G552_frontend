@@ -1,0 +1,30 @@
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background-color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .spinner {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    padding: 1.4px;
+    background: conic-gradient(#0000 10%, #203038) content-box;
+    -webkit-mask: repeating-conic-gradient(#0000 0deg, #000 1deg 20deg, #0000 21deg 36deg),
+      radial-gradient(farthest-side, #0000 calc(100% - 11.5px), #000 calc(100% - 11.5px));
+    -webkit-mask-composite: destination-in;
+    mask-composite: intersect;
+    animation: spinner-d55elj 1s infinite steps(10);
+  }
+  
+  @keyframes spinner-d55elj {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+  

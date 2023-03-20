@@ -16,6 +16,7 @@ class UploadService {
     });
   }
   upload(file) {
+    console.log('upload', file);
     let formData = new FormData();
     formData.append("file", file);
     return axios

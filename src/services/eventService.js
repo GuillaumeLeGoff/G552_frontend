@@ -9,7 +9,7 @@ class Eventservice {
     return axios
       .post(URL_API + "/events", {
         name: name,
-        userId: authService.getCurrentUser().id 
+        userId: authService.getCurrentUser().user.id
       })
       .then((res) => {
         console.log(res);
@@ -18,7 +18,7 @@ class Eventservice {
   }
   get() {
    
-    return axios.get(URL_API + "/events/"+  authService.getCurrentUser().id );
+    return axios.get(URL_API + "/events/"+  authService.getCurrentUser().user.id );
   }
 
   getById(id) {

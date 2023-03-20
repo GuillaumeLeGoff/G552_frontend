@@ -19,11 +19,11 @@ function Media(props) {
     >
       {(provided, snapshot) => (
         <TableRow 
-          className="media"
+          
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           ref={provided.innerRef}
-          sx={{ border: "1", borderColor: "grey.500" }}
+          
           onMouseEnter={() => props.handleRowHover(props.item.id)}
           onMouseLeave={() => props.handleRowHover(null)}
           hover
@@ -37,15 +37,16 @@ function Media(props) {
             ) : (
               <div >
                 <img
-                  style={{ maxWidth: "calc(20vh )", maxHeight: "calc(20vh )"}}
+                  style={{ minWidth: "calc(15vh )", maxHeight: "calc(20vh )"}}
                   src={props.item.path}
                   alt={props.item.title}
                 />
               </div>
             )}
           </TableCell>
-          <TableCell sx={{ borderBottom: "0" }} p={0}>
+          <TableCell  align="right" sx={{ borderBottom: "0" }} p={0}>
             <TextField
+            value={props.item.duration}
               size="small"
               type="number"
               InputProps={{ inputProps: { min: 0, max: 999 } }}

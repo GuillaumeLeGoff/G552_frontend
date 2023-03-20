@@ -12,7 +12,7 @@ function Event(props) {
   return (
     <div>
       {props.id === undefined ? (
-        <EventList onEventClick={idEventClick} />
+        <EventList   eventMedia={props.eventMedia} onEventClick={idEventClick} />
       ) : (
         <EventParam
         getEvents={props.getEvents}

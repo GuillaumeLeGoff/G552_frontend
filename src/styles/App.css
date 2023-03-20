@@ -7,7 +7,7 @@
     margin: 3vh;
 }
 
-.drop-zone{
+.Info{
     display: flex;
    justify-content: center;
     align-items: center;
@@ -29,4 +29,6 @@ input[type=number] {
 }
 
 
-
+.MuiTableCell-root {
+  border-bottom: 1px solid #2b646f26 !important;
+}

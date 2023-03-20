@@ -6,6 +6,7 @@ function Crop({ imageToCrop, uploadMediaCroped }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImageURL, setCroppedImageURL] = useState(null);
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
@@ -49,9 +50,15 @@ function Crop({ imageToCrop, uploadMediaCroped }) {
   const handleUpload = async () => {
     if (!imageToCrop || !croppedAreaPixels) return;
     const croppedImage = await getCroppedImage();
+    console.log('donee', { croppedImage });
     uploadMediaCroped([croppedImage]);
   };
-
+  const showCroppedImage = async () => {
+    if (!imageToCrop || !croppedAreaPixels) return;
+    const croppedImage = await getCroppedImage();
+    const objectUrl = URL.createObjectURL(croppedImage);
+    setCroppedImageURL(objectUrl);
+  };
   return (
     <div>
       <div
@@ -62,6 +69,7 @@ function Crop({ imageToCrop, uploadMediaCroped }) {
           background: "#333",
         }}
       >
+        
         <Cropper
           image={imageToCrop}
           crop={crop}
@@ -81,8 +89,14 @@ function Crop({ imageToCrop, uploadMediaCroped }) {
           alignItems: "center",
         }}
       >
-        <Button variant="contained" color="primary" onClick={handleUpload}>
-          Recadrer l'image
+        <Button variant="contained" color="primary" onClick={showCroppedImage}>
+          Afficher l'image recadrée
+        </Button>
+        {croppedImageURL && (
+          <img src={croppedImageURL} alt="Cropped" style={{ marginTop: "16px" }} />
+        )}
+        <Button variant="contained" color="primary" onClick={handleUpload} style={{ marginTop: "16px" }}>
+          Upload
         </Button>
       </div>
     </div>

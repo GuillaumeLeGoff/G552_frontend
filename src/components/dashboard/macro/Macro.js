@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
-import eventService from "../../../services/EventService";
+import eventService from "../../../services/eventService";
 
 function Macro() {
   const [macros, setMacros] = useState([

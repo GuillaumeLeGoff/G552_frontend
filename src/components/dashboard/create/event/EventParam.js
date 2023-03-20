@@ -1,5 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   Box,
   Button,
@@ -11,14 +12,16 @@ import {
   Paper,
   Stack,
   Table,
-  TableBody, TableContainer, TableRow
+  TableBody,
+  TableContainer,
+  TableRow,
 } from "@mui/material";
 
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import eventService from "../../../../services/EventService";
+import eventService from "../../../../services/eventService";
 import "../../../../styles/App.css";
 import Media from "../media/Media";
 
@@ -30,10 +33,12 @@ function EventParam(props) {
   useEffect(() => {
     props.getEvents();
     getMediasByID();
+
   }, []);
   function getMediasByID() {
     eventService.getById(props.id).then((result) => {
       setEvent(result.data);
+      console.log(result.data);
     });
   }
   function handleRowHover(rowId) {
@@ -61,7 +66,10 @@ function EventParam(props) {
 
   return (
     <div>
-      <Paper style={{ minHeight: "calc(94vh - 56px )" }}>
+      <Paper style={{
+          maxHeight: "calc(94vh - 56px )",
+          minHeight: "calc(94vh - 56px )",
+        }}>
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -75,10 +83,13 @@ function EventParam(props) {
             <IconButton sx={{ ml: 2 }}>
               <PermMediaIcon sx={{ color: "white" }} />
             </IconButton>
-            <Typography variant="h6" color="white" sx={{ padding: 2 }}>
-              Event : {event.name}
+            <Typography  color="white" sx={{ padding: 2 }}>
+              Event : {}
             </Typography>
           </div>
+          <IconButton>
+            <PlayArrowIcon color="secondary" />
+          </IconButton>
         </Stack>
 
         <TableContainer
@@ -89,30 +100,24 @@ function EventParam(props) {
           }}
         >
           <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
-            <Droppable
-              droppableId={`${props.eventMedia[0].id}`}
-
-            >
+            <Droppable droppableId={`${props.eventMedia[0].id}`}>
               {(provided, snapshot) => (
-                <TableBody
-                  ref={provided.innerRef}
-                 
-                >
+                <TableBody ref={provided.innerRef}>
                   {props.eventMedia[0].medias.length ? (
                     props.eventMedia[0].medias.map((item, index) => (
-                      
-                       
-                          <Media handleRowHover={handleRowHover} openDeleteDialog={openDeleteDialog} hoveredRow={hoveredRow} key={item.id} index={index} item={item} />
-                      
-                     
+                      <Media
+                        handleRowHover={handleRowHover}
+                        openDeleteDialog={openDeleteDialog}
+                        hoveredRow={hoveredRow}
+                        key={item.id}
+                        index={index}
+                        item={item}
+                      />
                     ))
                   ) : (
-                    <Box
-                      className='drop-zone'
-                    >
+                    <Box className="Info">
                       <Typography variant="body1" color="text.secondary">
                         Drop medias here
-                        
                       </Typography>
                     </Box>
                   )}
