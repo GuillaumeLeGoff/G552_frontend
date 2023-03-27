@@ -13,6 +13,7 @@ class AuthService {
                 console.log(response.data.accessToken);
                 if (response.data.accessToken) {
                     localStorage.setItem("user", JSON.stringify(response.data));
+                    window.location.reload()
                 }
                return response.data;
             });

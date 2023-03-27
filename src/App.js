@@ -22,7 +22,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 3000); // Ici, 3000 millisecondes (3 secondes) est le temps d'affichage de la page de chargement.
+    }, 1000); // Ici, 3000 millisecondes (3 secondes) est le temps d'affichage de la page de chargement.
 
     return () => clearTimeout(timer);
   }, []);

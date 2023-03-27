@@ -5,7 +5,7 @@ const URL_API = Config.SERVER_URL;
 class UploadService {
   get() {
     const data = {};
-    return axios.get(URL_API + "/medias/" + authService.getCurrentUser().user.username, JSON.stringify(data));
+    return axios.get(URL_API + "/medias/" + authService.getCurrentUser().user.id, JSON.stringify(data));
   }
 
   delete(file) {
@@ -19,8 +19,9 @@ class UploadService {
     console.log('upload', file);
     let formData = new FormData();
     formData.append("file", file);
+    const data = {user: authService.getCurrentUser().user};
     return axios
-      .post(URL_API + "/medias/" + authService.getCurrentUser().user.username, formData, {
+      .post(URL_API + "/medias/" + authService.getCurrentUser().user.username, formData, JSON.stringify(data),{
         headers: {
           "content-type": `multipart/form-data;boundary=${formData._boundary}`,
         },

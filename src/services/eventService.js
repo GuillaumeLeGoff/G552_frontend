@@ -18,7 +18,7 @@ class Eventservice {
   }
   get() {
    
-    return axios.get(URL_API + "/events/"+  authService.getCurrentUser().user.id );
+    return axios.get(URL_API + "/events/user/"+  authService.getCurrentUser().user.id );
   }
 
   getById(id) {

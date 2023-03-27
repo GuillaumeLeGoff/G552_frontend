@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import EventMediaService from "../../../../services/eventMediaService";
 import mediaService from "../../../../services/UploadService";
 import { Draggable, Droppable } from "react-beautiful-dnd";
@@ -41,6 +41,7 @@ function Medias(props) {
   const [FileToDelete, setFileToDelete] = useState();
   const [imageToCrop, setImageToCrop] = useState(null);
   const [originalName, setOriginalName] = useState(null);
+  const [mediaType, setMediaType] = useState(null);
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -77,28 +78,48 @@ function Medias(props) {
   }
 
   function goToCrop(event) {
-    setOriginalName(event[0].name);
+    console.log();
+    setOriginalName(event.target.files[0].name);
     const reader = new FileReader();
     reader.addEventListener("load", () => setImageToCrop(reader.result));
-    reader.readAsDataURL(event[0]);
+    reader.readAsDataURL(event.target.files[0]);
+    setMediaType(event.target.files[0].type.split("/")[0]);
+    displayDialogUpload();
   }
 
-  function uploadMediaCroped(event) {
-  const fileWithOriginalName = new File([event[0]], originalName, {
-    type: "image/jpeg",
-  });
+  function uploadMediaCroped(event, croppedAreaPixels) {
+    if (mediaType === "video") {
+      console.log(croppedAreaPixels);
+      const fileWithOriginalName = new File([event[0]], originalName, {
+        type: "video/mp4",
+      });
+      console.log(fileWithOriginalName);
 
-  mediaService
-    .upload(fileWithOriginalName)
-    .then(() => {
-      props.getMedias();
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  displayDialogUpload();
-  setImageToCrop(null);
-}
+      mediaService
+        .upload(fileWithOriginalName, mediaType, croppedAreaPixels)
+        .then(() => {
+          props.getMedias();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      const fileWithOriginalName = new File([event[0]], originalName, {
+        type: "image/jpeg",
+      });
+
+      mediaService
+        .upload(fileWithOriginalName, mediaType)
+        .then(() => {
+          props.getMedias();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+    /*  displayDialogUpload();
+  setImageToCrop(null); */
+  }
 
   function handleImageClick(imageId) {
     if (imageId === selectedImage) {
@@ -107,7 +128,6 @@ function Medias(props) {
       setSelectedImage(imageId);
     }
   }
-
 
   return (
     <div>
@@ -133,9 +153,16 @@ function Medias(props) {
             </Typography>
           </div>
 
-          <IconButton onClick={displayDialogUpload}>
+          <IconButton
+            onClick={() => {
+              document.getElementById("inputFile").click();
+
+            }}
+          >
             <AddIcon color="secondary" />
           </IconButton>
+
+          <input type="file" id="inputFile" style={{ display: "none" }} onChange={ goToCrop} />
         </Stack>
 
         <Droppable
@@ -275,30 +302,15 @@ function Medias(props) {
               <CloseIcon color="secondary" />
             </IconButton>
           </Stack>
-
           {imageToCrop ? (
             <>
               <Crop
                 imageToCrop={imageToCrop}
                 uploadMediaCroped={uploadMediaCroped}
+                mediaType={mediaType}
               />
             </>
-          ) : (
-            <section className="dropZone">
-              <div {...getRootProps({ className: "dropzone" })}>
-                <input onDrop={(e) => goToCrop(e)} {...getInputProps()} />
-                <div className="modal">
-                  <CloudUploadIcon
-                    style={{ color: "white", fontSize: "4rem" }}
-                  />
-                  <em className="textDropZone">Click to select files</em>
-                  <em className="textDropZone">
-                    (Only images and videos will be accepted)
-                  </em>
-                </div>
-              </div>
-            </section>
-          )}
+          ) :null}
         </Box>
       </Modal>
 
@@ -317,7 +329,6 @@ function Medias(props) {
           </Button>
         </DialogActions>
       </Dialog>
-      
     </div>
   );
 }

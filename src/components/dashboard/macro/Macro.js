@@ -16,38 +16,45 @@ import {
 } from "@mui/material";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import eventService from "../../../services/eventService";
+import macroService from "../../../services/macroService";
 
 function Macro() {
-  const [macros, setMacros] = useState([
-    { id: 1, name: "Macro 1", event: null },
-    { id: 2, name: "Macro 2", event: null },
-    { id: 3, name: "Macro 3", event: null },
-    { id: 4, name: "Macro 4", event: null },
-    { id: 5, name: "Macro 5", event: null },
-    { id: 6, name: "Macro 6", event: null },
-    { id: 7, name: "Macro 7", event: null },
-    { id: 8, name: "Macro 8", event: null },
-    { id: 9, name: "Macro 9", event: null },
-    { id: 10, name: "Macro 10", event: null },
-  ]);
+  const [macros, setMacros] = useState(null);
 
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
     getEvent();
+    getMacro();
   }, []);
 
   function getEvent() {
     eventService.get().then((result) => {
       setEvents(result.data);
-      console.log(result.data);
+      console.log(result);
+    });
+  }
+  function getMacro() {
+    macroService.getById().then((result) => {
+      const sortedData = result.data.sort((a, b) => a.button_id - b.button_id);
+      const updatedData = sortedData.map((macro) => {
+        return { ...macro, event_id: macro.event_id || 0 };
+      });
+      console.log(updatedData);
+      setMacros(updatedData);
+    });
+  }
+  function updateMacro(macro) {
+    console.log(macro);
+    macroService.update(macro).then((result) => {
+      console.log(result);
     });
   }
 
   return (
     <Grid item xs={12}>
       <div>
-        <Paper style={{ maxHeight: "calc(94vh - 56px )"}}>
+        <Paper style={{ maxHeight: "calc(94vh - 56px )" }}>
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -72,31 +79,39 @@ function Macro() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {macros.map((macro) => (
-                  <TableRow key={macro.id}>
-                    <TableCell>{macro.name}</TableCell>
-                    <TableCell>
-                      <Select
-                        value={macro.event}
-                        onChange={(event) =>
-                          setMacros((prevMacros) =>
-                            prevMacros.map((prevMacro) =>
-                              prevMacro.id === macro.id
-                                ? { ...prevMacro, event: event.target.value }
-                                : prevMacro
-                            )
-                          )
-                        }
-                      >
-                        {events.map((event) => (
-                          <MenuItem key={event.id} value={event}>
-                            {event.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {macros !== null
+                  ? macros.map((macro,index1) => (
+                      <TableRow key={macro.button_id}>
+                        <TableCell>{macro.button_id}</TableCell>
+                        <TableCell>
+                          <Select
+                            value={macro.event_id || "choisir event"}
+                            onChange={(e) => {
+                              const updatedData = macros.map((macro,index2) => {
+                                console.log( e.target.value);
+                                if (index1 === index2) {
+                                  updateMacro({ ...macro, event_id: e.target.value });
+                                  return { ...macro, event_id: e.target.value };
+                                }
+                                return macro;
+                              });
+                              setMacros(updatedData);
+                            
+                            }}
+                          >
+                            <MenuItem value="choisir event" >
+                            choisir event
+                            </MenuItem>
+                            {events.map((event) => (
+                              <MenuItem key={event.id} value={event.id}>
+                                {event.name}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  : null}
               </TableBody>
             </Table>
           </Box>

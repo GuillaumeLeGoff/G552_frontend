@@ -43,7 +43,6 @@ function EventList({ onEventClick }) {
     eventService.get().then((result) => {
       setEvent(result.data);
     });
-    console.log("event" + event);
   }
   function toggleModal() {
     setModalOpen(!modalOpen);
@@ -106,7 +105,7 @@ function EventList({ onEventClick }) {
         {event !== undefined ? (
           event.length > 0 ? (
             event.map((row) => (
-              <Table size="small">
+              <Table size="small" key={row.id}>
                 <TableBody>
                   <TableRow 
                     onMouseEnter={() => handleRowHover(row.id)}
