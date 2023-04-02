@@ -3,7 +3,7 @@ import Config from "../config.json";
 
 const URL_API = Config.SERVER_URL;
 
-class EventMediaService { 
+class EventMediaService {
   getAllByEvent(id) {
     const data = {};
     return axios.get(
@@ -18,7 +18,7 @@ class EventMediaService {
       JSON.stringify(data)
     );
   }
-  deleteAllByMedia(id){
+  deleteAllByMedia(id) {
     const data = {};
     return axios.delete(
       URL_API + "/eventmedias/media/" + id,
@@ -26,11 +26,17 @@ class EventMediaService {
     );
   }
   create(eventMedia) {
-    return axios.post(URL_API + "/eventmedias", eventMedia);  
+    return axios.post(URL_API + "/eventmedias", eventMedia);
   }
   delete(id) {
     console.log(id);
     return axios.delete(URL_API + "/eventmedias/" + id);
+  }
+
+  updateMediaPositions(eventId, mediaPositions) {
+    return axios.put(URL_API + `/eventmedias/${eventId}/media-positions`, {
+      mediaPositions,
+    });
   }
 }
 

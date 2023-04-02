@@ -16,12 +16,11 @@ class UploadService {
     });
   }
   upload(file) {
-    console.log('upload', file);
     let formData = new FormData();
     formData.append("file", file);
-    const data = {user: authService.getCurrentUser().user};
+
     return axios
-      .post(URL_API + "/medias/" + authService.getCurrentUser().user.username, formData, JSON.stringify(data),{
+      .post(URL_API + "/medias/" + authService.getCurrentUser().user.username + "/" + authService.getCurrentUser().user.id, formData, {
         headers: {
           "content-type": `multipart/form-data;boundary=${formData._boundary}`,
         },

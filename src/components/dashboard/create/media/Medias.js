@@ -117,8 +117,8 @@ function Medias(props) {
           console.error(error);
         });
     }
-    /*  displayDialogUpload();
-  setImageToCrop(null); */
+     displayDialogUpload();
+  setImageToCrop(null);
   }
 
   function handleImageClick(imageId) {

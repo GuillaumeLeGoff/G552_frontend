@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import mediaService from "../../../services/UploadService";
 import authService from "../../../services/authService";
-import EventMediaService from "../../../services/eventMediaService"
+import EventMediaService from "../../../services/eventMediaService";
 function Create() {
   const [isDragging, setIsDragging] = useState(false);
   const [eventMedia, setEventMedia] = useState([
@@ -47,7 +47,6 @@ function Create() {
   function getEvents() {
     if (id != undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
-        
         const newMedias = result.data.map((media) => {
           return { ...media, id: uuidv4(), idBdd: media.id };
         });
@@ -115,14 +114,14 @@ function Create() {
         });
         break;
       case "1":
-        console.log("copy");
         const sourceClone = Array.from(eventMedia[1].medias);
         const destClone = Array.from(
           eventMedia[destination.droppableId].medias
         );
         const item = sourceClone[source.index];
+        const newPosition = destination.index;
 
-        destClone.splice(destination.index, 0, { ...item, id: uuidv4() });
+        destClone.splice(newPosition, 0, { ...item, id: uuidv4() });
         setEventMedia((prevState) => {
           return prevState.map((column) => {
             if (column.id === 0) {
@@ -131,15 +130,23 @@ function Create() {
             return column;
           });
         });
-
-        console.log();
+        // on crée le nouvel EventMedia en utilisant la nouvelle position
         EventMediaService.create({
-          mediaId: item.idBdd,
           eventId: id,
-          duration: 0,
-          userId:authService.getCurrentUser().user.id
-        }).then((result) => {
-          console.log(result);
+          mediaId: item.idBdd,
+          mediaDurInEvent: 0,
+          mediaPosInEvent: newPosition,
+        }).then(() => {
+          // on met à jour la position de tous les autres EventMedia de l'événement
+          const mediaPositions = destClone.map((media, index) => ({
+            id: media.id,
+            position: index,
+          }));
+          EventMediaService.updateMediaPositions(id, mediaPositions).then(
+            () => {
+              console.log("Media positions updated.");
+            }
+          );
         });
 
         break;

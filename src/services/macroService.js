@@ -8,7 +8,7 @@ class MacroService {
   }
 
   update(macro) {
-    return axios.put(URL_API + '/macros/' + macro.button_id, macro);
+    return axios.put(URL_API + "/macros/" + macro.button_id, macro);
   }
 
   getById() {
