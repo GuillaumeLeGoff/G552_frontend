@@ -17,14 +17,13 @@ function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-
+  
   async function handleSubmit(e) {
     e.preventDefault(); // Empêcher le comportement par défaut du formulaire
-    console.log(user, password);
     try {
       await AuthService.login(user, password);
     } catch (error) {
-      setError(error.message);
+      setError("Nom d'utilisateur ou mot de passe incorrect");
     }
   }
 

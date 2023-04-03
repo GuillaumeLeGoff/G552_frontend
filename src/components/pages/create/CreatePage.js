@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Media from "./media/Medias";
-import Event from "./event/Event";
+import Media from "./mediaPage/Medias";
+import Event from "./eventPage/Event";
 import Grid from "@mui/material/Grid";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import mediaService from "../../../services/UploadService";
 import authService from "../../../services/authService";
 import EventMediaService from "../../../services/eventMediaService";
+import Medias from "./mediaPage/Medias";
 function Create() {
   const [isDragging, setIsDragging] = useState(false);
   const [eventMedia, setEventMedia] = useState([
@@ -44,14 +45,51 @@ function Create() {
 
     return result;
   };
+
+  function updateMedia(nouveauTemps, pos) {
+    setEventMedia((prevState) => {
+      return prevState.map((colonne) => {
+        if (colonne.id === 0) {
+          const nouveauxMedias = colonne.medias.map((media, index) => {
+            if (index === pos) {
+              // Mettre à jour la durée du média dans la base de données
+              EventMediaService.updateDuration({
+                eventId: id,
+                mediaId: media.idBdd,
+                duration: nouveauTemps,
+              })
+                .then((result) => {
+                  console.log("Durée du média mise à jour:", result);
+                })
+                .catch((error) => {
+                  console.error(
+                    "Erreur lors de la mise à jour de la durée du média:",
+                    error
+                  );
+                });
+
+              return { ...media, media_dur_in_event: nouveauTemps };
+            }
+            return media;
+          });
+          return { ...colonne, medias: nouveauxMedias };
+        }
+        return colonne;
+      });
+    });
+  }
+
   function getEvents() {
     if (id != undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
         const newMedias = result.data.map((media) => {
           return { ...media, id: uuidv4(), idBdd: media.id };
         });
+
+        // Trier les médias en fonction de media_pos_in_event
+        newMedias.sort((a, b) => a.media_pos_in_event - b.media_pos_in_event);
+
         setEventMedia((prevState) => {
-          console.log(newMedias);
           return prevState.map((column) => {
             if (column.id === 0) {
               if (newMedias.length > 0) {
@@ -66,6 +104,7 @@ function Create() {
       });
     }
   }
+
   function getMedias() {
     mediaService.get().then((result) => {
       const newMedias = result.data.map((media) => {
@@ -88,7 +127,6 @@ function Create() {
     setIsDragging(false);
     const { destination, source, draggableId } = result;
     if (!destination) {
-      console.log(destination);
       console.log("no destination");
       return;
     }
@@ -104,6 +142,22 @@ function Create() {
           0,
           eventMedia[source.droppableId].medias[source.index]
         );
+        // Mettre à jour les positions des éléments multimédias dans la colonne de destination
+        const updatesAfterMove = newMedias.map((media, index) => {
+          return {
+            eventId: id,
+            mediaId: media.idBdd,
+            media_pos_in_event: index + 1,
+          };
+        });
+        EventMediaService.update(updatesAfterMove)
+          .then((updateResult) => {
+            console.log("Media positions updated:", updateResult);
+          })
+          .catch((error) => {
+            console.error("Error updating media positions:", error);
+          });
+
         setEventMedia((prevState) => {
           return prevState.map((column) => {
             if (column.id === start.id) {
@@ -114,42 +168,48 @@ function Create() {
         });
         break;
       case "1":
+        console.log("copy");
         const sourceClone = Array.from(eventMedia[1].medias);
         const destClone = Array.from(
           eventMedia[destination.droppableId].medias
         );
         const item = sourceClone[source.index];
-        const newPosition = destination.index;
 
-        destClone.splice(newPosition, 0, { ...item, id: uuidv4() });
-        setEventMedia((prevState) => {
-          return prevState.map((column) => {
-            if (column.id === 0) {
-              return { ...column, medias: destClone };
-            }
-            return column;
-          });
+        destClone.splice(destination.index, 0, { ...item, id: uuidv4() });
+
+        // Triez destClone en fonction de media_pos_in_event
+        destClone.sort((a, b) => a.media_pos_in_event - b.media_pos_in_event);
+        const updates = destClone.map((media, index) => {
+          return {
+            eventId: id,
+            mediaId: media.idBdd,
+            media_pos_in_event: index + 1,
+          };
         });
-        // on crée le nouvel EventMedia en utilisant la nouvelle position
+
+        // Appel à la méthode create() pour ajouter le nouvel élément multimédia
         EventMediaService.create({
-          eventId: id,
           mediaId: item.idBdd,
-          mediaDurInEvent: 0,
-          mediaPosInEvent: newPosition,
-        }).then(() => {
-          // on met à jour la position de tous les autres EventMedia de l'événement
-          const mediaPositions = destClone.map((media, index) => ({
-            id: media.id,
-            position: index,
-          }));
-          EventMediaService.updateMediaPositions(id, mediaPositions).then(
-            () => {
-              console.log("Media positions updated.");
-            }
-          );
+          eventId: id,
+          duration: 1,
+          userId: authService.getCurrentUser().user.id,
+          media_pos_in_event: destination.index + 1,
+        }).then((createResult) => {
+
+          // Une fois que la promesse create() est résolue, appel à la méthode update() pour mettre à jour les positions des éléments multimédias
+          EventMediaService.update(updates)
+            .then((updateResult) => {
+              console.log("Media positions updated:", updateResult);
+              // Mise à jour de l'état local après la mise à jour réussie
+              getEvents();
+            })
+            .catch((error) => {
+              console.error("Error updating media positions:", error);
+            });
         });
 
         break;
+
       default:
         console.log("move");
         this.setState(
@@ -167,6 +227,7 @@ function Create() {
     <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
       <Grid item xs={12} md={8}>
         <Event
+          updateMedia={updateMedia}
           eventMedia={eventMedia}
           setEventMedia={setEventMedia}
           id={id}
@@ -175,7 +236,7 @@ function Create() {
         />
       </Grid>
       <Grid item xs={12} md={4}>
-        <Media
+        <Medias
           eventMedia={eventMedia}
           setEventMedia={setEventMedia}
           getEvents={getEvents}

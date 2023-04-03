@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -13,19 +13,25 @@ import {
 
 import SaveIcon from "@mui/icons-material/Save";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import authService from "../../../services/authService";
+import userService from "../../../services/userService";
 function Profile() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [username, setUsername] = useState("John Doe");
   const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
+  const user = authService.getCurrentUser()
+  useEffect(() => {
 
-  const handleCancel = () => {
-    setIsEditMode(false);
-    // reset the user information here
-  };
+      setUsername(user.user.username);
+    
+  }, []);
+  
 
   const handlePasswordChange = () => {
-    // change the user's password here
+    userService.changePassword(oldPassword, password,user.id).then((result) => {
+
+    });
   };
 
   return (
@@ -62,7 +68,7 @@ function Profile() {
           <Box sx={{ mt: 4 }}>
             <Stack direction="column" spacing={1}>
               <Typography variant="h6" sx={{ mb: 5 }} component="h2" gutterBottom>
-                Sport: {username}
+                Nom: {username}
               </Typography>
             </Stack>
             <Typography component="h2" gutterBottom>

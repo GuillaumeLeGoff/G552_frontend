@@ -17,6 +17,12 @@ class UserService {
   getSuperuserBoard() {
     return axios.get(URL_API + "superuser");
   }
+  changePassword(oldPassword, newPassword,id) {
+    return axios.put(
+      URL_API + "users/"+id,
+      { oldPassword, newPassword },
+    );
+  }
 }
 
 export default new UserService();

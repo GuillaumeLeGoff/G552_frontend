@@ -19,25 +19,29 @@ class EventMediaService {
     );
   }
   deleteAllByMedia(id) {
-    const data = {};
     return axios.delete(
-      URL_API + "/eventmedias/media/" + id,
-      JSON.stringify(data)
+      URL_API + "/eventmedias/media/" + id
     );
   }
   create(eventMedia) {
     return axios.post(URL_API + "/eventmedias", eventMedia);
   }
-  delete(id) {
-    console.log(id);
-    return axios.delete(URL_API + "/eventmedias/" + id);
+  delete(id,mediaToDelete) {
+    return axios.delete(URL_API + "/eventmedias/"+id , { data: mediaToDelete });
   }
 
-  updateMediaPositions(eventId, mediaPositions) {
-    return axios.put(URL_API + `/eventmedias/${eventId}/media-positions`, {
-      mediaPositions,
-    });
+  update(updates) {
+    return axios.put(URL_API + "/eventmedias/update-position", updates);
   }
+  updateDuration({ eventId, mediaId, duration }) {
+    const data = {
+      eventId: eventId,
+      mediaId: mediaId,
+      duration: duration,
+    };
+    return axios.put(URL_API + "/eventmedias/update-duration", data);
+  }
+
 }
 
 export default new EventMediaService();

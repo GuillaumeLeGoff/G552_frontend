@@ -21,24 +21,28 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
+import { useParams } from "react-router-dom";
+import eventMediaService from "../../../../services/eventMediaService";
 import eventService from "../../../../services/eventService";
 import "../../../../styles/App.css";
-import Media from "../media/Media";
+import DeleteMediaEventDialog from "../../../dialogs/DeleteMediaEventDialog";
+import DeleteDialog from "../../../dialogs/DeleteMediaEventDialog";
+import Media from "./EventMedia";
 
 function EventParam(props) {
   const [event, setEvent] = useState({});
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [eventToDelete, setEventToDelete] = useState(null);
+  const [idEventMediaDelete, setIdEventMediaDelete] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
+  const { id } = useParams();
   useEffect(() => {
     props.getEvents();
     getMediasByID();
-
   }, []);
   function getMediasByID() {
     eventService.getById(props.id).then((result) => {
       setEvent(result.data);
-      console.log(result.data);
+      props.getEvents();
     });
   }
   function handleRowHover(rowId) {
@@ -47,29 +51,33 @@ function EventParam(props) {
 
   function openDeleteDialog(index) {
     setDeleteDialogOpen(true);
-    setEventToDelete(index);
+    setIdEventMediaDelete(index);
   }
 
   function closeDeleteDialog() {
     setDeleteDialogOpen(false);
-    setEventToDelete(null);
+    setIdEventMediaDelete(null);
   }
 
-  function deleteEvent() {
-    console.log(eventToDelete);
-    eventService.delete(eventToDelete).then((result) => {
-      console.log(result);
-      getMediasByID();
+  async function deleteEventMedia() {
+    const eventMediaDelete = props.eventMedia[0].medias[idEventMediaDelete];
+    try {
+      const result = await eventMediaService.delete(id, eventMediaDelete);
+      await getMediasByID();
       closeDeleteDialog();
-    });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
     <div>
-      <Paper style={{
+      <Paper
+        style={{
           maxHeight: "calc(94vh - 56px )",
           minHeight: "calc(94vh - 56px )",
-        }}>
+        }}
+      >
         <Stack
           direction="row"
           justifyContent="space-between"
@@ -83,8 +91,8 @@ function EventParam(props) {
             <IconButton sx={{ ml: 2 }}>
               <PermMediaIcon sx={{ color: "white" }} />
             </IconButton>
-            <Typography  color="white" sx={{ padding: 2 }}>
-              Event : {}
+            <Typography color="white" sx={{ padding: 2 }}>
+              Event : {event.name}
             </Typography>
           </div>
           <IconButton>
@@ -106,6 +114,7 @@ function EventParam(props) {
                   {props.eventMedia[0].medias.length ? (
                     props.eventMedia[0].medias.map((item, index) => (
                       <Media
+                        updateMedia={props.updateMedia}
                         handleRowHover={handleRowHover}
                         openDeleteDialog={openDeleteDialog}
                         hoveredRow={hoveredRow}
@@ -128,22 +137,11 @@ function EventParam(props) {
           </Table>
         </TableContainer>
       </Paper>
-      <Dialog open={deleteDialogOpen} onClose={closeDeleteDialog}>
-        <DialogTitle>Confirmer la suppression</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Êtes-vous sûr de vouloir supprimer l'événement{" "}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDeleteDialog} color="secondary">
-            Annuler
-          </Button>
-          <Button onClick={deleteEvent} color="secondary">
-            Supprimer
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteMediaEventDialog
+        open={deleteDialogOpen}
+        onClose={closeDeleteDialog}
+        onDelete={deleteEventMedia}
+      />
     </div>
   );
 }

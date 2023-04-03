@@ -3,11 +3,11 @@ import LoadingScreen from "./components/LoadingScreen";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import Create from "./components/dashboard/create/Create";
-import Login from "./components/dashboard/login/Login";
-import Signup from "./components/dashboard/login/Signup";
-import Macro from "./components/dashboard/macro/Macro";
-import Profile from "./components/dashboard/profile/Profile";
+import Create from "./components/pages/create/CreatePage";
+import Login from "./components/pages/login/Login";
+import Signup from "./components/pages/login/Signup";
+import Macro from "./components/pages/macro/Macro";
+import Profile from "./components/pages/profile/Profile";
 import Navbar from "./components/NavBar";
 import authService from "./services/authService";
 import "./styles/App.css";
@@ -16,8 +16,8 @@ import { appTheme } from "./themes/theme.ts";
 
 function App() {
   const [token] = useState(authService.getCurrentUser());
-  const [loading, setLoading] = useState(true);
-  console.log(token);
+  const [loading, setLoading] = useState(false);
+
   /* const token = false; */
   useEffect(() => {
     const timer = setTimeout(() => {

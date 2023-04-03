@@ -28,6 +28,7 @@ import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";
 import "../../../../styles/Media.css";
+import DeleteMediaDialog from "../../../dialogs/DeleteMediaDialog";
 function Medias(props) {
   const style = {
     height: "100%",
@@ -42,6 +43,20 @@ function Medias(props) {
   const [imageToCrop, setImageToCrop] = useState(null);
   const [originalName, setOriginalName] = useState(null);
   const [mediaType, setMediaType] = useState(null);
+  const [longPressTimer, setLongPressTimer] = useState(null);
+
+  const handleTouchStart = (imageId) => {
+    clearTimeout(longPressTimer);
+    setLongPressTimer(
+      setTimeout(() => {
+        setSelectedImage(imageId);
+      }, 500)
+    ); // Appui long de 500 ms
+  };
+
+  const handleTouchEnd = () => {
+    clearTimeout(longPressTimer);
+  };
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
@@ -52,11 +67,8 @@ function Medias(props) {
   });
 
   function DeleteFile() {
-    console.log("result");
-
-    mediaService.delete(FileToDelete).then(() => {
-      EventMediaService.deleteAllByMedia(FileToDelete.idBdd).then((result) => {
-        console.log(result);
+    EventMediaService.deleteAllByMedia(FileToDelete.idBdd).then(() => {
+      mediaService.delete(FileToDelete).then((result) => {
         displayDialogDelete(false);
         props.getMedias();
         props.getEvents();
@@ -78,7 +90,6 @@ function Medias(props) {
   }
 
   function goToCrop(event) {
-    console.log();
     setOriginalName(event.target.files[0].name);
     const reader = new FileReader();
     reader.addEventListener("load", () => setImageToCrop(reader.result));
@@ -117,8 +128,8 @@ function Medias(props) {
           console.error(error);
         });
     }
-     displayDialogUpload();
-  setImageToCrop(null);
+    displayDialogUpload();
+    setImageToCrop(null);
   }
 
   function handleImageClick(imageId) {
@@ -156,13 +167,17 @@ function Medias(props) {
           <IconButton
             onClick={() => {
               document.getElementById("inputFile").click();
-
             }}
           >
             <AddIcon color="secondary" />
           </IconButton>
 
-          <input type="file" id="inputFile" style={{ display: "none" }} onChange={ goToCrop} />
+          <input
+            type="file"
+            id="inputFile"
+            style={{ display: "none" }}
+            onChange={goToCrop}
+          />
         </Stack>
 
         <Droppable
@@ -195,6 +210,8 @@ function Medias(props) {
                                   {...provided.draggableProps}
                                   {...provided.dragHandleProps}
                                   ref={provided.innerRef}
+                                  onTouchStart={() => handleTouchStart(file.id)}
+                                  onTouchEnd={handleTouchEnd}
                                 >
                                   {file.type === "video" ? (
                                     <video
@@ -310,25 +327,17 @@ function Medias(props) {
                 mediaType={mediaType}
               />
             </>
-          ) :null}
+          ) : null}
         </Box>
       </Modal>
 
       {/* Modal confirm suppression file */}
-      <Dialog open={dialogDelete} onClose={displayDialogDelete}>
-        <DialogTitle>{"Delete Media"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Voulez-vous supprimer ce media?</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button sx={{ color: "white" }} onClick={DeleteFile}>
-            Confirme
-          </Button>
-          <Button sx={{ color: "white" }} onClick={displayDialogDelete}>
-            Annuler
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteMediaDialog
+        open={dialogDelete}
+        onClose={displayDialogDelete}
+        DeleteFile={DeleteFile}
+        displayDialogDelete={displayDialogDelete}
+      />
     </div>
   );
 }

@@ -1,21 +1,24 @@
 import React from "react";
+import PropTypes from "prop-types";
 import EventParam from "./EventParam";
 import EventList from "./EventList";
 import { useNavigate } from "react-router-dom";
 
 function Event(props) {
-  let navigate = useNavigate();
-  function idEventClick(id) {
-    console.log(id);
+  const navigate = useNavigate();
+
+  function idEventClick(id) {;
     navigate(`/create/${id}`);
   }
+
   return (
     <div>
       {props.id === undefined ? (
-        <EventList   eventMedia={props.eventMedia} onEventClick={idEventClick} />
+        <EventList eventMedia={props.eventMedia} onEventClick={idEventClick} />
       ) : (
         <EventParam
-        getEvents={props.getEvents}
+          updateMedia={props.updateMedia}
+          getEvents={props.getEvents}
           eventMedia={props.eventMedia}
           setEventMedia={props.setEventMedia}
           id={props.id}
@@ -26,5 +29,14 @@ function Event(props) {
     </div>
   );
 }
+
+Event.propTypes = {
+  id: PropTypes.string,
+  updateMedia: PropTypes.func,
+  getEvents: PropTypes.func,
+  eventMedia: PropTypes.arrayOf(PropTypes.object),
+  setEventMedia: PropTypes.func,
+  isDragging: PropTypes.bool,
+};
 
 export default Event;
