@@ -4,7 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Create from "./components/pages/create/CreatePage";
-import Login from "./components/pages/login/Login";
+import Login from "./components/pages/login/LoginPage";
 import Signup from "./components/pages/login/Signup";
 import Macro from "./components/pages/macro/Macro";
 import Profile from "./components/pages/profile/Profile";

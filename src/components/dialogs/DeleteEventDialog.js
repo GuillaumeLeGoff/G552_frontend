@@ -14,7 +14,7 @@ function DeleteEventDialog({ open, onClose, onDelete, eventName }) {
       <DialogTitle>Confirmer la suppression</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Êtes-vous sûr de vouloir supprimer l'événement {eventName} ?
+          Êtes-vous sûr de vouloir supprimer l'événement "{eventName}" ?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
