@@ -46,6 +46,9 @@ function Macro() {
   }
   function updateMacro(macro) {
     console.log(macro);
+    if (macro.event_id === 'choisir event') {
+      macro.event_id = null;
+    }
     macroService.update(macro).then((result) => {
       console.log(result);
     });

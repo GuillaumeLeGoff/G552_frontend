@@ -6,6 +6,7 @@ const URL_API = Config.SERVER_URL;
 
 class Eventservice {
   create(name) {
+    console.log(name);
     return axios
       .post(URL_API + "/events", {
         name: name,

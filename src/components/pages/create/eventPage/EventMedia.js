@@ -11,10 +11,9 @@ import { Draggable } from "react-beautiful-dnd";
 import "../../../../styles/App.css";
 
 function Media(props) {
-
-  function handleDurationChange(event){
-  props.updateMedia(event.target.value, props.index, );
-  };
+  function handleDurationChange(event) {
+    props.updateMedia(event.target.value, props.index);
+  }
 
   return (
     <Draggable

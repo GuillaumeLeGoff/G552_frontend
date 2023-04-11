@@ -27,10 +27,10 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onAdd} color="secondary">
+        <Button onClick={onClose} color="secondary">
           Annuler
         </Button>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onAdd} color="secondary">
           Ajouter
         </Button>
       </DialogActions>
