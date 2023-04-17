@@ -72,32 +72,24 @@ function EventParam(props) {
 
   return (
     <div>
-      <Paper
-        style={{
-          maxHeight: "calc(94vh - 56px )",
-          minHeight: "calc(94vh - 56px )",
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={2}
-        >
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton onClick={() => props.onEventClick("")} sx={{ ml: 2 }}>
+      <Paper className="mainPaper">
+        <Stack className="headerSection">
+          <div className="headerItemLeft">
+            <IconButton onClick={() => props.onEventClick("")}>
               <CloseIcon color="secondary" />
             </IconButton>
             <IconButton sx={{ ml: 2 }}>
-              <PermMediaIcon sx={{ color: "white" }} />
+              <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
-            <Typography color="white" sx={{ padding: 2 }}>
+            <Typography variant="h6" className="headerTitle">
               Event : {event.name}
             </Typography>
           </div>
-          <IconButton>
-            <PlayArrowIcon color="secondary" />
-          </IconButton>
+          <div className="headerItemRight">
+            <IconButton>
+              <PlayArrowIcon color="secondary" />
+            </IconButton>
+          </div>
         </Stack>
 
         <TableContainer

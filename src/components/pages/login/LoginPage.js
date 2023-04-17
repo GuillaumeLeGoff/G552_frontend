@@ -33,7 +33,7 @@ function Login() {
         <Stack>
           <div style={{ display: "flex", alignItems: "center" }}>
             <IconButton sx={{ ml: 2 }}></IconButton>
-            <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+            <Typography variant="h6" color="primary.light" sx={{ padding: 2 }}>
               Login
             </Typography>
           </div>

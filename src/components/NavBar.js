@@ -19,6 +19,7 @@ import {
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AuthService from "../services/authService";
+import DisconnectDialog from "./dialogs/DisconnectDialog";
 
 function NavBar() {
   const [token] = useState(AuthService.getCurrentUser());
@@ -39,7 +40,7 @@ function NavBar() {
   }
 
   function getIconColor(path) {
-    return location.pathname.startsWith(path) ? "secondary" : "white";
+    return location.pathname.startsWith(path) ? "secondary.main" : "secondary.light";
   }
 
   return (
@@ -49,7 +50,7 @@ function NavBar() {
           <BottomNavigationAction
             component={Link}
             to="/create"
-            label="Évenements"
+            label="Événement"
             icon={<PermMediaIcon sx={{ color: getIconColor("/create") }} />}
           />
 
@@ -78,21 +79,13 @@ function NavBar() {
       ) : (
         ""
       )}
+      <DisconnectDialog
+        open={logoutDialogOpen}
+        onClose={handleLogoutDialogClose}
+        logout={logout}
+      />
 
-      <Dialog open={logoutDialogOpen} onClose={handleLogoutDialogClose}>
-        <DialogTitle>{"Déconnexion"}</DialogTitle>
-        <DialogContent>
-          <div>Voulez-vous vraiment vous déconnecter ?</div>
-        </DialogContent>
-        <DialogActions>
-          <Button sx={{ color: "white" }} onClick={handleLogoutDialogClose}>
-            Annuler
-          </Button>
-          <Button sx={{ color: "white" }} onClick={logout}>
-            Déconnexion
-          </Button>
-        </DialogActions>
-      </Dialog>
+     
     </div>
   );
 }

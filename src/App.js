@@ -11,63 +11,72 @@ import Profile from "./components/pages/profile/Profile";
 import Navbar from "./components/NavBar";
 import authService from "./services/authService";
 import "./styles/App.css";
-import { appTheme } from "./themes/theme.ts";
+import { darkTheme } from "./themes/darkTheme.ts";
 
 
+import { useDarkMode } from "./contexts/DarkModeContext";
+
+import { clairTheme } from "./themes/clairTheme.ts";
 function App() {
   const [token] = useState(authService.getCurrentUser());
   const [loading, setLoading] = useState(false);
+  const { darkMode, setDarkMode } = useDarkMode();
+  
 
   /* const token = false; */
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 1000); // Ici, 3000 millisecondes (3 secondes) est le temps d'affichage de la page de chargement.
-
+    console.log(darkMode);
     return () => clearTimeout(timer);
   }, []);
 
+  const theme = darkMode ? darkTheme : clairTheme;
+
   return (
-    <ThemeProvider theme={appTheme}>
-      <CssBaseline />
-      <BrowserRouter>
-        {/*  <Header /> */}
-        {loading ? (
-          <LoadingScreen />
-        ) : (
-          <>
-            <div className="Container">
-              {token ? (
-                <Grid container spacing={2}>
-                  <Routes>
-                    <Route path="*" element={<Navigate to="/create" />} />
-                    <Route path="create" element={<Create />} />
-                    <Route path="create/:id" element={<Create />} />
-                    <Route path="macro" element={<Macro />} />
-                    <Route path="profile" element={<Profile />} />
-                  </Routes>
-                </Grid>
-              ) : (
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{ minHeight: "calc(94vh - 56px)" }}
-                  spacing={2}
-                >
-                  <Routes>
-                    <Route path="*" element={<Navigate to="/login" />} />
-                    <Route path="login" element={<Login />} />
-                  </Routes>
-                </Grid>
-              )}
-            </div>
-            <Navbar />
-          </>
-        )}
-      </BrowserRouter>
-    </ThemeProvider>
+   
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <BrowserRouter>
+          {/*  <Header /> */}
+          {loading ? (
+            <LoadingScreen />
+          ) : (
+            <>
+              <div className="Container">
+                {token ? (
+                  <Grid container spacing={2}>
+                    <Routes>
+                      <Route path="*" element={<Navigate to="/create" />} />
+                      <Route path="create" element={<Create />} />
+                      <Route path="create/:id" element={<Create />} />
+                      <Route path="macro" element={<Macro />} />
+                      <Route path="profile" element={<Profile />} />
+                    </Routes>
+                  </Grid>
+                ) : (
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="center"
+                    alignItems="center"
+                    style={{ minHeight: "calc(94vh - 56px)" }}
+                    spacing={2}
+                  >
+                    <Routes>
+                      <Route path="*" element={<Navigate to="/login" />} />
+                      <Route path="login" element={<Login />} />
+                    </Routes>
+                  </Grid>
+                )}
+              </div>
+              <Navbar />
+            </>
+          )}
+        </BrowserRouter>
+      </ThemeProvider>
+   
   );
 }
 

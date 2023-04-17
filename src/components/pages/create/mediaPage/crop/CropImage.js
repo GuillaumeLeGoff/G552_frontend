@@ -108,9 +108,7 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
           alignItems: "center",
         }}
       >
-        {/*  <Button variant="contained" color="primary" onClick={showCroppedImage}>
-          Afficher l'image recadrée
-        </Button> */}
+    
         {croppedImageURL && (
           <img
             src={croppedImageURL}

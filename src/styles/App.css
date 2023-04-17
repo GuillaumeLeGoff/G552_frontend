@@ -5,6 +5,7 @@
 }
 .Container {
     margin: 3vh;
+    font-family: system-ui !important;
 }
 
 .Info{

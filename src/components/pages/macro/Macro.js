@@ -46,7 +46,7 @@ function Macro() {
   }
   function updateMacro(macro) {
     console.log(macro);
-    if (macro.event_id === 'choisir event') {
+    if (macro.event_id === "choisir event") {
       macro.event_id = null;
     }
     macroService.update(macro).then((result) => {
@@ -56,70 +56,65 @@ function Macro() {
 
   return (
     <Grid item xs={12}>
-      <div>
-        <Paper style={{ maxHeight: "calc(94vh - 56px )" }}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            spacing={2}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton sx={{ ml: 2 }}>
-                <KeyboardIcon sx={{ color: "white" }} />
-              </IconButton>
-              <Typography variant="h6" color="white" sx={{ padding: 2 }}>
-                Macro
-              </Typography>
-            </div>
-          </Stack>
-          <Box sx={{ maxHeight: "calc(94vh - 120px)", overflowY: "scroll" }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Event</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {macros !== null
-                  ? macros.map((macro,index1) => (
-                      <TableRow key={macro.button_id}>
-                        <TableCell>{macro.button_id}</TableCell>
-                        <TableCell>
-                          <Select
-                            value={macro.event_id || "choisir event"}
-                            onChange={(e) => {
-                              const updatedData = macros.map((macro,index2) => {
-                                console.log( e.target.value);
-                                if (index1 === index2) {
-                                  updateMacro({ ...macro, event_id: e.target.value });
-                                  return { ...macro, event_id: e.target.value };
-                                }
-                                return macro;
-                              });
-                              setMacros(updatedData);
-                            
-                            }}
-                          >
-                            <MenuItem value="choisir event" >
+      <Paper className="mainPaper">
+        <Stack className="headerSection">
+          <div className="headerItemLeft">
+            <IconButton>
+              <KeyboardIcon sx={{ color: "primary.light" }} />
+            </IconButton>
+            <Typography variant="h6" className="headerTitle">
+              Macro
+            </Typography>
+          </div>
+        </Stack>
+        <Box className="container">
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Event</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {macros !== null
+                ? macros.map((macro, index1) => (
+                    <TableRow key={macro.button_id}>
+                      <TableCell>{macro.button_id}</TableCell>
+                      <TableCell>
+                        <Select
+                          value={macro.event_id || "choisir event"}
+                          onChange={(e) => {
+                            const updatedData = macros.map((macro, index2) => {
+                              console.log(e.target.value);
+                              if (index1 === index2) {
+                                updateMacro({
+                                  ...macro,
+                                  event_id: e.target.value,
+                                });
+                                return { ...macro, event_id: e.target.value };
+                              }
+                              return macro;
+                            });
+                            setMacros(updatedData);
+                          }}
+                        >
+                          <MenuItem value="choisir event">
                             choisir event
+                          </MenuItem>
+                          {events.map((event) => (
+                            <MenuItem key={event.id} value={event.id}>
+                              {event.name}
                             </MenuItem>
-                            {events.map((event) => (
-                              <MenuItem key={event.id} value={event.id}>
-                                {event.name}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  : null}
-              </TableBody>
-            </Table>
-          </Box>
-        </Paper>
-      </div>
+                          ))}
+                        </Select>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                : null}
+            </TableBody>
+          </Table>
+        </Box>
+      </Paper>
     </Grid>
   );
 }

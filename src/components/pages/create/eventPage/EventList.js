@@ -51,7 +51,7 @@ function EventList({ onEventClick }) {
     }
   }
   async function addEvent() {
-    console.log('addEvent');
+    console.log("addEvent");
     try {
       await eventService.create(name);
       toggleModal();
@@ -83,29 +83,21 @@ function EventList({ onEventClick }) {
 
   return (
     <div>
-      <Paper
-        style={{
-          maxHeight: "calc(94vh - 56px )",
-          minHeight: "calc(94vh - 56px )",
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={2}
-        >
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton sx={{ ml: 2 }}>
-              <PermMediaIcon sx={{ color: "white" }} />
+      <Paper className="mainPaper">
+        <Stack className="headerSection">
+          <div className="headerItemLeft">
+            <IconButton>
+              <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
-            <Typography color="white" sx={{ padding: 2 }}>
+            <Typography variant="h6" className="headerTitle">
               Event
             </Typography>
           </div>
-          <IconButton onClick={toggleModal}>
-            <AddIcon color="secondary" />
-          </IconButton>
+          <div className="headerItemRight">
+            <IconButton onClick={toggleModal}>
+              <AddIcon color="secondary" />
+            </IconButton>
+          </div>
         </Stack>
 
         {event !== undefined ? (

@@ -4,7 +4,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import Crop from "./crop/CropImage";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@mui/icons-material/Upload";
-import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import {
   Box,
   ImageList,
@@ -86,13 +86,13 @@ function Medias(props) {
   function goToCrop(event) {
     if (event.target.files[0].type.split("/")[0] === "video") {
       mediaService
-      .upload(event.target.files[0], "video")
-      .then(() => {
-        props.getMedias();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+        .upload(event.target.files[0], "video")
+        .then(() => {
+          props.getMedias();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     } else {
       console.log(event.target.files[0]);
       setOriginalName(event.target.files[0].name);
@@ -131,60 +131,43 @@ function Medias(props) {
   }
 
   return (
-    <div>
-      <Paper
-        className="paper-container"
-        style={{
-          maxHeight: "calc(94vh - 56px )",
-          minHeight: "calc(94vh - 56px )",
-        }}
-      >
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={2}
-        >
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton sx={{ ml: 2 }}>
-              <ImageIcon sx={{ color: "white" }} />
+    <>
+      <Paper className="mainPaper">
+        <Stack className="headerSection">
+          <div className="headerItemLeft">
+            <IconButton>
+              <ImageIcon sx={{ color: "primary.light" }} />
             </IconButton>
-            <Typography color="white" sx={{ padding: 2 }}>
+            <Typography variant="h6" className="headerTitle">
               Media
             </Typography>
           </div>
+          <div className="headerItemRight">
+            <IconButton
+              onClick={() => {
+                document.getElementById("inputFile").click();
+              }}
+            >
+              <AddIcon color="secondary" />
+            </IconButton>
 
-          <IconButton
-            onClick={() => {
-              document.getElementById("inputFile").click();
-            }}
-          >
-            <AddIcon color="secondary" />
-          </IconButton>
-
-          <input
-            type="file"
-            id="inputFile"
-            style={{ display: "none" }}
-            onChange={goToCrop}
-          />
+            <input
+              type="file"
+              id="inputFile"
+              style={{ display: "none" }}
+              onChange={goToCrop}
+            />
+          </div>
         </Stack>
-
-        <Droppable
-          droppableId={`${props.eventMedia[1].id}`}
-          isDropDisabled={true}
-        >
-          {(provided) => (
-            <div ref={provided.innerRef}>
-              {props.eventMedia[1].medias ? (
-                props.eventMedia[1].medias.length > 0 ? (
-                  <Box
-                    sx={{
-                      maxHeight: "calc(94vh - 120px)",
-                      overflowY: "scroll",
-                    }}
-                    p={1}
-                  >
+        <Box className="container">
+          <Droppable
+            droppableId={`${props.eventMedia[1].id}`}
+            isDropDisabled={true}
+          >
+            {(provided) => (
+              <div ref={provided.innerRef}>
+                {props.eventMedia[1].medias ? (
+                  props.eventMedia[1].medias.length > 0 ? (
                     <ImageList variant="masonry" cols={2} gap={8}>
                       {props.eventMedia[1].medias.map((file, index) => (
                         <ImageListItem key={file.id}>
@@ -204,33 +187,35 @@ function Medias(props) {
                                   onTouchEnd={handleTouchEnd}
                                 >
                                   {file.type === "video" ? (
-                                   <div style={{position: "relative"}}>
-                                   <video
-                                     onClick={() => handleImageClick(file.id)}
-                                     alt={file.title}
-                                     className={`${
-                                       file.id === selectedImage
-                                         ? "image"
-                                         : "selected-image"
-                                     }`}
-                                   >
-                                     <source
-                                       src={file.path}
-                                       type="video/mp4"
-                                     />
-                                   </video>
-                                   <PlayCircleFilledIcon
-                                     style={{
-                                       position: "absolute",
-                                       top: "50%",
-                                       left: "50%",
-                                       transform: "translate(-50%, -50%)",
-                                       opacity: "0.7",
-                                       width: "40%",
-                                       height: "100px",
-                                     }}
-                                   />
-                                 </div>
+                                    <div style={{ position: "relative" }}>
+                                      <video
+                                        onClick={() =>
+                                          handleImageClick(file.id)
+                                        }
+                                        alt={file.title}
+                                        className={`${
+                                          file.id === selectedImage
+                                            ? "image"
+                                            : "selected-image"
+                                        }`}
+                                      >
+                                        <source
+                                          src={file.path}
+                                          type="video/mp4"
+                                        />
+                                      </video>
+                                      <PlayCircleFilledIcon
+                                        style={{
+                                          position: "absolute",
+                                          top: "50%",
+                                          left: "50%",
+                                          transform: "translate(-50%, -50%)",
+                                          opacity: "0.7",
+                                          width: "40%",
+                                          height: "100px",
+                                        }}
+                                      />
+                                    </div>
                                   ) : (
                                     <div>
                                       <img
@@ -265,19 +250,19 @@ function Medias(props) {
                         </ImageListItem>
                       ))}
                     </ImageList>
-                  </Box>
-                ) : (
-                  <Box className="Info">
-                    <Typography variant="body1" color="text.secondary">
-                      Ajouter media "+"
-                    </Typography>
-                  </Box>
-                )
-              ) : null}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
+                  ) : (
+                    <Box className="Info">
+                      <Typography variant="body1" color="text.secondary">
+                        Ajouter media "+"
+                      </Typography>
+                    </Box>
+                  )
+                ) : null}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </Box>
       </Paper>
       {/* Modal upload  */}
       <Modal open={dialogUpload} onClose={displayDialogUpload}>
@@ -320,7 +305,7 @@ function Medias(props) {
         DeleteFile={DeleteFile}
         displayDialogDelete={displayDialogDelete}
       />
-    </div>
+    </>
   );
 }
 
