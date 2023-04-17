@@ -1,6 +1,9 @@
-.ligneParam {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+.switchContainer {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+.profileContainer {
+  padding: 1% 8% 0 8% !important;
 }

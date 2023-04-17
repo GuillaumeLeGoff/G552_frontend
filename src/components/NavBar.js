@@ -1,20 +1,13 @@
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from "@mui/icons-material/Login";
-import PersonAddAltIcon from "@mui/icons-material/PersonAddAlt";
-import KeyboardIcon from "@mui/icons-material/Keyboard";
 
-import { useMediaQuery } from "@mui/material";
+import KeyboardIcon from "@mui/icons-material/Keyboard";
+import SettingsIcon from '@mui/icons-material/Settings';
 import {
   BottomNavigation,
   BottomNavigationAction,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Paper,
+
 } from "@mui/material";
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -66,7 +59,7 @@ function NavBar() {
             to="/profile"
             label="Profile"
             icon={
-              <AccountCircleIcon sx={{ color: getIconColor("/profile") }} />
+              <SettingsIcon sx={{ color: getIconColor("/profile") }} />
             }
           />
 

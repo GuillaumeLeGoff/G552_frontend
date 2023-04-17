@@ -7,16 +7,17 @@ import {
   Paper,
   Stack,
   Switch,
-  TextField,
   Typography,
   Slider,
   LinearProgress,
+  TextField,
 } from "@mui/material";
 import "../../../styles/Global.css";
-import SaveIcon from "@mui/icons-material/Save";
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import SettingsIcon from '@mui/icons-material/Settings';
+
 import authService from "../../../services/authService";
 import userService from "../../../services/userService";
+import "./Profile.css";
 function Profile() {
   const [username, setUsername] = useState("John Doe");
   const [password, setPassword] = useState("");
@@ -57,10 +58,10 @@ function Profile() {
         <Stack className="headerSection">
           <div className="headerItemLeft">
             <IconButton>
-              <AccountBoxIcon sx={{ color: "primary.light" }} />
+              <SettingsIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              Profile {username}
+              Paramètre de {username}
             </Typography>
           </div>
           {/* <div className="headerItemRight">
@@ -69,12 +70,12 @@ function Profile() {
             </IconButton>
           </div> */}
         </Stack>
-        <Box className="container">
-          <Stack spacing={2} sx={{ mt: 4 }}>
-            <Typography variant="h6" component="h2">
-              Nom: {username}
-            </Typography>
-            {/* <Stack direction="column" spacing={1}>
+        <Box className="profileContainer">
+          <Stack spacing={2}>
+            {/* <Typography variant="h6" component="h2">
+              Nom {username}
+            </Typography> */}
+            <Stack direction="column" spacing={1}>
               <Typography>Change Password:</Typography>
               <TextField
                 fullWidth
@@ -90,33 +91,21 @@ function Profile() {
                 type="password"
                 label="New Password"
               />
-            </Stack> */}
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography >Mode sombre</Typography>
+            </Stack>
+            <Stack className="switchContainer">
+              <Typography>Mode sombre</Typography>
               <Switch
                 checked={darkMode}
                 onChange={() => setIsDarkMode()}
                 color="secondary"
               />
             </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography >Event auto</Typography>
+            <Stack className="switchContainer">
+              <Typography>Event auto</Typography>
               <Switch color="secondary" />
             </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography >Mise en veille automatique</Typography>
+            <Stack className="switchContainer">
+              <Typography>Mise en veille automatique</Typography>
               <Switch
                 color="secondary"
                 checked={miseEnVeille}
@@ -124,11 +113,7 @@ function Profile() {
               />
             </Stack>
 
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
+            <Stack className="switchContainer">
               <Slider
                 color="secondary"
                 value={[sleepStart, sleepEnd]}
@@ -150,20 +135,14 @@ function Profile() {
                 disabled={!miseEnVeille}
               />
             </Stack>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography >Espace de stockage utilisé</Typography>
-
-              
+            <Stack className="switchContainer">
+              <Typography>Espace de stockage utilisé</Typography>
             </Stack>
             <LinearProgress
-                variant="determinate"
-                value={percentage}
-                color={percentage > 80 ? "error" : "secondary"}
-              />
+              variant="determinate"
+              value={percentage}
+              color={percentage > 80 ? "error" : "secondary"}
+            />
           </Stack>
         </Box>
       </Paper>
