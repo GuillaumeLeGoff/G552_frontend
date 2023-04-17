@@ -1,18 +1,12 @@
 import AddIcon from "@mui/icons-material/Add";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
 import Crop from "./crop/CropImage";
 import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@mui/icons-material/Upload";
+import PlayCircleFilledIcon from '@mui/icons-material/PlayCircleFilled';
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   ImageList,
   ImageListItem,
   Modal,
@@ -90,44 +84,40 @@ function Medias(props) {
   }
 
   function goToCrop(event) {
-    setOriginalName(event.target.files[0].name);
-    const reader = new FileReader();
-    reader.addEventListener("load", () => setImageToCrop(reader.result));
-    reader.readAsDataURL(event.target.files[0]);
-    setMediaType(event.target.files[0].type.split("/")[0]);
-    displayDialogUpload();
+    if (event.target.files[0].type.split("/")[0] === "video") {
+      mediaService
+      .upload(event.target.files[0], "video")
+      .then(() => {
+        props.getMedias();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    } else {
+      console.log(event.target.files[0]);
+      setOriginalName(event.target.files[0].name);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => setImageToCrop(reader.result));
+      reader.readAsDataURL(event.target.files[0]);
+      setMediaType(event.target.files[0].type.split("/")[0]);
+      displayDialogUpload();
+    }
   }
 
-  function uploadMediaCroped(event, croppedAreaPixels) {
-    if (mediaType === "video") {
-      console.log(croppedAreaPixels);
-      const fileWithOriginalName = new File([event[0]], originalName, {
-        type: "video/mp4",
-      });
-      console.log(fileWithOriginalName);
+  function uploadMediaCroped(event) {
+    const fileWithOriginalName = new File([event[0]], originalName, {
+      type: "image/jpeg",
+    });
 
-      mediaService
-        .upload(fileWithOriginalName, mediaType, croppedAreaPixels)
-        .then(() => {
-          props.getMedias();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      const fileWithOriginalName = new File([event[0]], originalName, {
-        type: "image/jpeg",
+    mediaService
+      .upload(fileWithOriginalName, mediaType)
+      .then(() => {
+        props.getMedias();
+      })
+      .catch((error) => {
+        console.error(error);
       });
 
-      mediaService
-        .upload(fileWithOriginalName, mediaType)
-        .then(() => {
-          props.getMedias();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
     displayDialogUpload();
     setImageToCrop(null);
   }
@@ -214,20 +204,33 @@ function Medias(props) {
                                   onTouchEnd={handleTouchEnd}
                                 >
                                   {file.type === "video" ? (
-                                    <video
-                                      onClick={() => handleImageClick(file.id)}
-                                      alt={file.title}
-                                      className={`${
-                                        file.id === selectedImage
-                                          ? "image"
-                                          : "selected-image"
-                                      }`}
-                                    >
-                                      <source
-                                        src={file.path}
-                                        type="video/mp4"
-                                      />
-                                    </video>
+                                   <div style={{position: "relative"}}>
+                                   <video
+                                     onClick={() => handleImageClick(file.id)}
+                                     alt={file.title}
+                                     className={`${
+                                       file.id === selectedImage
+                                         ? "image"
+                                         : "selected-image"
+                                     }`}
+                                   >
+                                     <source
+                                       src={file.path}
+                                       type="video/mp4"
+                                     />
+                                   </video>
+                                   <PlayCircleFilledIcon
+                                     style={{
+                                       position: "absolute",
+                                       top: "50%",
+                                       left: "50%",
+                                       transform: "translate(-50%, -50%)",
+                                       opacity: "0.7",
+                                       width: "40%",
+                                       height: "100px",
+                                     }}
+                                   />
+                                 </div>
                                   ) : (
                                     <div>
                                       <img
@@ -256,27 +259,6 @@ function Medias(props) {
                                     />
                                   )}
                                 </div>
-                                {/* {snapshot.isDragging && (
-                                  <div>
-                                    {file.type === "video" ? (
-                                      <video
-                                      alt={file.title}
-                                      className="selected-image"
-                                    >
-                                      <source
-                                        src={file.path}
-                                        type="video/mp4"
-                                      />
-                                    </video>
-                                    ) : (<img
-                                      style={{ display: "none !important" }}
-                                      src={file.path}
-                                      alt={file.title}
-                                      className="selected-image"
-                                    />
-                                    )}
-                                  </div>
-                                )} */}
                               </React.Fragment>
                             )}
                           </Draggable>

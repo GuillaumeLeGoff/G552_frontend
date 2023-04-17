@@ -4,14 +4,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   Button,
-  Typography,
   DialogContentText,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Stack } from "@mui/system";
+
 
 function DeleteMediaDialog({ open, onClose, DeleteFile, displayDialogDelete }) {
   return (
@@ -21,10 +17,10 @@ function DeleteMediaDialog({ open, onClose, DeleteFile, displayDialogDelete }) {
         <DialogContentText>Voulez-vous supprimer ce media?</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={DeleteFile} color="secondary">
+        <Button onClick={displayDialogDelete} color="secondary">
           Annuler
         </Button>
-        <Button onClick={displayDialogDelete} color="secondary">
+        <Button onClick={DeleteFile} color="secondary">
           Confirme
         </Button>
       </DialogActions>
