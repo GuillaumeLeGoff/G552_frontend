@@ -3,10 +3,12 @@ import {
   Box,
   Button,
   Container,
+  FormControlLabel,
   Grid,
   IconButton,
   Paper,
   Stack,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -20,18 +22,23 @@ function Profile() {
   const [username, setUsername] = useState("John Doe");
   const [password, setPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
-  const user = authService.getCurrentUser()
+  const [autoEvent, setAutoEvent] = useState(false); // 💡 Ajout d'un nouvel état pour gérer l'event automatique
+  const user = authService.getCurrentUser();
   useEffect(() => {
-
-      setUsername(user.user.username);
-    
+    setUsername(user.user.username);
   }, []);
-  
 
   const handlePasswordChange = () => {
-    userService.changePassword(oldPassword, password,user.id).then((result) => {
-
-    });
+    userService
+      .changePassword(oldPassword, password, user.id)
+      .then((result) => {});
+  };
+  // 😎 Fonction pour gérer le changement de l'état autoEvent
+  const handleAutoEventSwitch = (e) => {
+    setAutoEvent(e.target.checked);
+  };
+  const handleAutoEvent = (e) => {
+    setIsEditMode(!isEditMode);
   };
 
   return (
@@ -67,7 +74,12 @@ function Profile() {
         >
           <Box sx={{ mt: 4 }}>
             <Stack direction="column" spacing={1}>
-              <Typography variant="h6" sx={{ mb: 5 }} component="h2" gutterBottom>
+              <Typography
+                variant="h6"
+                sx={{ mb: 5 }}
+                component="h2"
+                gutterBottom
+              >
                 Nom: {username}
               </Typography>
             </Stack>
@@ -89,6 +101,10 @@ function Profile() {
               type="password"
               label="New Password"
             />
+           <Typography  gutterBottom>
+             Evenement automatique
+            </Typography>
+           <Switch color="secondary" defaultChecked />
           </Box>
         </Box>
       </Paper>
