@@ -17,7 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import React, { useState } from "react";
 import EventMediaService from "../../../../services/eventMediaService";
-import mediaService from "../../../../services/UploadService";
+import mediaService from "../../../../services/uploadService";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import { useDropzone } from "react-dropzone";
 import "react-image-crop/dist/ReactCrop.css";

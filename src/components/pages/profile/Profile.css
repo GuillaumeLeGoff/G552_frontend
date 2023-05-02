@@ -7,3 +7,15 @@
 .profileContainer {
   padding: 1% 8% 0 8% !important;
 }
+
+.passwordContainer{
+  display: flex;
+justify-content: center;
+flex-direction: column;
+align-items: center;
+}
+
+.passwordInput{
+  width: 80%;
+  margin: 0 0 1rem 0!important;
+}

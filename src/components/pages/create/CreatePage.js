@@ -6,7 +6,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 
 import { v4 as uuidv4 } from "uuid";
-import mediaService from "../../../services/UploadService";
+import mediaService from "../../../services/uploadService";
 import authService from "../../../services/authService";
 import EventMediaService from "../../../services/eventMediaService";
 import Medias from "./mediaPage/Medias";

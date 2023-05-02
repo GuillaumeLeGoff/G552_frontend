@@ -13,18 +13,19 @@ import {
   TextField,
 } from "@mui/material";
 import "../../../styles/Global.css";
-import SettingsIcon from '@mui/icons-material/Settings';
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import authService from "../../../services/authService";
 import userService from "../../../services/userService";
 import "./Profile.css";
+import paramService from "../../../services/paramService";
+import veilleService from "../../../services/veilleService";
 function Profile() {
   const [username, setUsername] = useState("John Doe");
   const [password, setPassword] = useState("");
+  const [param, setParam] = useState("");
+  const [veille, setVeille] = useState("");
   const [oldPassword, setOldPassword] = useState("");
-  const [miseEnVeille, setMiseEnVeille] = useState(false);
-  const [sleepStart, setSleepStart] = useState(22);
-  const [sleepEnd, setSleepEnd] = useState(7);
   const totalSize = 100; // Taille totale en Go
   const usedSize = 90; // Taille utilisée en Go
 
@@ -36,7 +37,17 @@ function Profile() {
 
   useEffect(() => {
     setUsername(user.user.username);
-  }, [user.user.username]);
+    paramService.getByUserId(user.user.id).then((param) => {
+      setParam(param.data[0]);
+      console.log("param", param.data[0]);
+      // Mettre à jour l'état avec les données de param
+      veilleService.getByUserId(param.data[0].veille_id).then((veille) => {
+        setVeille(veille.data);
+        console.log("veille", veille.data);
+        // Mettre à jour l'état avec les données de veille
+      });
+    });
+  }, [user.user.username, user.user.id]);
 
   function setIsDarkMode() {
     console.log(darkMode);
@@ -46,10 +57,26 @@ function Profile() {
     });
   }
 
-  const handlePasswordChange = () => {
-    userService
-      .changePassword(oldPassword, password, user.id)
-      .then((result) => {});
+  const handleEventAutoChange = (event) => {
+    setParam({ ...param, event_auto: event.target.checked ? 1 : 0 });
+    paramService.update({ ...param, event_auto: event.target.checked ? 1 : 0 }).then((response) => {
+      console.log("Paramètres mis à jour :", response.data);
+    });
+  };
+
+  const handleVeilleChange = (event) => {
+    setVeille({ ...veille, enable: event.target.checked ? 1 : 0 });
+
+    veilleService.update({ ...veille, enable: event.target.checked ? 1 : 0 }).then((response) => {
+      console.log("Paramètres mis à jour :", response.data);
+    });
+  };
+
+  const handleSliderChange = (event, newValue) => {
+    setVeille({ ...veille, start_time: newValue[0], end_time: newValue[1] });
+    veilleService.update({ ...veille, start_time: newValue[0], end_time: newValue[1] }).then((response) => {
+      console.log("Paramètres mis à jour :", response.data);
+    });
   };
 
   return (
@@ -77,20 +104,22 @@ function Profile() {
             </Typography> */}
             <Stack direction="column" spacing={1}>
               <Typography>Change Password:</Typography>
-              <TextField
-                fullWidth
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                type="password"
-                label="Current Password"
-              />
-              <TextField
-                fullWidth
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                label="New Password"
-              />
+              <Box className="passwordContainer">
+                <TextField
+                  className="passwordInput"
+                  value={oldPassword}
+                  onChange={(e) => setOldPassword(e.target.value)}
+                  type="password"
+                  label="Current Password"
+                />
+                <TextField
+                  className="passwordInput"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  label="New Password"
+                />
+              </Box>
             </Stack>
             <Stack className="switchContainer">
               <Typography>Mode sombre</Typography>
@@ -102,25 +131,24 @@ function Profile() {
             </Stack>
             <Stack className="switchContainer">
               <Typography>Event auto</Typography>
-              <Switch color="secondary" />
+              <Switch
+                color="secondary"
+                checked={param.event_auto === 1}
+                onChange={handleEventAutoChange}
+              />
             </Stack>
             <Stack className="switchContainer">
               <Typography>Mise en veille automatique</Typography>
               <Switch
                 color="secondary"
-                checked={miseEnVeille}
-                onChange={() => setMiseEnVeille(!miseEnVeille)}
+                checked={veille.enable === 1}
+                onChange={handleVeilleChange}
               />
             </Stack>
-
             <Stack className="switchContainer">
               <Slider
                 color="secondary"
-                value={[sleepStart, sleepEnd]}
-                onChange={(event, newValue) => {
-                  setSleepStart(newValue[0]);
-                  setSleepEnd(newValue[1]);
-                }}
+                value={[veille.start_time, veille.end_time]}
                 min={0}
                 max={24}
                 step={1}
@@ -132,7 +160,8 @@ function Profile() {
                   { value: 24, label: "24h" },
                 ]}
                 valueLabelDisplay="auto"
-                disabled={!miseEnVeille}
+                onChange={handleSliderChange}
+                disabled={veille.enable === 0}
               />
             </Stack>
             <Stack className="switchContainer">
