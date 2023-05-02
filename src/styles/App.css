@@ -8,14 +8,7 @@
     font-family: system-ui !important;
 }
 
-.Info{
-    display: flex;
-   justify-content: center;
-    align-items: center;
-    min-height: calc(94vh - 120px ) ;
-    width: 100%;
-   
-}
+
 
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

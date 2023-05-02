@@ -6,11 +6,7 @@ import {
   DialogTitle,
   TextField,
   Button,
-  Typography,
 } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import { Stack } from "@mui/system";
 
 function AddEventDialog({ open, onClose, onAdd, name, setName }) {
   return (
@@ -30,7 +26,7 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
         <Button onClick={onClose} color="secondary">
           Annuler
         </Button>
-        <Button onClick={onAdd} color="secondary">
+        <Button onClick={onAdd} color="secondary" disabled={!name.trim()}>
           Ajouter
         </Button>
       </DialogActions>

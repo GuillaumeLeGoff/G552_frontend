@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Media from "./mediaPage/Medias";
 import Event from "./eventPage/Event";
 import Grid from "@mui/material/Grid";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -80,7 +79,7 @@ function Create() {
   }
 
   function getEvents() {
-    if (id != undefined) {
+    if (id !== undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
         const newMedias = result.data.map((media) => {
           return { ...media, id: uuidv4(), idBdd: media.id };
@@ -125,7 +124,7 @@ function Create() {
   };
   const onDragEnd = (result) => {
     setIsDragging(false);
-    const { destination, source, draggableId } = result;
+    const { destination, source } = result;
     if (!destination) {
       console.log("no destination");
       return;

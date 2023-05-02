@@ -3,18 +3,11 @@ import PermMediaIcon from "@mui/icons-material/PermMedia";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Paper,
   Stack,
   Table,
   TableBody,
   TableContainer,
-  TableRow,
 } from "@mui/material";
 
 import IconButton from "@mui/material/IconButton";
@@ -26,7 +19,6 @@ import eventMediaService from "../../../../services/eventMediaService";
 import eventService from "../../../../services/eventService";
 import "../../../../styles/App.css";
 import DeleteMediaEventDialog from "../../../dialogs/DeleteMediaEventDialog";
-import DeleteDialog from "../../../dialogs/DeleteMediaEventDialog";
 import Media from "./EventMedia";
 
 function EventParam(props) {
@@ -38,7 +30,9 @@ function EventParam(props) {
   useEffect(() => {
     props.getEvents();
     getMediasByID();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   function getMediasByID() {
     eventService.getById(props.id).then((result) => {
       setEvent(result.data);
@@ -62,7 +56,7 @@ function EventParam(props) {
   async function deleteEventMedia() {
     const eventMediaDelete = props.eventMedia[0].medias[idEventMediaDelete];
     try {
-      const result = await eventMediaService.delete(id, eventMediaDelete);
+      await eventMediaService.delete(id, eventMediaDelete);
       await getMediasByID();
       closeDeleteDialog();
     } catch (error) {

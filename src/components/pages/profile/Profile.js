@@ -16,7 +16,6 @@ import "../../../styles/Global.css";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 import authService from "../../../services/authService";
-import userService from "../../../services/userService";
 import "./Profile.css";
 import paramService from "../../../services/paramService";
 import veilleService from "../../../services/veilleService";
@@ -59,24 +58,30 @@ function Profile() {
 
   const handleEventAutoChange = (event) => {
     setParam({ ...param, event_auto: event.target.checked ? 1 : 0 });
-    paramService.update({ ...param, event_auto: event.target.checked ? 1 : 0 }).then((response) => {
-      console.log("Paramètres mis à jour :", response.data);
-    });
+    paramService
+      .update({ ...param, event_auto: event.target.checked ? 1 : 0 })
+      .then((response) => {
+        console.log("Paramètres mis à jour :", response.data);
+      });
   };
 
   const handleVeilleChange = (event) => {
     setVeille({ ...veille, enable: event.target.checked ? 1 : 0 });
 
-    veilleService.update({ ...veille, enable: event.target.checked ? 1 : 0 }).then((response) => {
-      console.log("Paramètres mis à jour :", response.data);
-    });
+    veilleService
+      .update({ ...veille, enable: event.target.checked ? 1 : 0 })
+      .then((response) => {
+        console.log("Paramètres mis à jour :", response.data);
+      });
   };
 
   const handleSliderChange = (event, newValue) => {
     setVeille({ ...veille, start_time: newValue[0], end_time: newValue[1] });
-    veilleService.update({ ...veille, start_time: newValue[0], end_time: newValue[1] }).then((response) => {
-      console.log("Paramètres mis à jour :", response.data);
-    });
+    veilleService
+      .update({ ...veille, start_time: newValue[0], end_time: newValue[1] })
+      .then((response) => {
+        console.log("Paramètres mis à jour :", response.data);
+      });
   };
 
   return (
@@ -91,17 +96,9 @@ function Profile() {
               Paramètre de {username}
             </Typography>
           </div>
-          {/* <div className="headerItemRight">
-            <IconButton>
-              <SaveIcon onClick={handlePasswordChange} color="secondary" />
-            </IconButton>
-          </div> */}
         </Stack>
         <Box className="profileContainer">
           <Stack spacing={2}>
-            {/* <Typography variant="h6" component="h2">
-              Nom {username}
-            </Typography> */}
             <Stack direction="column" spacing={1}>
               <Typography>Change Password:</Typography>
               <Box className="passwordContainer">

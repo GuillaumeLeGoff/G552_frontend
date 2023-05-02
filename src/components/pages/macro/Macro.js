@@ -17,7 +17,7 @@ import {
 import KeyboardIcon from "@mui/icons-material/Keyboard";
 import eventService from "../../../services/eventService";
 import macroService from "../../../services/macroService";
-
+import "./Macro.css";
 function Macro() {
   const [macros, setMacros] = useState(null);
 
@@ -67,7 +67,7 @@ function Macro() {
             </Typography>
           </div>
         </Stack>
-        <Box className="container">
+        <Box className="containerMacro">
           <Table>
             <TableHead>
               <TableRow>

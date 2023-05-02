@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import EventParam from "./EventParam";
-import EventList from "./EventList";
+import EventList from "./eventList/EventList";
 import { useNavigate } from "react-router-dom";
 
 function Event(props) {

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { Button } from "@mui/material";
 
@@ -6,10 +6,7 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
-  const [croppedImageURL, setCroppedImageURL] = useState(null);
-  useEffect(() => {
-    console.log("mediaType", mediaType);
-  }, [mediaType]);
+
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
     console.log("croppedAreaPixels", croppedAreaPixels);
@@ -51,21 +48,16 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
   };
 
   const handleUpload = async () => {
-    if (mediaType == "image") {
+    if (mediaType === "image") {
       if (!imageToCrop || !croppedAreaPixels) return;
       const croppedImage = await getCroppedImage();
       console.log("donee", { croppedImage });
       uploadMediaCroped([croppedImage]);
-    } else if (mediaType == "video") {
+    } else if (mediaType === "video") {
       uploadMediaCroped([imageToCrop], croppedAreaPixels);
     }
   };
-  const showCroppedImage = async () => {
-    if (!imageToCrop || !croppedAreaPixels) return;
-    const croppedImage = await getCroppedImage();
-    const objectUrl = URL.createObjectURL(croppedImage);
-    setCroppedImageURL(objectUrl);
-  };
+  /*  */
   return (
     <div>
       <div
@@ -76,20 +68,9 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
           background: "#333",
         }}
       >
-        {/* si image afficher  Cropper image sinon Cropper video*/}
-        {mediaType === "image" ? (
+        {mediaType === "image" && (
           <Cropper
             image={imageToCrop}
-            crop={crop}
-            zoom={zoom}
-            aspect={1}
-            onCropChange={setCrop}
-            onCropComplete={onCropComplete}
-            onZoomChange={setZoom}
-          />
-        ) : (
-          <Cropper
-            video={imageToCrop}
             crop={crop}
             zoom={zoom}
             aspect={1}
@@ -108,14 +89,6 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
           alignItems: "center",
         }}
       >
-    
-        {croppedImageURL && (
-          <img
-            src={croppedImageURL}
-            alt="Cropped"
-            style={{ marginTop: "16px" }}
-          />
-        )}
         <Button
           variant="contained"
           color="primary"

@@ -1,12 +1,7 @@
 import DeleteIcon from "@mui/icons-material/Delete";
-import {
-  IconButton,
-  InputLabel,
-  TableCell,
-  TableRow,
-  TextField,
-} from "@mui/material";
+import { IconButton, TableCell, TableRow, TextField } from "@mui/material";
 import React from "react";
+import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
 import { Draggable } from "react-beautiful-dnd";
 import "../../../../styles/App.css";
 
@@ -33,16 +28,24 @@ function Media(props) {
         >
           <TableCell sx={{ borderBottom: "0" }} p={0} align="center">
             {props.item.type === "video" ? (
-              <video
-                style={{ maxWidth: "calc(20vh )", maxHeight: "calc(20vh )" }}
-                alt={props.item.title}
-              >
-                <source src={props.item.path} type="video/mp4" />
-              </video>
+              <div>
+                <video
+                  style={{
+                    maxWidth: "calc(20vh )",
+                    maxHeight: "calc(20vh )",
+                    minWidth: "calc(20vh )",
+                    minHeight: "calc(20vh )",
+                  }}
+                  alt={props.item.title}
+                >
+                  <source src={props.item.path} type="video/mp4" />
+                </video>
+                
+              </div>
             ) : (
               <div>
                 <img
-                  style={{ minWidth: "calc(15vh )", maxHeight: "calc(20vh )" }}
+                  style={{ minWidth: "calc(15vh )", maxHeight: "calc(15vh )" }}
                   src={props.item.path}
                   alt={props.item.title}
                 />
@@ -55,7 +58,10 @@ function Media(props) {
               onChange={(e) => handleDurationChange(e, props.index)}
               size="small"
               type="number"
-              InputProps={{ inputProps: { min: 0, max: 999 } }}
+              InputProps={{
+                inputProps: { min: 0, max: 999 },
+                disabled: props.item.type === "video",
+              }}
             />
           </TableCell>
           <TableCell sx={{ borderBottom: "0" }} p={0} align="right">

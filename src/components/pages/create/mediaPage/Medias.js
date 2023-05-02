@@ -19,9 +19,8 @@ import React, { useState } from "react";
 import EventMediaService from "../../../../services/eventMediaService";
 import mediaService from "../../../../services/uploadService";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { useDropzone } from "react-dropzone";
-import "react-image-crop/dist/ReactCrop.css";
-import "../../../../styles/Media.css";
+import "./Medias.css";
+
 import DeleteMediaDialog from "../../../dialogs/DeleteMediaDialog";
 function Medias(props) {
   const style = {
@@ -51,14 +50,6 @@ function Medias(props) {
   const handleTouchEnd = () => {
     clearTimeout(longPressTimer);
   };
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      "image/jpeg": [],
-      "image/png": [],
-      "video/mp4": [],
-    },
-    onDrop: (files) => goToCrop(files),
-  });
 
   function DeleteFile() {
     EventMediaService.deleteAllByMedia(FileToDelete.idBdd).then(() => {
@@ -159,7 +150,7 @@ function Medias(props) {
             />
           </div>
         </Stack>
-        <Box className="container">
+        <Box className="container-medias">
           <Droppable
             droppableId={`${props.eventMedia[1].id}`}
             isDropDisabled={true}
@@ -198,6 +189,12 @@ function Medias(props) {
                                             ? "image"
                                             : "selected-image"
                                         }`}
+                                        style={{
+                                          minWidth: "calc(20vh )",
+                                          maxWidth: "calc(20vh )",
+                                          maxHeight: "calc(20vh )",
+                                          minHeight: "calc(20vh )",
+                                        }}
                                       >
                                         <source
                                           src={file.path}
@@ -219,6 +216,12 @@ function Medias(props) {
                                   ) : (
                                     <div>
                                       <img
+                                        style={{
+                                          minWidth: "calc(20vh )",
+                                          maxWidth: "calc(20vh )",
+                                          maxHeight: "calc(20vh )",
+                                          minHeight: "calc(20vh )",
+                                        }}
                                         onClick={() =>
                                           handleImageClick(file.id)
                                         }

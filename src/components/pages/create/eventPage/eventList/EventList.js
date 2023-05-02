@@ -10,16 +10,15 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
-import eventService from "../../../../services/eventService";
+import eventService from "../../../../../services/eventService";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
 
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
-import "../../../../styles/App.css";
-import DeleteEventDialog from "../../../dialogs/DeleteEventDialog";
-import AddEventDialog from "../../../dialogs/AddEventDialog";
-
+import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
+import AddEventDialog from "../../../../dialogs/AddEventDialog";
+import "./EventList.css"
 function EventList({ onEventClick }) {
   useEffect(() => {
     getEvent();
@@ -56,6 +55,7 @@ function EventList({ onEventClick }) {
       await eventService.create(name);
       toggleModal();
       getEvent();
+      setName("");
     } catch (error) {
       console.error("Erreur lors de l'ajout d'un événement :", error);
     }
@@ -100,10 +100,11 @@ function EventList({ onEventClick }) {
           </div>
         </Stack>
 
+        <Box className="containerEventList">
         {event !== undefined ? (
           event.length > 0 ? (
             event.map((row) => (
-              <Table size="small" key={row.id}>
+              <Table size="big" key={row.id}>
                 <TableBody>
                   <TableRow
                     onMouseEnter={() => handleRowHover(row.id)}
@@ -141,6 +142,7 @@ function EventList({ onEventClick }) {
         ) : (
           ""
         )}
+        </Box>
       </Paper>
 
       <DeleteEventDialog

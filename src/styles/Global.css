@@ -1,24 +1,5 @@
-.mainPaper {
-  max-height: calc(94vh - 56px);
-  min-height: calc(94vh - 56px);
-}
-.headerSection {
-  flex-direction: row !important;
-  justify-content: space-between;
-}
-.headerItemLeft {
-  display: flex;
-  flex-direction: row;
-  margin-left: 16px;
-}
-.headerItemRight {
-  display: flex;
-  margin-right: 16px;
-}
-.headerTitle {
-  padding: 16px;
-}
-.container {
+
+/* .container {
   display: flex;
   justify-content: center;
   min-height: calc(94vh - 120px);
@@ -26,4 +7,4 @@
   overflow-y: scroll;
   align-content: center;
   padding: 8px;
-}
+} */
