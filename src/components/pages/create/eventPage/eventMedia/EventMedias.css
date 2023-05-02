@@ -1,0 +1,35 @@
+/* styles.css */
+
+.event-media-cell {
+  border-bottom: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.event-media {
+  max-width: calc(15vh);
+  max-height: calc(15vh);
+  min-width: calc(15vh);
+  min-height: calc(15vh);
+}
+
+.event-media-duration-cell {
+  border-bottom: 0;
+  padding: 0;
+  text-align: right;
+}
+
+.event-media-icon-cell {
+  border-bottom: 0;
+  padding: 0;
+  text-align: right;
+}
+
+.event-media-icon-button {
+  padding: 0;
+  opacity: 0;
+}
+
+.event-media-icon-button.visible {
+  opacity: 1;
+}

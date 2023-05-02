@@ -24,6 +24,8 @@ function EventList({ onEventClick }) {
     getEvent();
   }, []);
 
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
   const [name, setName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [event, setEvent] = useState(undefined);
@@ -67,7 +69,13 @@ function EventList({ onEventClick }) {
   }
 
   function handleRowHover(rowId) {
-    setHoveredRow(rowId);
+    console.log("rowId", rowId);
+    console.log("hoveredRow", hoveredRow);
+    if (rowId === hoveredRow) {
+      setHoveredRow(null);
+    } else {
+      setHoveredRow(rowId);
+    }
   }
 
   function openDeleteDialog(event) {
@@ -106,9 +114,14 @@ function EventList({ onEventClick }) {
             event.map((row) => (
               <Table size="big" key={row.id}>
                 <TableBody>
-                  <TableRow
-                    onMouseEnter={() => handleRowHover(row.id)}
-                    onMouseLeave={() => handleRowHover(null)}
+                  <TableRow {...(isMobile
+            ? {
+                onClick: () => handleRowHover(row.id),
+              }
+            : {
+                onMouseEnter: () => handleRowHover(row.id),
+                onMouseLeave: () => handleRowHover(null),
+              })}
                     hover
                     onClick={() => onEventClick(row.id)}
                     key={row.id}

@@ -11,6 +11,7 @@ import {
   ImageListItem,
   Modal,
   Paper,
+  Skeleton,
   Stack,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
@@ -23,12 +24,6 @@ import "./Medias.css";
 
 import DeleteMediaDialog from "../../../dialogs/DeleteMediaDialog";
 function Medias(props) {
-  const style = {
-    height: "100%",
-    width: "100%",
-    bgcolor: "#203038",
-    p: 4,
-  };
   const [selectedImage, setSelectedImage] = useState(null);
   const [dialogUpload, setDialogUpload] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
@@ -42,7 +37,11 @@ function Medias(props) {
     clearTimeout(longPressTimer);
     setLongPressTimer(
       setTimeout(() => {
+        if (imageId === selectedImage) {
+          setSelectedImage(null);
+        } else {
         setSelectedImage(imageId);
+        }
       }, 500)
     ); // Appui long de 500 ms
   };
@@ -178,7 +177,7 @@ function Medias(props) {
                                   onTouchEnd={handleTouchEnd}
                                 >
                                   {file.type === "video" ? (
-                                    <div style={{ position: "relative" }}>
+                                    <div>
                                       <video
                                         onClick={() =>
                                           handleImageClick(file.id)
@@ -188,40 +187,18 @@ function Medias(props) {
                                           file.id === selectedImage
                                             ? "image"
                                             : "selected-image"
-                                        }`}
-                                        style={{
-                                          minWidth: "calc(20vh )",
-                                          maxWidth: "calc(20vh )",
-                                          maxHeight: "calc(20vh )",
-                                          minHeight: "calc(20vh )",
-                                        }}
+                                        } media-size`}
                                       >
                                         <source
                                           src={file.path}
                                           type="video/mp4"
                                         />
                                       </video>
-                                      <PlayCircleFilledIcon
-                                        style={{
-                                          position: "absolute",
-                                          top: "50%",
-                                          left: "50%",
-                                          transform: "translate(-50%, -50%)",
-                                          opacity: "0.7",
-                                          width: "40%",
-                                          height: "100px",
-                                        }}
-                                      />
+                                      <PlayCircleFilledIcon className="playCircleFilledIcon" />
                                     </div>
                                   ) : (
                                     <div>
                                       <img
-                                        style={{
-                                          minWidth: "calc(20vh )",
-                                          maxWidth: "calc(20vh )",
-                                          maxHeight: "calc(20vh )",
-                                          minHeight: "calc(20vh )",
-                                        }}
                                         onClick={() =>
                                           handleImageClick(file.id)
                                         }
@@ -231,7 +208,7 @@ function Medias(props) {
                                           file.id === selectedImage
                                             ? "image"
                                             : "selected-image"
-                                        }`}
+                                        } media-size`}
                                       />
                                     </div>
                                   )}
@@ -239,11 +216,7 @@ function Medias(props) {
                                     <DeleteIcon
                                       onClick={() => OpenDialogDelete(file)}
                                       color="warning"
-                                      sx={{
-                                        position: "absolute",
-                                        top: 5,
-                                        right: 5,
-                                      }}
+                                      className="deleteIcon"
                                     />
                                   )}
                                 </div>
@@ -260,7 +233,9 @@ function Medias(props) {
                       </Typography>
                     </Box>
                   )
-                ) : null}
+                ) : (
+                 null
+                )}
                 {provided.placeholder}
               </div>
             )}
@@ -269,23 +244,25 @@ function Medias(props) {
       </Paper>
       {/* Modal upload  */}
       <Modal open={dialogUpload} onClose={displayDialogUpload}>
-        <Box sx={style}>
+        <Box className="modalBox">
           <Stack
             direction="row"
             justifyContent="space-between"
             alignItems="center"
             spacing={2}
           >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <IconButton sx={{ ml: 2 }}>
-                <UploadIcon sx={{ color: "white" }} />
+            <div className="modalHeader">
+              <IconButton >
+                <UploadIcon sx={{ color: "primary.light" }} className="uploadIcon" />
               </IconButton>
-              <Typography variant="h6" color="white" sx={{ padding: 2 }}>
+              <Typography variant="h6" className="modalHeaderText">
                 Upload
               </Typography>
             </div>
 
-            <IconButton onClick={displayDialogUpload}>
+            <IconButton
+              onClick={displayDialogUpload}
+            >
               <CloseIcon color="secondary" />
             </IconButton>
           </Stack>

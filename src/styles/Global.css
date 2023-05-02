@@ -8,3 +8,7 @@
   align-content: center;
   padding: 8px;
 } */
+input:-webkit-autofill,
+.MuiInputBase-root:has(> input:-webkit-autofill) {
+  background-color: blue !important;
+}

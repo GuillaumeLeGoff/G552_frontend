@@ -9,6 +9,7 @@ import {
   TableBody,
   TableContainer,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -19,7 +20,7 @@ import eventMediaService from "../../../../services/eventMediaService";
 import eventService from "../../../../services/eventService";
 import "../../../../styles/App.css";
 import DeleteMediaEventDialog from "../../../dialogs/DeleteMediaEventDialog";
-import Media from "./EventMedia";
+import Media from "./eventMedia/EventMedia";
 
 function EventParam(props) {
   const [event, setEvent] = useState({});
@@ -76,10 +77,14 @@ function EventParam(props) {
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              Event : {event.name}
+              Event {event.name}
             </Typography>
           </div>
           <div className="headerItemRight">
+           
+            <IconButton>
+              <DeleteIcon color="secondary" />
+            </IconButton>
             <IconButton>
               <PlayArrowIcon color="secondary" />
             </IconButton>
@@ -123,6 +128,7 @@ function EventParam(props) {
           </Table>
         </TableContainer>
       </Paper>
+      
       <DeleteMediaEventDialog
         open={deleteDialogOpen}
         onClose={closeDeleteDialog}
