@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import EventParam from "./EventParam";
+import EventParam from "./eventParam/EventParam";
 import EventList from "./eventList/EventList";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ function Event(props) {
         <EventList eventMedia={props.eventMedia} onEventClick={idEventClick} />
       ) : (
         <EventParam
+        closeEvent={props.closeEvent}
           updateMedia={props.updateMedia}
           getEvents={props.getEvents}
           eventMedia={props.eventMedia}

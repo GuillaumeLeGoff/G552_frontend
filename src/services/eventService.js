@@ -1,38 +1,66 @@
 import axios from "axios";
+import PropTypes from "prop-types";
 import Config from "../config.json";
 import authService from "./authService";
 
 const URL_API = Config.SERVER_URL;
 
-class Eventservice {
-  create(name) {
+class EventService {
+  static propTypes = {
+    name: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+  };
+
+  static async create(name) {
     console.log(name);
-    return axios
-      .post(URL_API + "/events", {
+    const currentUser = authService.getCurrentUser();
+    const userId = currentUser?.user?.id;
+    try {
+      const res = await axios.post(URL_API + "/events", {
         name: name,
-        userId: authService.getCurrentUser().user.id
-      })
-      .then((res) => {
-        console.log(res);
-        console.log(res.data);
+        userId: userId,
       });
-  }
-  get() {
-   
-    return axios.get(URL_API + "/events/user/"+  authService.getCurrentUser().user.id );
+      console.log(res);
+      console.log(res.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  getById(id) {
-    const data = {
-      userId: authService.getCurrentUser().id
-    };
-    return axios.get(URL_API + "/events/" + id, { params: data });
+  static async get() {
+    const currentUser = authService.getCurrentUser();
+    const userId = currentUser?.user?.id;
+    try {
+      const res = await axios.get(URL_API + "/events/user/" + userId);
+
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
   }
-  
-  delete(id) {
-    return axios.delete(URL_API + "/events/" + id);
+
+  static async getById(id) {
+    const currentUser = authService.getCurrentUser();
+    const userId = currentUser?.user?.id;
+    const data = { userId: userId };
+    try {
+      const res = await axios.get(URL_API + "/events/" + id, { params: data });
+
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async delete(id) {
+    try {
+      const res = await axios.delete(URL_API + "/events/" + id);
+
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
-
-export default new Eventservice();
+export default EventService;

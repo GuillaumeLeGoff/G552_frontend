@@ -18,7 +18,10 @@ import React, { useEffect, useState } from "react";
 import { Box } from "@mui/system";
 import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
 import AddEventDialog from "../../../../dialogs/AddEventDialog";
-import "./EventList.css"
+import "./EventList.css";
+
+
+
 function EventList({ onEventClick }) {
   useEffect(() => {
     getEvent();
@@ -34,12 +37,8 @@ function EventList({ onEventClick }) {
   const [hoveredRow, setHoveredRow] = useState(null);
 
   async function getEvent() {
-    try {
-      const result = await eventService.get();
-      setEvent(result.data);
-    } catch (error) {
-      console.error("Erreur lors de la récupération des événements :", error);
-    }
+    const result = await eventService.get();
+    setEvent(result.data);
   }
 
   async function deleteEvent() {
@@ -69,8 +68,6 @@ function EventList({ onEventClick }) {
   }
 
   function handleRowHover(rowId) {
-    console.log("rowId", rowId);
-    console.log("hoveredRow", hoveredRow);
     if (rowId === hoveredRow) {
       setHoveredRow(null);
     } else {
@@ -94,7 +91,7 @@ function EventList({ onEventClick }) {
       <Paper className="mainPaper">
         <Stack className="headerSection">
           <div className="headerItemLeft">
-            <IconButton>
+            <IconButton className="header-button">
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
@@ -102,59 +99,63 @@ function EventList({ onEventClick }) {
             </Typography>
           </div>
           <div className="headerItemRight">
-            <IconButton onClick={toggleModal}>
+            <IconButton className="header-button" onClick={toggleModal}>
               <AddIcon color="secondary" />
             </IconButton>
           </div>
         </Stack>
 
         <Box className="containerEventList">
-        {event !== undefined ? (
-          event.length > 0 ? (
-            event.map((row) => (
-              <Table size="big" key={row.id}>
-                <TableBody>
-                  <TableRow {...(isMobile
-            ? {
-                onClick: () => handleRowHover(row.id),
-              }
-            : {
-                onMouseEnter: () => handleRowHover(row.id),
-                onMouseLeave: () => handleRowHover(null),
-              })}
-                    hover
-                    onClick={() => onEventClick(row.id)}
-                    key={row.id}
-                  >
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell p={0} align="right">
-                      {hoveredRow === row.id && (
-                        <IconButton
-                          sx={{ p: 0 }}
-                          size="small"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openDeleteDialog(row);
-                          }}
-                        >
-                          <DeleteIcon sx={{ fontSize: 15 }} color="secondary" />
-                        </IconButton>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            ))
+          {event !== undefined ? (
+            event.length > 0 ? (
+              event.map((row) => (
+                <Table size="big" key={row.id}>
+                  <TableBody>
+                    <TableRow
+                      {...(isMobile
+                        ? {
+                            onClick: () => handleRowHover(row.id),
+                          }
+                        : {
+                            onMouseEnter: () => handleRowHover(row.id),
+                            onMouseLeave: () => handleRowHover(null),
+                          })}
+                      hover
+                      onClick={() => onEventClick(row.id)}
+                      key={row.id}
+                    >
+                      <TableCell className="eventTitle">{row.name}</TableCell>
+                      <TableCell p={0} align="right">
+                        {hoveredRow === row.id && (
+                          <IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openDeleteDialog(row);
+                            }}
+                          >
+                            <DeleteIcon
+                              sx={{ fontSize: 15 }}
+                              color="secondary"
+                            />
+                          </IconButton>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              ))
+            ) : (
+              <Box className="Info">
+                <Typography variant="body1" color="text.secondary">
+                  Ajouter event "+"
+                </Typography>
+              </Box>
+            )
           ) : (
-            <Box className="Info">
-              <Typography variant="body1" color="text.secondary">
-                Ajouter event "+"
-              </Typography>
-            </Box>
-          )
-        ) : (
-          ""
-        )}
+            ""
+          )}
         </Box>
       </Paper>
 

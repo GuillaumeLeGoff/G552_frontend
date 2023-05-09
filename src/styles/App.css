@@ -6,6 +6,7 @@
 .Container {
     margin: 3vh;
     font-family: system-ui !important;
+    padding-bottom: 50px;
 }
 
 .Info{

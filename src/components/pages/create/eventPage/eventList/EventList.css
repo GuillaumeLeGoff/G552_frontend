@@ -36,3 +36,27 @@
   .headerTitle {
     padding: 16px;
   }
+
+  .eventTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 600px) {
+    .eventTitle {
+      max-width: 150px;
+    }
+  }
+  
+  @media (min-width: 601px) and (max-width: 900px) {
+    .eventTitle {
+      max-width: 300px;
+    }
+  }
+  
+  @media (min-width: 901px) {
+    .eventTitle {
+      max-width: 500px;
+    }
+  }

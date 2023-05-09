@@ -11,16 +11,16 @@ import {
   ImageListItem,
   Modal,
   Paper,
-  Skeleton,
   Stack,
 } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import EventMediaService from "../../../../services/eventMediaService";
-import mediaService from "../../../../services/uploadService";
+import uploadService from "../../../../services/uploadService";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import "./Medias.css";
+import { LoadingContext } from "../../../../contexts/Context";
 
 import DeleteMediaDialog from "../../../dialogs/DeleteMediaDialog";
 function Medias(props) {
@@ -32,6 +32,8 @@ function Medias(props) {
   const [originalName, setOriginalName] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [longPressTimer, setLongPressTimer] = useState(null);
+  const setLoading = useContext(LoadingContext);
+
 
   const handleTouchStart = (imageId) => {
     clearTimeout(longPressTimer);
@@ -52,7 +54,7 @@ function Medias(props) {
 
   function DeleteFile() {
     EventMediaService.deleteAllByMedia(FileToDelete.idBdd).then(() => {
-      mediaService.delete(FileToDelete).then((result) => {
+      uploadService.delete(FileToDelete).then((result) => {
         displayDialogDelete(false);
         props.getMedias();
         props.getEvents();
@@ -75,8 +77,8 @@ function Medias(props) {
 
   function goToCrop(event) {
     if (event.target.files[0].type.split("/")[0] === "video") {
-      mediaService
-        .upload(event.target.files[0], "video")
+      uploadService
+        .upload(setLoading,event.target.files[0], "video")
         .then(() => {
           props.getMedias();
         })
@@ -99,8 +101,8 @@ function Medias(props) {
       type: "image/jpeg",
     });
 
-    mediaService
-      .upload(fileWithOriginalName, mediaType)
+    uploadService
+      .upload(setLoading,fileWithOriginalName, mediaType)
       .then(() => {
         props.getMedias();
       })
@@ -125,7 +127,7 @@ function Medias(props) {
       <Paper className="mainPaper">
         <Stack className="headerSection">
           <div className="headerItemLeft">
-            <IconButton>
+            <IconButton className="header-button">
               <ImageIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
@@ -133,7 +135,7 @@ function Medias(props) {
             </Typography>
           </div>
           <div className="headerItemRight">
-            <IconButton
+            <IconButton className="header-button"
               onClick={() => {
                 document.getElementById("inputFile").click();
               }}

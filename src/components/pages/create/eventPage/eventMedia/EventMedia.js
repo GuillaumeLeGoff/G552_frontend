@@ -68,8 +68,7 @@ function EventMedia(props) {
               </IconButton>
             ) : (
               <IconButton
-                className="event-media-icon-button hidden"
-               
+                className="event-media-icon-button"
               >
                 <DeleteIcon />
               </IconButton>

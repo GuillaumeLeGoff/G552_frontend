@@ -1,0 +1,27 @@
+.headerTitle {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (max-width: 600px) {
+    .headerTitle {
+      max-width: 150px;
+    }
+  }
+  
+  @media (min-width: 601px) and (max-width: 900px) {
+    .headerTitle {
+      max-width: 300px;
+    }
+  }
+  
+  @media (min-width: 901px) {
+    .headerTitle {
+      max-width: 500px;
+    }
+  }
+
+  .main-header-button{
+    margin-left: 0.5vh !important;
+  }

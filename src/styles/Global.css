@@ -1,14 +1,35 @@
-
-/* .container {
+.container {
   display: flex;
   justify-content: center;
   min-height: calc(94vh - 120px);
   max-height: calc(94vh - 120px);
-  overflow-y: scroll;
+  overflow-y: auto; /* Utilise "auto" au lieu de "scroll" */
   align-content: center;
   padding: 8px;
-} */
-input:-webkit-autofill,
-.MuiInputBase-root:has(> input:-webkit-autofill) {
-  background-color: blue !important;
 }
+
+.container::-webkit-scrollbar {
+  width: 8px; /* Largeur de la barre de défilement */
+}
+
+.container::-webkit-scrollbar-thumb {
+  background-color: #888; /* Couleur de la poignée de défilement */
+  border-radius: 4px; /* Bordure arrondie de la poignée de défilement */
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Couleur de la poignée de défilement au survol */
+}
+
+.container::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Couleur de la piste de défilement */
+  border-radius: 4px; /* Bordure arrondie de la piste de défilement */
+}
+
+
+.header-button {
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
+}
+
+

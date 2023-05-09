@@ -91,17 +91,23 @@ function Create() {
         setEventMedia((prevState) => {
           return prevState.map((column) => {
             if (column.id === 0) {
-              if (newMedias.length > 0) {
-                return { ...column, medias: newMedias };
-              } else {
-                return { ...column, medias: newMedias };
-              }
+              return { ...column, medias: newMedias };
             }
             return column;
           });
         });
       });
     }
+  }
+  function closeEvent() {
+    setEventMedia((prevState) => {
+      return prevState.map((column) => {
+        if (column.id === 0) {
+          return { ...column, medias: {} };
+        }
+        return column;
+      });
+    });
   }
 
   function getMedias() {
@@ -194,7 +200,6 @@ function Create() {
           userId: authService.getCurrentUser().user.id,
           media_pos_in_event: destination.index + 1,
         }).then((createResult) => {
-
           // Une fois que la promesse create() est résolue, appel à la méthode update() pour mettre à jour les positions des éléments multimédias
           EventMediaService.update(updates)
             .then((updateResult) => {
@@ -232,6 +237,7 @@ function Create() {
           id={id}
           isDragging={isDragging}
           getEvents={getEvents}
+          closeEvent={closeEvent}
         />
       </Grid>
       <Grid item xs={12} md={4}>

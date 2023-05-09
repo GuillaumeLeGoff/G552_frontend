@@ -77,10 +77,7 @@
 }
 
 .media-size {
-  min-width: calc(20vh);
-  max-width: calc(20vh);
-  max-height: calc(20vh);
-  min-height: calc(20vh);
+
 }
 .playCircleFilledIcon {
   position: absolute;

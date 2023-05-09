@@ -1,11 +1,12 @@
 import React from 'react';
 import '../styles/LoadingScreen.css';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const LoadingScreen = () => {
   return (
-    <div className="loading-screen">
-      <div className="spinner"></div>
-    </div>
+    <Backdrop open={true}>
+      <CircularProgress sx={{ color: 'primary.light'}} size={60} />
+    </Backdrop>
   );
 };
 
