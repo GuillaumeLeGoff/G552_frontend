@@ -1,5 +1,6 @@
 import axios from "axios";
 import Config from "../config.json";
+import "../contexts/axiosConfig"
 
 const URL_API = Config.SERVER_URL;
 

@@ -1,15 +1,16 @@
 import AuthService from "../../../services/authService";
 import "../../../styles/App.css";
-
 import {
   Box,
   Button,
   Grid,
   IconButton,
   Paper,
+  Select,
   Stack,
   TextField,
   Typography,
+  MenuItem,
 } from "@mui/material";
 import React, { useState } from "react";
 
@@ -17,8 +18,9 @@ function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  
+
   async function handleSubmit(e) {
+    console.log(user, password);
     e.preventDefault(); // Empêcher le comportement par défaut du formulaire
     try {
       await AuthService.login(user, password);
@@ -28,7 +30,7 @@ function Login() {
   }
 
   return (
-    <Grid item xs={10} style={{ maxWidth: "calc(70vh)" }}>
+    <Grid item xs={10} style={{ maxWidth: "calc(50vh)" }}>
       <Paper>
         <Stack>
           <div style={{ display: "flex", alignItems: "center" }}>
@@ -46,14 +48,19 @@ function Login() {
           pb={5}
         >
           <form onSubmit={handleSubmit}>
-            <TextField
-              label="Nom d'utilisateur"
+            <Select
+              label="Mot de passe"
               value={user}
               onChange={(e) => setUser(e.target.value)}
               required
               fullWidth
               margin="normal"
-            />
+            >
+              <MenuItem value="football">Football</MenuItem>
+              <MenuItem value="basketball">Basketball</MenuItem>
+              <MenuItem value="tennis">Tennis</MenuItem>
+            </Select>
+
             <TextField
               label="Mot de passe"
               type="password"

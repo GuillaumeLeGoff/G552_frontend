@@ -1,15 +1,16 @@
 import axios from "axios";
 import Config from "../config.json";
+import "../contexts/axiosConfig";
 
 const SERVER_URL = Config.SERVER_URL;
 const SIGN_IN_URL = "/auth/signin";
 const SIGN_UP_URL = "/auth/signup";
-const USER_URL = "/user";
+const USER_URL = "/users";
+const CHANGE_PASSWORD_URL = "/users/changePassword";
 
 class AuthService {
-  login = async (username, password, setLoading) => {
+  login = async (username, password) => {
     try {
-      setLoading(true);
       const response = await axios.post(`${SERVER_URL}${SIGN_IN_URL}`, {
         username,
         password,
@@ -18,11 +19,10 @@ class AuthService {
         localStorage.setItem("user", JSON.stringify(response.data));
         window.location.reload();
       }
-      setLoading(false);
+
       return response.data;
     } catch (error) {
       console.log("Error during login:", error);
-      setLoading(false);
     }
   };
 
@@ -35,36 +35,50 @@ class AuthService {
     }
   };
 
-  register = async (username, password, role, setLoading) => {
+  register = async (username, password, role) => {
     try {
-      setLoading(true);
       const roles = [role];
       const response = await axios.post(`${SERVER_URL}${SIGN_UP_URL}`, {
         username,
         password,
         roles,
       });
-      setLoading(false);
+
       return response.data;
     } catch (error) {
       console.log("Error during registration:", error);
-      setLoading(false);
     }
   };
 
-  updateUser = async (_id, role, setLoading) => {
+  updateUser = async (id, role) => {
     try {
-      setLoading(true);
       const roles = [role];
-      console.log(_id);
-      const response = await axios.put(`${SERVER_URL}${USER_URL}/${_id}`, {
+      console.log(id);
+      const response = await axios.put(`${SERVER_URL}${USER_URL}/${id}`, {
         roles,
       });
-      setLoading(false);
       return response.data;
     } catch (error) {
       console.log("Error during update:", error);
-      setLoading(false);
+    }
+  };
+
+  changePassword = async (newPassword) => {
+    try {
+      const user = this.getCurrentUser();
+      console.log(user.user.id);
+      if (user) {
+        await axios.post(
+          `${SERVER_URL}${CHANGE_PASSWORD_URL}/${user.user.id}`,
+          { newPassword }
+        );
+        this.logout();
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.log("Error during password change:", error);
+      throw error;
     }
   };
 

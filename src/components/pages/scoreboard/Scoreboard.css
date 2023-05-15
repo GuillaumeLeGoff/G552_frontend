@@ -1,0 +1,162 @@
+.scoreContainer {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .paper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .teamContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+  }
+  
+  .teamScore {
+    height: 15vw;
+    width: 15vw;
+  }
+  
+  .ControlsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .scoreIcôneButton {
+    height: 3vw;
+    width: 3vw;
+    font-size: 1.25rem;
+  }
+  
+  .firstScoreButton {
+    margin: 1vw 1vw 0 0;
+  }
+  
+  .secondScoreButton {
+    margin: 1vw 0 0 0;
+  }
+  
+  .scoreSeparator {
+    display: flex;
+    align-items: center;
+  }
+  
+  .timerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .paperTimer {
+    height: 8vw;
+    margin-top: 3vw;
+    width: 15vw;
+  }
+  
+  .playIcôneButton {
+    width: 4.3vw;
+  }
+  
+  .BuzzerButton {
+    width: 8vw;
+    height: 6vw;
+  }
+  
+  .PaperBuzzer {
+    margin-top: 3vw;
+  }
+  
+  /* Styles responsifs pour téléphone */
+  @media (max-width: 600px) {
+    .teamContainer {
+      width: 100%;
+    }
+  
+    .teamScore {
+      height: 40vw;
+      width: 40vw;
+    }
+  
+    .scoreIcôneButton {
+      height: 8vw;
+      width: 8vw;
+    }
+  
+    .firstScoreButton {
+      margin: 5vw 5vw 0 0;
+    }
+  
+    .secondScoreButton {
+      margin: 5vw 0 0 0;
+    }
+  
+    .timerContainer {
+      margin-top: 5vw;
+    }
+  
+    .paperTimer {
+      height: 15vw;
+      margin-top: 5vw;
+      width: 25vw;
+    }
+  
+    .BuzzerButton {
+      width: 25vw;
+      height: 20vw;
+    }
+  
+    .PaperBuzzer {
+      margin-top: 5vw;
+    }
+  }
+  
+  /* Styles responsifs pour tablette */
+  @media (min-width: 601px) and (max-width: 920px) {
+    .teamContainer {
+      width: 100%;
+    }
+  
+    .teamScore {
+      height: 30vw;
+      width: 30vw;
+    }
+  
+    .scoreIcôneButton {
+      height: 6vw;
+      width: 6.3vw;
+    }
+  
+    .firstScoreButton {
+      margin: 4vw 4vw 0 0;
+    }
+  
+    .secondScoreButton {
+      margin: 4vw 0 0 0;
+    }
+  
+    .timerContainer {
+      margin-top: 4vw;
+    }
+  
+    .paperTimer {
+      height: 15vw;
+      margin-top: 4vw;
+      width: 20vw;
+    }
+  
+    .BuzzerButton {
+      width: 20vw;
+      height: 16vw;
+    }
+  
+    .PaperBuzzer {
+      margin-top: 4vw;
+    }
+  }
+  
