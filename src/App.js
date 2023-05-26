@@ -12,7 +12,7 @@ import Navbar from "./components/NavBar";
 
 import { LoadingContext } from "./contexts/Context";
 
-import authService from "./services/authService";
+import AuthService from "./services/authService";
 import "./styles/App.css";
 import { darkTheme } from "./themes/darkTheme.ts";
 
@@ -23,7 +23,7 @@ import ChangePassword from "./components/pages/login/ChangePassword";
 import ScoreboardPage from "./components/pages/scoreboard/ScoreboardPage";
 
 function App() {
-  const [token] = useState(authService.getCurrentUser());
+  const [token] = useState(AuthService.getCurrentUser());
   const [loading, setLoading] = useState(false);
   const { darkMode, setDarkMode } = useDarkMode();
   const value = "My Context Value";

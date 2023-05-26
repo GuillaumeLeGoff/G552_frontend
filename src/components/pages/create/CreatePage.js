@@ -5,11 +5,14 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 
 import { v4 as uuidv4 } from "uuid";
-import mediaService from "../../../services/uploadService";
+import UploadService from "../../../services/uploadService";
 import authService from "../../../services/authService";
 import EventMediaService from "../../../services/eventMediaService";
 import Medias from "./mediaPage/Medias";
 function Create() {
+
+  const uploadService = UploadService();
+
   const [isDragging, setIsDragging] = useState(false);
   const [eventMedia, setEventMedia] = useState([
     {
@@ -111,7 +114,7 @@ function Create() {
   }
 
   function getMedias() {
-    mediaService.get().then((result) => {
+    uploadService.get().then((result) => {
       const newMedias = result.data.map((media) => {
         return { ...media, id: uuidv4(), idBdd: media.id };
       });

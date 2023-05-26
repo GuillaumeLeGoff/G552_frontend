@@ -17,13 +17,14 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import React, { useContext, useState } from "react";
 import EventMediaService from "../../../../services/eventMediaService";
-import uploadService from "../../../../services/uploadService";
+import UploadService from "../../../../services/uploadService";
 import { Draggable, Droppable } from "react-beautiful-dnd";
 import "./Medias.css";
 import { LoadingContext } from "../../../../contexts/Context";
 
 import DeleteMediaDialog from "../../../dialogs/DeleteMediaDialog";
 function Medias(props) {
+  const uploadService = UploadService();
   const [selectedImage, setSelectedImage] = useState(null);
   const [dialogUpload, setDialogUpload] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
@@ -54,7 +55,7 @@ function Medias(props) {
 
   function DeleteFile() {
     EventMediaService.deleteAllByMedia(FileToDelete.idBdd).then(() => {
-      uploadService.delete(FileToDelete).then((result) => {
+      uploadService.deleteFile(FileToDelete).then((result) => {
         displayDialogDelete(false);
         props.getMedias();
         props.getEvents();

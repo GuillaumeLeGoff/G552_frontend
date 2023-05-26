@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import AuthService from "../services/authService";
 import DisconnectDialog from "./dialogs/DisconnectDialog";
-import ScoreboardIcon from '@mui/icons-material/Scoreboard';
+import ScoreboardIcon from "@mui/icons-material/Scoreboard";
 
 function NavBar() {
   const location = useLocation();
@@ -48,19 +48,17 @@ function NavBar() {
           label="Macro"
           icon={<KeyboardIcon sx={{ color: getIconColor("/macro") }} />}
         />
-
-        <BottomNavigationAction
-          component={Link}
-          to="/profile"
-          label="Profile"
-          icon={<SettingsIcon sx={{ color: getIconColor("/profile") }} />}
-        />
-
         <BottomNavigationAction
           component={Link}
           to="/scoreboard"
           label="scoreboard"
           icon={<ScoreboardIcon sx={{ color: getIconColor("/scoreboard") }} />}
+        />
+        <BottomNavigationAction
+          component={Link}
+          to="/profile"
+          label="Profile"
+          icon={<SettingsIcon sx={{ color: getIconColor("/profile") }} />}
         />
 
         <BottomNavigationAction

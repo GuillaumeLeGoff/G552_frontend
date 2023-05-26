@@ -25,42 +25,36 @@ function ScoreboardPage() {
   const [team1Score, setTeam1Score] = useState(0);
   const [team2Score, setTeam2Score] = useState(0);
 
-  useEffect(() => {
-    // Mettre à jour le scoring à chaque changement de score
-    ScoreService.updateScore(team1Score, team2Score);
-  }, [team1Score, team2Score]);
-
-  useEffect(() => {
-    // Récupérer le score initial au chargement du composant
-    const initialScore = ScoreService.getScore();
-    setTeam1Score(initialScore.team1Score);
-    setTeam2Score(initialScore.team2Score);
-  }, []);
-
   function incrementTeam1Score(add) {
     setTeam1Score(team1Score + add);
+    ScoreService.updateScore(team1Score + add, team2Score);
   }
 
   const decrementTeam1Score = () => {
     if (team1Score > 0) {
       setTeam1Score((prevScore) => prevScore - 1);
+      ScoreService.updateScore(team1Score - 1, team2Score);
     }
   };
 
   const incrementTeam2Score = () => {
     setTeam2Score((prevScore) => prevScore + 1);
+    ScoreService.updateScore(team1Score, team2Score + 1);
   };
 
   const decrementTeam2Score = () => {
     if (team2Score > 0) {
       setTeam2Score((prevScore) => prevScore - 1);
+      ScoreService.updateScore(team1Score, team2Score - 1);
     }
   };
 
   const resetScores = () => {
     setTeam1Score(0);
     setTeam2Score(0);
+    ScoreService.updateScore(0, 0);
   }
+
 
 
   return (
