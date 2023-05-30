@@ -11,10 +11,12 @@ import {
   Slider,
   LinearProgress,
   TextField,
+  FormControl,
+  Button,
 } from "@mui/material";
 import "../../../styles/Global.css";
 import SettingsIcon from "@mui/icons-material/Settings";
-
+import ChangePasswordDialog from "../../dialogs/ChangePasswordDialog";
 import authService from "../../../services/authService";
 import "./Profile.css";
 import paramService from "../../../services/paramService";
@@ -22,6 +24,11 @@ import veilleService from "../../../services/veilleService";
 function Profile() {
   const [username, setUsername] = useState("John Doe");
   const [password, setPassword] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  function toggleModal() {
+    console.log("toggleModal");
+    setModalOpen(!modalOpen);
+  }
   const [param, setParam] = useState("");
   const [veille, setVeille] = useState("");
   const [oldPassword, setOldPassword] = useState("");
@@ -85,94 +92,86 @@ function Profile() {
   };
 
   return (
-    <Grid item xs={12}>
-      <Paper className="mainPaper">
-        <Stack className="headerSection">
-          <div className="headerItemLeft">
-            <IconButton>
-              <SettingsIcon sx={{ color: "primary.light" }} />
-            </IconButton>
-            <Typography variant="h6" className="headerTitle">
-              Paramètre de {username}
-            </Typography>
-          </div>
-        </Stack>
-        <Box className="profileContainer">
-          <Stack spacing={2}>
-            <Stack direction="column" spacing={1}>
-              <Typography>Change Password:</Typography>
-              <Box className="passwordContainer">
-                <TextField
-                  className="passwordInput"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                  type="password"
-                  label="Current Password"
-                />
-                <TextField
-                  className="passwordInput"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  label="New Password"
-                />
-              </Box>
-            </Stack>
-            <Stack className="switchContainer">
-              <Typography>Mode sombre</Typography>
-              <Switch
-                checked={darkMode}
-                onChange={() => setIsDarkMode()}
-                color="secondary"
-              />
-            </Stack>
-            <Stack className="switchContainer">
-              <Typography>Event auto</Typography>
-              <Switch
-                color="secondary"
-                checked={param.event_auto === 1}
-                onChange={handleEventAutoChange}
-              />
-            </Stack>
-            <Stack className="switchContainer">
-              <Typography>Mise en veille automatique</Typography>
-              <Switch
-                color="secondary"
-                checked={veille.enable === 1}
-                onChange={handleVeilleChange}
-              />
-            </Stack>
-            <Stack className="switchContainer">
-              <Slider
-                color="secondary"
-                value={[veille.start_time, veille.end_time]}
-                min={0}
-                max={24}
-                step={1}
-                marks={[
-                  { value: 0, label: "0h" },
-                  { value: 6, label: "6h" },
-                  { value: 12, label: "12h" },
-                  { value: 18, label: "18h" },
-                  { value: 24, label: "24h" },
-                ]}
-                valueLabelDisplay="auto"
-                onChange={handleSliderChange}
-                disabled={veille.enable === 0}
-              />
-            </Stack>
-            <Stack className="switchContainer">
-              <Typography>Espace de stockage utilisé</Typography>
-            </Stack>
-            <LinearProgress
-              variant="determinate"
-              value={percentage}
-              color={percentage > 80 ? "error" : "secondary"}
-            />
+    <>
+      <Grid item xs={12}>
+        <Paper className="mainPaper">
+          <Stack className="headerSection">
+            <div className="headerItemLeft">
+              <IconButton>
+                <SettingsIcon sx={{ color: "primary.light" }} />
+              </IconButton>
+              <Typography variant="h6" className="headerTitle">
+                Paramètre de {username}
+              </Typography>
+            </div>
           </Stack>
-        </Box>
-      </Paper>
-    </Grid>
+          <Box className="profileContainer">
+            <Stack spacing={2}>
+              <Stack direction="column" spacing={1}>
+                <Button  onClick={toggleModal} variant="contained" color="secondary">
+                  Modifier sont mot de passe
+                </Button>
+              </Stack>
+              <Stack className="switchContainer">
+                <Typography>Mode sombre</Typography>
+                <Switch
+                  checked={darkMode}
+                  onChange={() => setIsDarkMode()}
+                  color="secondary"
+                />
+              </Stack>
+              <Stack className="switchContainer">
+                <Typography>Event auto</Typography>
+                <Switch
+                  color="secondary"
+                  checked={param.event_auto === 1}
+                  onChange={handleEventAutoChange}
+                />
+              </Stack>
+              <Stack className="switchContainer">
+                <Typography>Mise en veille automatique</Typography>
+                <Switch
+                  color="secondary"
+                  checked={veille.enable === 1}
+                  onChange={handleVeilleChange}
+                />
+              </Stack>
+              <Stack className="switchContainer">
+                <Slider
+                  color="secondary"
+                  value={[veille.start_time, veille.end_time]}
+                  min={0}
+                  max={24}
+                  step={1}
+                  marks={[
+                    { value: 0, label: "0h" },
+                    { value: 6, label: "6h" },
+                    { value: 12, label: "12h" },
+                    { value: 18, label: "18h" },
+                    { value: 24, label: "24h" },
+                  ]}
+                  valueLabelDisplay="auto"
+                  onChange={handleSliderChange}
+                  disabled={veille.enable === 0}
+                />
+              </Stack>
+              <Stack className="switchContainer">
+                <Typography>Espace de stockage utilisé</Typography>
+              </Stack>
+              <LinearProgress
+                variant="determinate"
+                value={percentage}
+                color={percentage > 80 ? "error" : "secondary"}
+              />
+            </Stack>
+          </Box>
+        </Paper>
+      </Grid>
+      <ChangePasswordDialog
+        open={modalOpen}
+        onClose={toggleModal}
+      />
+    </>
   );
 }
 

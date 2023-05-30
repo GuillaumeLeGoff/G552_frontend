@@ -11,9 +11,11 @@ import {
   TextField,
   Typography,
   MenuItem,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import React, { useState } from "react";
-
+import "./login.css";
 function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
@@ -35,11 +37,12 @@ function Login() {
         <Stack>
           <div style={{ display: "flex", alignItems: "center" }}>
             <IconButton sx={{ ml: 2 }}></IconButton>
-            <Typography variant="h6" color="primary.light" sx={{ padding: 2 }}>
+            <Typography className="title" variant="h6" color="primary.light">
               Login
             </Typography>
           </div>
         </Stack>
+
         <Box
           display="flex"
           justifyContent="center"
@@ -47,7 +50,9 @@ function Login() {
           paddingX={5}
           pb={5}
         >
-          <form onSubmit={handleSubmit}>
+        <form className="form" onSubmit={handleSubmit}>
+          <FormControl  className="form-control"  >
+            <InputLabel>Utilisateur</InputLabel>
             <Select
               label="Mot de passe"
               value={user}
@@ -62,6 +67,7 @@ function Login() {
             </Select>
 
             <TextField
+              className="text-field-mdp"
               label="Mot de passe"
               type="password"
               value={password}
@@ -75,9 +81,10 @@ function Login() {
                 {error}
               </Typography>
             )}
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="secondary">
               Se connecter
             </Button>
+          </FormControl>
           </form>
         </Box>
       </Paper>

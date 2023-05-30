@@ -1,0 +1,15 @@
+.form {
+  width: 90%;
+}
+.form-control {
+    width: 100%;
+  }
+.text-field-mdp {
+  margin-bottom: 5% !important;
+}
+
+.title {
+  padding: 2 !important;
+  margin-top: 5% !important;
+  margin-bottom: 5% !important;
+}

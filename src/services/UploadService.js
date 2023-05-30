@@ -1,9 +1,7 @@
-import React from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
 import Config from "../config.json";
 import authService from "./authService";
-import { useSnackbar } from "../contexts/SnackbarContext"; // Veuillez inclure le bon chemin vers useSnackbar
+import { useSnackbar } from "../contexts/SnackbarContext"; 
  import "../contexts/axiosConfig"; // Ce module n'est pas utilisé, vous pouvez le supprimer
 
 

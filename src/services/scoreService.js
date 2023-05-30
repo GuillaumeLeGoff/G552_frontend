@@ -11,7 +11,7 @@ class ScoreService {
   }
 
   // Mettre à jour le score
-  updateScore(team1,team2) {
+  updateScore(team1, team2) {
     console.log("Updating score", team1, team2);
     return axios.put(
       URL_API + "/scores/" + authService.getCurrentUser().user.id,
@@ -35,6 +35,17 @@ class ScoreService {
   // Mettre à jour un score spécifique
   updateSpecificScore(scoreId, updatedScore) {
     return axios.put(URL_API + "/scores/" + scoreId, updatedScore);
+  }
+
+  // Mettre à jour le timer
+  updateTimer(timer) {
+    console.log("Updating timer", timer);
+    return axios.put(
+      URL_API + "/timer/" + authService.getCurrentUser().user.id,
+      {
+        timer: timer,
+      }
+    );
   }
 }
 
