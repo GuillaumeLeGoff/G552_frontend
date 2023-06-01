@@ -20,6 +20,7 @@
     "react-dropzone": "^14.2.3",
     "react-easy-crop": "^4.7.1",
     "react-image-crop": "^10.0.9",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.6.2",
     "react-scripts": "5.0.1",
     "socket.io-client": "^4.6.1",

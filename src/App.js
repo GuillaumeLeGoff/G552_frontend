@@ -21,6 +21,7 @@ import { useDarkMode } from "./contexts/DarkModeContext";
 import { clairTheme } from "./themes/clairTheme.ts";
 import ChangePassword from "./components/pages/login/ChangePassword";
 import ScoreboardPage from "./components/pages/scoreboard/ScoreboardPage";
+import Header from "./components/Header";
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
@@ -51,7 +52,12 @@ function App() {
               <LoadingScreen />
             </Box>
           )}
+          <Header />
           <Box className="Container">
+          
+              
+           
+         
             {token && token.user.firstLogin === 1 ? (
               <Grid
                 container

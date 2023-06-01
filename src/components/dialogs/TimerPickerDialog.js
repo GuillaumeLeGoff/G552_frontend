@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -11,7 +11,9 @@ import {
   InputLabel,
   FormControl,
   Select,
-} from '@mui/material';
+  Typography,
+  Box,
+} from "@mui/material";
 
 function TimerPickerDialog({ open, onClose, setTimer, eventName }) {
   const [minutes, setMinutes] = useState(0);
@@ -43,22 +45,50 @@ function TimerPickerDialog({ open, onClose, setTimer, eventName }) {
         <DialogContentText>
           Veuillez choisir les minutes et les secondes :
         </DialogContentText>
-        <FormControl>
-          <InputLabel>Minutes</InputLabel>
-          <Select value={minutes} onChange={handleMinutesChange}>
-            {Array.from({ length: 60 }, (_, index) => (
-              <MenuItem key={index} value={index}>{index}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl>
-          <InputLabel>Secondes</InputLabel>
-          <Select value={seconds} onChange={handleSecondsChange}>
-            {Array.from({ length: 60 }, (_, index) => (
-              <MenuItem key={index} value={index}>{index}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Box display="flex" justifyContent="center">
+          <FormControl sx={{ minWidth: 120, maxWidth: 200 }}>
+            <Select
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: "200px", // Limite la hauteur du menu déroulant
+                  },
+                },
+              }}
+              value={minutes}
+              onChange={handleMinutesChange}
+            >
+              {Array.from({ length: 60 }, (_, index) => (
+                <MenuItem key={index} value={index}>
+                  {index}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <Typography variant="h5" component="span">
+            {" "}
+            :{" "}
+          </Typography>
+          <FormControl sx={{ minWidth: 120, maxWidth: 200 }}>
+            <Select
+              MenuProps={{
+                PaperProps: {
+                  style: {
+                    maxHeight: "200px", // Limite la hauteur du menu déroulant
+                  },
+                },
+              }}
+              value={seconds}
+              onChange={handleSecondsChange}
+            >
+              {Array.from({ length: 60 }, (_, index) => (
+                <MenuItem key={index} value={index}>
+                  {index}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">

@@ -25,3 +25,30 @@
   .main-header-button{
     margin-left: 0.5vh !important;
   }
+
+  /* ===== Modal ===== */
+.modalBox {
+  height: 100%;
+  width: 100%;
+  background-color: #203038;
+  padding: 16px;
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+}
+
+.modalHeaderText {
+  padding: 2px;
+}
+
+.imageContainer {
+  width: 50% !important;
+  height: 50% !important;
+}
+.diapoImage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

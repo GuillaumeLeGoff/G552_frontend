@@ -1,8 +1,6 @@
 .container-medias {
   display: flex;
   justify-content: center;
-  min-height: calc(94vh - 120px);
-  max-height: calc(94vh - 120px);
   overflow-y: scroll;
   align-content: center;
   padding: 8px;
@@ -76,9 +74,6 @@
   bottom: 15vh;
 }
 
-.media-size {
-
-}
 .playCircleFilledIcon {
   position: absolute;
   top: 50%;

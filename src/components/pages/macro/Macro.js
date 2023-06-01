@@ -56,7 +56,7 @@ function Macro() {
 
   return (
     <Grid item xs={12}>
-      <Paper className="mainPaper">
+     <Paper className="mainPaper">
         <Stack className="headerSection">
           <div className="headerItemLeft">
             <IconButton>

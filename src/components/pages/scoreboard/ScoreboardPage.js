@@ -1,6 +1,8 @@
+import React, { useEffect, useState } from "react";
+import { TextField, useMediaQuery } from "@mui/material";
+import PropTypes from "prop-types";
 import {
   Box,
-  Button,
   Grid,
   IconButton,
   Paper,
@@ -8,8 +10,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useMediaQuery } from "@mui/material";
 import ScoreboardIcon from "@mui/icons-material/Scoreboard";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
@@ -27,32 +27,68 @@ function ScoreboardPage() {
   const theme = useTheme();
   const [team1Score, setTeam1Score] = useState(0);
   const [team2Score, setTeam2Score] = useState(0);
-  const isSmallScreen = useMediaQuery('(max-width: 600px)');
-  const iconSize = theme.breakpoints.down('sm') ? 15 : 24;
+  const [team1Fautes, setTeam1Fautes] = useState(0);
+  const [team2Fautes, setTeam2Fautes] = useState(0);
+  const [team1Name, setTeam1Name] = useState("");
+  const [team2Name, setTeam2Name] = useState("");
+  const isSmallScreen = useMediaQuery("(max-width: 600px)");
+  const iconSize = theme.breakpoints.down("sm") ? 15 : 24;
   const [timerValue, setTimerValue] = useState(0);
-  const [DialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const socket = io("ws://localhost:8080/ws/desk");
+
   useEffect(() => {
-    // Écoute de l'événement "timerUpdate" émis par le serveur
+    async function fetchInitialScore() {
+      try {
+        const response = await ScoreService.getScores();
+        console.log("Initial score", response.data[0]);
+        const {
+          score_team1,
+          score_team2,
+          faute_team1,
+          faute_team2,
+          nom_team1,
+          nom_team2,
+        } = response.data[0];
+        setTeam1Score(score_team1);
+        setTeam2Score(score_team2);
+        setTeam1Fautes(faute_team1);
+        setTeam2Fautes(faute_team2);
+        setTeam1Name(nom_team1);
+        setTeam2Name(nom_team2);
+      } catch (error) {
+        console.error("Error fetching initial score:", error);
+      }
+    }
+
+    fetchInitialScore();
+  }, []);
+
+  useEffect(() => {
     socket.on("timerUpdate", (value) => {
       console.log("timerUpdate", value);
       setTimerValue(value);
     });
-  }, []);
+
+    return () => {
+      socket.off("timerUpdate");
+    };
+  }, [socket]);
 
   useEffect(() => {
     socket.emit("getTimerValue");
+
     socket.on("timerValue", (value) => {
       setTimerValue(value);
-      console.log("Valeur du minuteur :", value); // Affichage dans la console
+      console.log("Valeur du minuteur :", value);
     });
+
     return () => {
       socket.off("timerValue");
     };
-  }, []);
+  }, [socket]);
 
-  // Fonction de conversion du temps total (en secondes) en format "minutes:secondes"
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
@@ -61,13 +97,14 @@ function ScoreboardPage() {
     }`;
   };
 
-  function handleDialogOpen() {
+  const handleDialogOpen = () => {
     setDialogOpen(true);
-  }
+  };
 
-  function handleDialogClose() {
+  const handleDialogClose = () => {
     setDialogOpen(false);
-  }
+  };
+
   const startTimer = () => {
     socket.emit("startTimer");
   };
@@ -75,41 +112,139 @@ function ScoreboardPage() {
   const stopTimer = () => {
     socket.emit("stopTimer");
   };
- 
 
-  function incrementTeam1Score(add) {
-    setTeam1Score(team1Score + add);
-    ScoreService.updateScore(team1Score + add, team2Score);
-  }
+  const incrementScore = (team, add) => {
+    if (team === 1) {
+      setTeam1Score((prevScore) => prevScore + add);
+      ScoreService.updateScore(
+        team1Score + add,
+        team2Score,
+        team1Fautes,
+        team2Fautes,
+        team1Name,
+        team2Name
+      );
+    } else if (team === 2) {
+      setTeam2Score((prevScore) => prevScore + add);
+      ScoreService.updateScore(
+        team1Score,
+        team2Score + add,
+        team1Fautes,
+        team2Fautes,
+        team1Name,
+        team2Name
+      );
+    }
+  };
 
-  const decrementTeam1Score = () => {
-    if (team1Score > 0) {
+  const decrementScore = (team) => {
+    if (team === 1 && team1Score > 0) {
       setTeam1Score((prevScore) => prevScore - 1);
-      ScoreService.updateScore(team1Score - 1, team2Score);
-    }
-  };
-
-  const incrementTeam2Score = () => {
-    setTeam2Score((prevScore) => prevScore + 1);
-    ScoreService.updateScore(team1Score, team2Score + 1);
-  };
-
-  const decrementTeam2Score = () => {
-    if (team2Score > 0) {
+      ScoreService.updateScore(
+        team1Score - 1,
+        team2Score,
+        team1Fautes,
+        team2Fautes,
+        team1Name,
+        team2Name
+      );
+    } else if (team === 2 && team2Score > 0) {
       setTeam2Score((prevScore) => prevScore - 1);
-      ScoreService.updateScore(team1Score, team2Score - 1);
+      ScoreService.updateScore(
+        team1Score,
+        team2Score - 1,
+        team1Fautes,
+        team2Fautes,
+        team1Name,
+        team2Name
+      );
     }
   };
-  function setTimer(timerValue) {
+
+  const incrementFaute = (team, add) => {
+    if (team === 1 && team1Fautes < 5) {
+      setTeam1Fautes((prevFaute) => prevFaute + add);
+      ScoreService.updateScore(
+        team1Score,
+        team2Score,
+        team1Fautes + add,
+        team2Fautes,
+        team1Name,
+        team2Name
+      );
+    } else if (team === 2 && team2Fautes < 5) {
+      setTeam2Fautes((prevFaute) => prevFaute + add);
+      ScoreService.updateScore(
+        team1Score,
+        team2Score,
+        team1Fautes,
+        team2Fautes + add,
+        team1Name,
+        team2Name
+      );
+    }
+  };
+
+  const decrementFaute = (team) => {
+    if (team === 1 && team1Fautes > 0) {
+      setTeam1Fautes((prevFaute) => prevFaute - 1);
+      ScoreService.updateScore(
+        team1Score,
+        team2Score,
+        team1Fautes - 1,
+        team2Fautes,
+        team1Name,
+        team2Name
+      );
+    } else if (team === 2 && team2Fautes > 0) {
+      setTeam2Fautes((prevFaute) => prevFaute - 1);
+      ScoreService.updateScore(
+        team1Score,
+        team2Score,
+        team1Fautes,
+        team2Fautes - 1,
+        team1Name,
+        team2Name
+      );
+    }
+  };
+
+  const setTimer = (timerValue) => {
     console.log("setTimer", timerValue);
     socket.emit("timerUpdate", timerValue);
     setTimerValue(timerValue);
-  }
+  };
 
   const resetScores = () => {
     setTeam1Score(0);
     setTeam2Score(0);
-    ScoreService.updateScore(0, 0);
+    setTeam1Fautes(0);
+    setTeam2Fautes(0);
+    ScoreService.updateScore(0, 0, 0, 0);
+  };
+
+  const handleTeam1NameChange = (event) => {
+    setTeam1Name(event.target.value);
+    ScoreService.updateScore(
+      team1Score,
+      team2Score,
+      team1Fautes,
+      team2Fautes,
+      event.target.value,
+      team2Name
+    );
+  };
+
+  const handleTeam2NameChange = (event) => {
+    setTeam2Name(event.target.value);
+    ScoreService.updateScore(
+      team1Score,
+      team2Score,
+      team1Fautes,
+      team2Fautes,
+      team1Name,
+      event.target.value
+    );
   };
 
   return (
@@ -121,228 +256,315 @@ function ScoreboardPage() {
               <IconButton>
                 <ScoreboardIcon sx={{ color: "primary.light" }} />
               </IconButton>
-              <Typography variant='h6' className="headerTitle">
+              <Typography variant="h6" className="headerTitle">
                 Scoreboard
               </Typography>
             </div>
             <div className="headerItemRight">
-              <IconButton className="header-button">
-                <RestartAltIcon  color="secondary" />
+              <IconButton
+                onClick={resetScores}
+                className="header-button"
+                aria-label="Reset Scores"
+              >
+                <RestartAltIcon color="secondary" />
               </IconButton>
             </div>
           </Stack>
-          <Box className="scoreContainer">
-            <div className="teamContainer">
-              <Typography variant={isSmallScreen ? 'h5' : 'h3'}>Locaux</Typography>
-              <Paper
-                className="teamScore paper"
-                elevation={2}
-                sx={{
-                  backgroundColor: theme.palette.secondary.main,
-                }}
-              >
-                <Typography  variant={isSmallScreen ? 'h2' : 'h1'}>{team1Score}</Typography>
-              </Paper>
-              <Box className="ControlsContainer">
+          <Box className="mainContainer">
+            <Box className="middleContainer">
+              <div className="teamContainer">
+                <TextField
+                  value={team1Name}
+                  onChange={handleTeam1NameChange}
+                  label="Nom équipe 1"
+                  variant="standard"
+                />
                 <Paper
-                  className="firstScoreButton"
+                  className="teamScore paper"
                   elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
+                  sx={{
+                    backgroundColor: theme.palette.secondary.main,
+                  }}
                 >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={() => incrementTeam1Score(1)}
-                  >
-                     <AddIcon sx={{ fontSize: iconSize }}/><Typography>1</Typography>
-                  </IconButton>
+                  <Typography variant={isSmallScreen ? "h2" : "h1"}>
+                    {team1Score}
+                  </Typography>
                 </Paper>
-                <Paper
-                  className="firstScoreButton"
-                  elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
-                >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={() => incrementTeam1Score(2)}
-                  >
-                     <AddIcon sx={{ fontSize: iconSize }}/><Typography>2</Typography>
-                  </IconButton>
-                </Paper>
-                <Paper
-                  className="firstScoreButton"
-                  elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
-                >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={() => incrementTeam1Score(3)}
-                  >
-                    <AddIcon sx={{ fontSize: iconSize }}/><Typography>3</Typography>
-                  </IconButton>
-                </Paper>
+                <Box className="ControlsContainer">
+                  {[1, 2, 3].map((add) => (
+                    <Paper
+                      key={add}
+                      className="firstScoreButton"
+                      elevation={2}
+                      sx={{ backgroundColor: theme.palette.secondary.main }}
+                    >
+                      <IconButton
+                        className="icôneButton"
+                        onClick={() => incrementScore(1, add)}
+                      >
+                        <AddIcon sx={{ fontSize: iconSize }} />
+                        <Typography>{add}</Typography>
+                      </IconButton>
+                    </Paper>
+                  ))}
 
-                <Paper
-                  className="secondScoreButton"
-                  elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
-                >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={decrementTeam1Score}
+                  <Paper
+                    className="secondScoreButton"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <RemoveIcon />
-                  </IconButton>
-                </Paper>
-              </Box>
-            </div>
-            <div className="scoreSeparator">
-              <Typography variant={isSmallScreen ? 'h3' : 'h1'}>-</Typography>
-            </div>
-            <div className="teamContainer">
-              <Typography variant={isSmallScreen ? 'h5' : 'h3'}>Visiteur</Typography>
-              <Paper
-                className="teamScore paper"
-                elevation={2}
-                sx={{
-                  backgroundColor: theme.palette.secondary.main,
-                }}
-              >
-                <Typography variant={isSmallScreen ? 'h2' : 'h1'}>{team2Score}</Typography>
-              </Paper>
-              <Box className="ControlsContainer">
+                    <IconButton
+                      className="icôneButton"
+                      onClick={() => decrementScore(1)}
+                    >
+                      <RemoveIcon />
+                    </IconButton>
+                  </Paper>
+                </Box>
+              </div>
+              <div className="scoreSeparator">
+                <Typography variant={isSmallScreen ? "h3" : "h1"}>-</Typography>
+              </div>
+              <div className="teamContainer">
+                <TextField
+                  value={team2Name}
+                  onChange={handleTeam2NameChange}
+                  label="Nom équipe 2"
+                  variant="standard"
+                />
                 <Paper
-                  className="firstScoreButton"
+                  className="teamScore paper"
                   elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
+                  sx={{
+                    backgroundColor: theme.palette.secondary.main,
+                  }}
                 >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={() => incrementTeam2Score(1)}
-                  >
-                    <AddIcon sx={{ fontSize: iconSize }}/><Typography>1</Typography>
-                  </IconButton>
+                  <Typography variant={isSmallScreen ? "h2" : "h1"}>
+                    {team2Score}
+                  </Typography>
                 </Paper>
-                <Paper
-                  className="firstScoreButton"
-                  elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
-                >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={() => incrementTeam2Score(2)}
-                  >
-                    <AddIcon sx={{ fontSize: iconSize }}/><Typography>2</Typography>
-                  </IconButton>
-                </Paper>
-                <Paper
-                  className="firstScoreButton"
-                  elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
-                >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={() => incrementTeam2Score(3)}
-                  >
-                     <AddIcon sx={{ fontSize: iconSize }}/><Typography>3</Typography>
-                  </IconButton>
-                </Paper>
+                <Box className="ControlsContainer">
+                  {[1, 2, 3].map((add) => (
+                    <Paper
+                      key={add}
+                      className="firstScoreButton"
+                      elevation={2}
+                      sx={{ backgroundColor: theme.palette.secondary.main }}
+                    >
+                      <IconButton
+                        className="icôneButton"
+                        onClick={() => incrementScore(2, add)}
+                      >
+                        <AddIcon sx={{ fontSize: iconSize }} />
+                        <Typography>{add}</Typography>
+                      </IconButton>
+                    </Paper>
+                  ))}
 
-                <Paper
-                  className="secondScoreButton"
-                  elevation={2}
-                  sx={{ backgroundColor: theme.palette.secondary.main }}
-                >
-                  <IconButton
-                    className="scoreIcôneButton"
-                    onClick={decrementTeam2Score}
+                  <Paper
+                    className="secondScoreButton"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <RemoveIcon />
-                  </IconButton>
+                    <IconButton  className="icôneButton"
+                     
+                      onClick={() => decrementScore(2)}
+                    >
+                      <RemoveIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
+                </Box>
+              </div>
+            </Box>
+            <Box className="middleContainer">
+              <Box className="fauteContainer">
+                <Typography variant={isSmallScreen ? "h7" : "h5"}>
+                  Faute
+                </Typography>
+                <Paper
+                  className="paper paperFaute"
+                  elevation={2}
+                  sx={{
+                    backgroundColor: theme.palette.secondary.main,
+                  }}
+                >
+                  <Typography variant={isSmallScreen ? "h4" : "h3"}>
+                    {team1Fautes}
+                  </Typography>
                 </Paper>
-              </Box>
-            </div>
-          </Box>
-          <Box className="timerContainer">
-            <Paper
-              className="paper paperTimer"
-              elevation={2}
-              sx={{
-                backgroundColor: theme.palette.secondary.main,
-              }}
-            >
-              <Box className="timerContainer">
-                <Box className="editTimerContainer">
-                  <Typography ariant={isSmallScreen ? 'h4' : 'h3'}>{formatTime(timerValue)}</Typography>
+                <Box className="ControlsContainer">
+                  <Paper
+                    className="fauteButton"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
+                  >
+                    <IconButton  className="icôneButton"
+                     
+                      onClick={() => incrementFaute(1, 1)}
+                    >
+                      <AddIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
+                  <Paper
+                    className="fauteButton fauteButtonMargin0"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
+                  >
+                    <IconButton  className="icôneButton"
+                     
+                      onClick={() => decrementFaute(1)}
+                    >
+                      <RemoveIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
                 </Box>
               </Box>
-            </Paper>
-            <Box className="ControlsContainer">
-              <Paper
-                className="timerButton"
-                elevation={2}
-                sx={{ backgroundColor: theme.palette.secondary.main }}
-              >
-                <IconButton
-                  onClick={() => {
-                    startTimer();
+              <Box className="timerContainer">
+                <Paper
+                  className="paper paperTimer"
+                  elevation={2}
+                  sx={{
+                    backgroundColor: theme.palette.secondary.main,
                   }}
-                  className="timerIcon"
                 >
-                  <PlayArrowIcon />
-                </IconButton>
-              </Paper>
-              <Paper
-                className="timerButton"
-                elevation={2}
-                sx={{ backgroundColor: theme.palette.secondary.main }}
-              >
-                <IconButton
-                  onClick={() => {
-                    stopTimer();
-                  }}
-                  className="timerIcon"
-                >
-                  <PauseIcon />
-                </IconButton>
-              </Paper>
+                  <Box className="timerContainer">
+                    <Box className="editTimerContainer">
+                      <Typography
+                        variant={isSmallScreen ? "h5" : "h4"}
+                        className="timerValue"
+                      >
+                        {formatTime(timerValue)}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Paper>
+                <Box className="ControlsContainer">
+                  <Paper
+                    className="timerButton"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
+                  >
+                    <IconButton  className="icôneButton"
+                      onClick={startTimer}
+                      
+                      aria-label="Start Timer"
+                    >
+                      <PlayArrowIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
+                  <Paper
+                    className="timerButton"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
+                  >
+                    <IconButton  className="icôneButton"
+                      onClick={stopTimer}
+                     
+                      aria-label="Stop Timer"
+                    >
+                      <PauseIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
 
+                  <Paper
+                    className="timerButton margin-right-0"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
+                  >
+                    <IconButton  className="icôneButton"
+                      onClick={handleDialogOpen}
+                      aria-label="Edit Timer"
+                    >
+                      <EditIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
+                </Box>
+              </Box>
+              <Box className="fauteContainer">
+                <Typography variant={isSmallScreen ? "h7" : "h5"}>
+                  Faute
+                </Typography>
+                <Paper
+                  className="paper paperFaute"
+                  elevation={2}
+                  sx={{
+                    backgroundColor: theme.palette.secondary.main,
+                  }}
+                >
+                  <Typography variant={isSmallScreen ? "h4" : "h3"}>
+                    {team2Fautes}
+                  </Typography>
+                </Paper>
+                <Box className="ControlsContainer">
+                  <Paper
+                    className="fauteButton"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
+                  >
+                    <IconButton  className="icôneButton"
+                   
+                      onClick={() => incrementFaute(2, 1)}
+                    >
+                      <AddIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
+                  <Paper
+                    className="fauteButton fauteButtonMargin0"
+                    elevation={2}
+                    sx={{ backgroundColor: theme.palette.secondary.main }}
+                  >
+                    <IconButton  className="icôneButton"
+                     
+                      onClick={() => decrementFaute(2)}
+                    >
+                      <RemoveIcon sx={{ fontSize: iconSize }}/>
+                    </IconButton>
+                  </Paper>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box>
               <Paper
-                className="timerButton margin-right-0"
+                className="PaperBuzzer"
                 elevation={2}
                 sx={{ backgroundColor: theme.palette.secondary.main }}
               >
-                <IconButton
-                  onClick={() => {
-                    handleDialogOpen();
-                  }}
-                  className="timerIcon"
-                >
-                  <EditIcon />
+                <IconButton  className="icôneButton"  aria-label="Buzzer">
+                  <SurroundSoundIcon sx={{ fontSize: iconSize }}/>
                 </IconButton>
               </Paper>
             </Box>
-          </Box>
-
-          <Box className="timerContainer">
-            <Paper
-              className="PaperBuzzer"
-              elevation={2}
-              sx={{ backgroundColor: theme.palette.secondary.main }}
-            >
-              <IconButton className="BuzzerButton">
-                <SurroundSoundIcon />
-              </IconButton>
-            </Paper>
+            <Box className="macroContainer">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((macroNumber) => (
+                <Paper
+                  key={macroNumber}
+                  className={`macroButton${
+                    macroNumber === 10 ? " macroButtonMargin0" : ""
+                  }`}
+                  elevation={2}
+                  sx={{ backgroundColor: theme.palette.secondary.main }}
+                >
+                  <IconButton  className="icôneButton" >
+                    <Typography>{macroNumber}</Typography>
+                  </IconButton>
+                </Paper>
+              ))}
+            </Box>
           </Box>
         </Paper>
       </Grid>
       <TimerPickerDialog
-        open={DialogOpen}
+        open={dialogOpen}
         onClose={handleDialogClose}
         setTimer={setTimer}
       />
     </>
   );
 }
+
+ScoreboardPage.propTypes = {
+  // Add prop types here
+};
 
 export default ScoreboardPage;

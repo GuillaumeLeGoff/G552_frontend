@@ -1,8 +1,6 @@
 .containerEventList {
     display: flex;
     justify-content: center;
-    min-height: calc(94vh - 120px);
-    max-height: calc(94vh - 120px);
     overflow-y: scroll;
     align-content: center;
     padding: 8px;
@@ -16,10 +14,7 @@
     min-height: calc(94vh - 120px ) ;
     width: 100%;
 }
-.mainPaper {
-    max-height: calc(94vh - 56px);
-    min-height: calc(94vh - 56px);
-  }
+
   .headerSection {
     flex-direction: row !important;
     justify-content: space-between;

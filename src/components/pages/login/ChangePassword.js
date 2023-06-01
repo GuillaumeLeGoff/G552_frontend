@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import AuthService from "../../../services/authService";
 
 function ChangePassword() {
@@ -29,14 +30,25 @@ function ChangePassword() {
 
     // Appeler le service d'authentification pour changer le mot de passe
     AuthService.changePassword(newPassword)
-      .then(() => {
-        setSuccess(true);
-        setError(null);
-      })
-      .catch((error) => {
-        console.log("Erreur", error.response.data.message);
-        setError(error.response.data.message);
-      });
+    .then(() => {
+      // Met à jour la valeur 'firstLogin' dans le localStorage
+      const user = JSON.parse(localStorage.getItem('user'));
+      console.log(user);
+      user.user.firstLogin = 0;
+      localStorage.setItem('user', JSON.stringify(user));
+      console.log(user);
+      setSuccess(true);
+      setError(null);
+      AuthService.logout();
+    })
+    .catch((error) => {
+      console.log("Erreur", error.response.data.message);
+      setError(error.response.data.message);
+    });
+  }
+  function disconnect() {
+    AuthService.logout();
+    window.location.reload();
   }
 
   return (
@@ -44,7 +56,9 @@ function ChangePassword() {
       <Paper>
         <Stack>
           <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton sx={{ ml: 2 }}></IconButton>
+            <IconButton onClick={disconnect} sx={{ ml: 2 }}>
+              <CloseIcon color="secondary" />
+            </IconButton>
             <Typography variant="h6" color="primary.light" className="title">
               Modifier le mot de passe
             </Typography>

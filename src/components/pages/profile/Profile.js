@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useDarkMode } from "../../../contexts/DarkModeContext";
 import {
   Box,
@@ -10,8 +11,6 @@ import {
   Typography,
   Slider,
   LinearProgress,
-  TextField,
-  FormControl,
   Button,
 } from "@mui/material";
 import "../../../styles/Global.css";
@@ -21,75 +20,83 @@ import authService from "../../../services/authService";
 import "./Profile.css";
 import paramService from "../../../services/paramService";
 import veilleService from "../../../services/veilleService";
+
 function Profile() {
   const [username, setUsername] = useState("John Doe");
-  const [password, setPassword] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
-  function toggleModal() {
-    console.log("toggleModal");
-    setModalOpen(!modalOpen);
-  }
-  const [param, setParam] = useState("");
-  const [veille, setVeille] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const totalSize = 100; // Taille totale en Go
-  const usedSize = 90; // Taille utilisée en Go
-
-  const percentage = (usedSize / totalSize) * 100;
-
-  const user = authService.getCurrentUser();
-
+  const [param, setParam] = useState({});
+  const [veille, setVeille] = useState({});
+  const [totalSize, setTotalSize] = useState(100); // Taille totale en Go
+  const [usedSize, setUsedSize] = useState(90); // Taille utilisée en Go
+  const [user, setUser] = useState(null);
   const { darkMode, setDarkMode } = useDarkMode();
 
   useEffect(() => {
-    setUsername(user.user.username);
-    paramService.getByUserId(user.user.id).then((param) => {
-      setParam(param.data[0]);
-      console.log("param", param.data[0]);
-      // Mettre à jour l'état avec les données de param
-      veilleService.getByUserId(param.data[0].veille_id).then((veille) => {
-        setVeille(veille.data);
-        console.log("veille", veille.data);
-        // Mettre à jour l'état avec les données de veille
-      });
-    });
-  }, [user.user.username, user.user.id]);
+    const currentUser = authService.getCurrentUser();
+    setUser(currentUser);
+  }, []);
 
-  function setIsDarkMode() {
+  useEffect(() => {
+    if (user) {
+      setUsername(user.user.username);
+      paramService.getByUserId(user.user.id).then((paramData) => {
+        const paramDataItem = paramData?.data?.[0] || {};
+        setParam(paramDataItem);
+        console.log("param", paramDataItem);
+        // Mettre à jour l'état avec les données de param
+        veilleService
+          .getByUserId(paramDataItem.veille_id)
+          .then((veilleData) => {
+            setVeille(veilleData?.data || {});
+            console.log("veille", veilleData?.data);
+            // Mettre à jour l'état avec les données de veille
+          });
+      });
+    }
+  }, [user]);
+
+  const toggleModal = () => {
+    console.log("toggleModal");
+    setModalOpen(!modalOpen);
+  };
+
+  const setIsDarkMode = () => {
     console.log(darkMode);
     setDarkMode((prevDarkMode) => {
       localStorage.setItem("darkMode", !prevDarkMode);
       return !prevDarkMode;
     });
-  }
+  };
 
   const handleEventAutoChange = (event) => {
-    setParam({ ...param, event_auto: event.target.checked ? 1 : 0 });
-    paramService
-      .update({ ...param, event_auto: event.target.checked ? 1 : 0 })
-      .then((response) => {
-        console.log("Paramètres mis à jour :", response.data);
-      });
+    const updatedParam = { ...param, event_auto: event.target.checked ? 1 : 0 };
+    setParam(updatedParam);
+    paramService.update(updatedParam).then((response) => {
+      console.log("Paramètres mis à jour :", response.data);
+    });
   };
 
   const handleVeilleChange = (event) => {
-    setVeille({ ...veille, enable: event.target.checked ? 1 : 0 });
-
-    veilleService
-      .update({ ...veille, enable: event.target.checked ? 1 : 0 })
-      .then((response) => {
-        console.log("Paramètres mis à jour :", response.data);
-      });
+    const updatedVeille = { ...veille, enable: event.target.checked ? 1 : 0 };
+    setVeille(updatedVeille);
+    veilleService.update(updatedVeille).then((response) => {
+      console.log("Paramètres mis à jour :", response.data);
+    });
   };
 
   const handleSliderChange = (event, newValue) => {
-    setVeille({ ...veille, start_time: newValue[0], end_time: newValue[1] });
-    veilleService
-      .update({ ...veille, start_time: newValue[0], end_time: newValue[1] })
-      .then((response) => {
-        console.log("Paramètres mis à jour :", response.data);
-      });
+    const updatedVeille = {
+      ...veille,
+      start_time: newValue[0],
+      end_time: newValue[1],
+    };
+    setVeille(updatedVeille);
+    veilleService.update(updatedVeille).then((response) => {
+      console.log("Paramètres mis à jour :", response.data);
+    });
   };
+
+  const percentage = (usedSize / totalSize) * 100;
 
   return (
     <>
@@ -101,22 +108,26 @@ function Profile() {
                 <SettingsIcon sx={{ color: "primary.light" }} />
               </IconButton>
               <Typography variant="h6" className="headerTitle">
-                Paramètre de {username}
+                Paramètres de {username}
               </Typography>
             </div>
           </Stack>
           <Box className="profileContainer">
             <Stack spacing={2}>
               <Stack direction="column" spacing={1}>
-                <Button  onClick={toggleModal} variant="contained" color="secondary">
-                  Modifier sont mot de passe
+                <Button
+                  onClick={toggleModal}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Modifier son mot de passe
                 </Button>
               </Stack>
               <Stack className="switchContainer">
                 <Typography>Mode sombre</Typography>
                 <Switch
                   checked={darkMode}
-                  onChange={() => setIsDarkMode()}
+                  onChange={setIsDarkMode}
                   color="secondary"
                 />
               </Stack>
@@ -163,14 +174,16 @@ function Profile() {
                 value={percentage}
                 color={percentage > 80 ? "error" : "secondary"}
               />
+              <Button variant="contained" color="secondary">
+                test
+              </Button>
+              <Typography> Numéro de Stramatel : 0123456789</Typography>
+
             </Stack>
           </Box>
         </Paper>
       </Grid>
-      <ChangePasswordDialog
-        open={modalOpen}
-        onClose={toggleModal}
-      />
+      <ChangePasswordDialog open={modalOpen} onClose={toggleModal} />
     </>
   );
 }

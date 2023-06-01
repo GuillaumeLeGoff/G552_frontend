@@ -1,37 +1,30 @@
-import { AppBar, Box, IconButton, Toolbar } from '@mui/material'
-import React from 'react'
+import { AppBar, IconButton, Toolbar } from '@mui/material';
+import React from 'react';
 
 function Header() {
-    
   return (
-   
-    <AppBar 
-     /*  style={{
+    <AppBar
+      style={{
         justifyContent: "center",
         position: "sticky",
         top: "0",
         marginBottom: "2vh",
-      }} */
+      }}
     >
       <Toolbar
-       /*  style={{
+        style={{
           justifyContent: "center",
           padding: "0",
-        }} */
+        }}
       >
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-        /*   sx={{ mr: 2 }} */
-         /*  style={{ padding: "0", justifyContent: "center" }} */
-        >
-
-        </IconButton>
+        <img
+          src="/images/Logo_Stramatel.png"
+          alt="Logo"
+          style={{ width: "200px", height: "auto" }}
+        />
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
-export default Header
+export default Header;
