@@ -17,8 +17,8 @@
 }
 
 .teamScore {
-  height: 15vw;
-  width: 15vw;
+  height: 14vw;
+  width: 14vw;
 }
 
 .ControlsContainer {
@@ -35,11 +35,11 @@
 }
 
 .firstScoreButton {
-  margin: 1vw 1vw 0 0;
+  margin: 0.5vw 0.5vw 0 0;
 }
 
 .secondScoreButton {
-  margin: 1vw 0 0 0;
+  margin: 0.5vw 0 0 0;
 }
 
 .scoreSeparator {
@@ -54,13 +54,9 @@
 }
 
 .paperTimer {
-  height: 8vw;
-  margin-top: 3vw;
-  width: 15vw;
-}
-
-.playIcôneButton {
-  width: 4.3vw;
+  height: 6vw;
+  margin-top: 0.5vw;
+  width: 12vw;
 }
 
 .BuzzerButton {
@@ -69,26 +65,38 @@
 }
 
 .PaperBuzzer {
-  margin-top: 3vw;
+  margin-top: 1vw;
 }
+.timerIcon {
+  height: 7vw;
+  width: 7vw;
+  width: 100%;
+  height: 100%;
+}
+.timerButton {
+  height: 3.5vw;
+  width: 3.5vw;
+  margin: 0.5vw 0.5vw 0 0;
+}
+.margin-right-0 {
+  margin: 0.5vw 0 0 0!important;
+}
+
 
 /* Styles responsifs pour téléphone */
 @media (max-width: 600px) {
 
   .margin-right-0 {
-    margin: 1.5vw 0 0 0;
+    margin: 1vw 0 0 0!important;
   }
 
   .timerButton {
     height: 7vw;
     width: 7vw;
-    margin: 1.5vw 1.5vw 0 0;
+    margin: 1vw 1vw 0 0;
   }
 
-  .timerIcon {
-    height: 7vw;
-    width: 7vw;
-  }
+
 
   .teamContainer {
     width: 100%;
@@ -118,7 +126,7 @@
   .paperTimer {
     height: 15vw;
     margin-top: 5vw;
-    width: 25vw;
+    width: 24vw;
   }
 
   .BuzzerButton {
@@ -133,8 +141,24 @@
 
 /* Styles responsifs pour tablette */
 @media (min-width: 601px) and (max-width: 920px) {
+
+
+  .paperTimer {
+    height: 14vw;
+    width: 20vw;
+  }
   .teamContainer {
     width: 100%;
+  }
+  
+  .margin-right-0 {
+    margin: 1vw 0 0 0 !important;
+  }
+
+  .timerButton {
+    height: 6vw;
+    width: 6vw;
+    margin: 1vw 1vw 0 0;
   }
 
   .teamScore {
@@ -143,27 +167,23 @@
   }
 
   .scoreIcôneButton {
-    height: 6vw;
-    width: 6.3vw;
+    height: 6.5vw;
+    width: 6.5vw;
   }
 
   .firstScoreButton {
-    margin: 4vw 4vw 0 0;
+    margin: 1vw 1vw 0 0;
   }
 
   .secondScoreButton {
-    margin: 4vw 0 0 0;
+    margin: 1vw 0 0 0;
   }
 
   .timerContainer {
-    margin-top: 4vw;
+    margin-top: 1vw;
   }
 
-  .paperTimer {
-    height: 15vw;
-    margin-top: 4vw;
-    width: 20vw;
-  }
+  
 
   .BuzzerButton {
     width: 20vw;

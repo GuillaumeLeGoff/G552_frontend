@@ -67,9 +67,7 @@ function EventMedia(props) {
                 <DeleteIcon color="secondary" />
               </IconButton>
             ) : (
-              <IconButton
-                className="event-media-icon-button"
-              >
+              <IconButton sx={{ p: 0 }} className="event-media-icon-button">
                 <DeleteIcon />
               </IconButton>
             )}
