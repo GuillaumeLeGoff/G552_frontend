@@ -6,6 +6,7 @@ import {
   Paper,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useMediaQuery } from "@mui/material";
@@ -18,13 +19,16 @@ import EditIcon from "@mui/icons-material/Edit";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SurroundSoundIcon from "@mui/icons-material/SurroundSound";
 import "./Scoreboard.css";
-import { useTheme } from "@emotion/react";
 import ScoreService from "../../../services/scoreService";
 import { io } from "socket.io-client";
 import TimerPickerDialog from "../../dialogs/TimerPickerDialog";
 
 function ScoreboardPage() {
+  const theme = useTheme();
+  const [team1Score, setTeam1Score] = useState(0);
+  const [team2Score, setTeam2Score] = useState(0);
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
+  const iconSize = theme.breakpoints.down('sm') ? 15 : 24;
   const [timerValue, setTimerValue] = useState(0);
   const [DialogOpen, setDialogOpen] = useState(false);
 
@@ -71,9 +75,7 @@ function ScoreboardPage() {
   const stopTimer = () => {
     socket.emit("stopTimer");
   };
-  const theme = useTheme();
-  const [team1Score, setTeam1Score] = useState(0);
-  const [team2Score, setTeam2Score] = useState(0);
+ 
 
   function incrementTeam1Score(add) {
     setTeam1Score(team1Score + add);
@@ -151,7 +153,7 @@ function ScoreboardPage() {
                     className="scoreIcôneButton"
                     onClick={() => incrementTeam1Score(1)}
                   >
-                    <AddIcon />1
+                     <AddIcon sx={{ fontSize: iconSize }}/><Typography>1</Typography>
                   </IconButton>
                 </Paper>
                 <Paper
@@ -163,7 +165,7 @@ function ScoreboardPage() {
                     className="scoreIcôneButton"
                     onClick={() => incrementTeam1Score(2)}
                   >
-                    <AddIcon />2
+                     <AddIcon sx={{ fontSize: iconSize }}/><Typography>2</Typography>
                   </IconButton>
                 </Paper>
                 <Paper
@@ -175,7 +177,7 @@ function ScoreboardPage() {
                     className="scoreIcôneButton"
                     onClick={() => incrementTeam1Score(3)}
                   >
-                    <AddIcon />3
+                    <AddIcon sx={{ fontSize: iconSize }}/><Typography>3</Typography>
                   </IconButton>
                 </Paper>
 
@@ -217,7 +219,7 @@ function ScoreboardPage() {
                     className="scoreIcôneButton"
                     onClick={() => incrementTeam2Score(1)}
                   >
-                    <AddIcon />1
+                    <AddIcon sx={{ fontSize: iconSize }}/><Typography>1</Typography>
                   </IconButton>
                 </Paper>
                 <Paper
@@ -229,7 +231,7 @@ function ScoreboardPage() {
                     className="scoreIcôneButton"
                     onClick={() => incrementTeam2Score(2)}
                   >
-                    <AddIcon />2
+                    <AddIcon sx={{ fontSize: iconSize }}/><Typography>2</Typography>
                   </IconButton>
                 </Paper>
                 <Paper
@@ -241,7 +243,7 @@ function ScoreboardPage() {
                     className="scoreIcôneButton"
                     onClick={() => incrementTeam2Score(3)}
                   >
-                    <AddIcon />3
+                     <AddIcon sx={{ fontSize: iconSize }}/><Typography>3</Typography>
                   </IconButton>
                 </Paper>
 

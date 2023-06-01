@@ -74,6 +74,7 @@
 
 /* Styles responsifs pour téléphone */
 @media (max-width: 600px) {
+
   .margin-right-0 {
     margin: 1.5vw 0 0 0;
   }
@@ -111,7 +112,7 @@
   }
 
   .timerContainer {
-    margin-top: 5vw;
+    margin-top: 0vw;
   }
 
   .paperTimer {
@@ -121,8 +122,8 @@
   }
 
   .BuzzerButton {
-    width: 25vw;
-    height: 20vw;
+    width: 20vw;
+    height: 12vw;
   }
 
   .PaperBuzzer {
@@ -166,7 +167,7 @@
 
   .BuzzerButton {
     width: 20vw;
-    height: 16vw;
+    height: 12vw;
   }
 
   .PaperBuzzer {
