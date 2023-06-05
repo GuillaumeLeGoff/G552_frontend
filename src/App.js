@@ -1,11 +1,10 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { Box, Grid, ThemeProvider } from "@mui/material";
 import LoadingScreen from "./components/LoadingScreen";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import Create from "./components/pages/create/CreatePage";
 import Login from "./components/pages/login/LoginPage";
-import Signup from "./components/pages/login/Signup";
 import Macro from "./components/pages/macro/Macro";
 import Profile from "./components/pages/profile/Profile";
 import Navbar from "./components/NavBar";
@@ -26,12 +25,8 @@ import Header from "./components/Header";
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
   const [loading, setLoading] = useState(false);
-  const { darkMode, setDarkMode } = useDarkMode();
-  const value = "My Context Value";
+  const { darkMode } = useDarkMode();
 
-  useEffect(() => {
-    console.log(token);
-  }, []);
 
   const theme = darkMode ? darkTheme : clairTheme;
 

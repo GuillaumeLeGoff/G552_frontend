@@ -26,5 +26,6 @@ class MacroService {
     return axios.get(`${URL_API}/user/${userId}`);
   }
 }
+const macroServiceInstance = new MacroService();
 
-export default new MacroService();
+export default macroServiceInstance;

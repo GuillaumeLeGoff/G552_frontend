@@ -30,21 +30,18 @@ function ChangePassword() {
 
     // Appeler le service d'authentification pour changer le mot de passe
     AuthService.changePassword(newPassword)
-    .then(() => {
-      // Met à jour la valeur 'firstLogin' dans le localStorage
-      const user = JSON.parse(localStorage.getItem('user'));
-      console.log(user);
-      user.user.firstLogin = 0;
-      localStorage.setItem('user', JSON.stringify(user));
-      console.log(user);
-      setSuccess(true);
-      setError(null);
-      AuthService.logout();
-    })
-    .catch((error) => {
-      console.log("Erreur", error.response.data.message);
-      setError(error.response.data.message);
-    });
+      .then(() => {
+        // Met à jour la valeur 'firstLogin' dans le localStorage
+        const user = JSON.parse(localStorage.getItem("user"));
+        user.user.firstLogin = 0;
+        localStorage.setItem("user", JSON.stringify(user));
+        setSuccess(true);
+        setError(null);
+        AuthService.logout();
+      })
+      .catch((error) => {
+        setError(error.response.data.message);
+      });
   }
   function disconnect() {
     AuthService.logout();
@@ -85,7 +82,6 @@ function ChangePassword() {
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                   fullWidth
-                  margin="normal"
                 />
                 <TextField
                   className="text-field-mdp"
@@ -95,7 +91,6 @@ function ChangePassword() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                   fullWidth
-                  margin="normal"
                 />
                 {error && (
                   <Typography variant="body2" color="error" align="center">

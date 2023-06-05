@@ -26,4 +26,6 @@ class VeilleService {
   }
 }
 
-export default new VeilleService();
+const veilleServiceInstance = new VeilleService();
+
+export default veilleServiceInstance;

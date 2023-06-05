@@ -10,7 +10,6 @@ import authService from "../../../services/authService";
 import EventMediaService from "../../../services/eventMediaService";
 import Medias from "./mediaPage/Medias";
 function Create() {
-
   const uploadService = UploadService();
 
   const [isDragging, setIsDragging] = useState(false);
@@ -32,6 +31,7 @@ function Create() {
   useEffect(() => {
     getEvents();
     getMedias();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const move = (source, destination, droppableSource, droppableDestination) => {
@@ -135,14 +135,14 @@ function Create() {
     setIsDragging(false);
     const { destination, source } = result;
     if (!destination) {
-      console.log("no destination");
+      /*  console.log("no destination"); */
       return;
     }
     const start = eventMedia[source.droppableId];
 
     switch (source.droppableId) {
       case destination.droppableId:
-        console.log("meme colonne");
+        /*  console.log("meme colonne"); */
         const newMedias = Array.from(start.medias);
         newMedias.splice(source.index, 1);
         newMedias.splice(
@@ -176,7 +176,6 @@ function Create() {
         });
         break;
       case "1":
-        console.log("copy");
         const sourceClone = Array.from(eventMedia[1].medias);
         const destClone = Array.from(
           eventMedia[destination.droppableId].medias
@@ -218,7 +217,6 @@ function Create() {
         break;
 
       default:
-        console.log("move");
         this.setState(
           move(
             this.state[source.droppableId],

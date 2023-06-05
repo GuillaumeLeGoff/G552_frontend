@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { TextField, useMediaQuery } from "@mui/material";
-import PropTypes from "prop-types";
 import {
   Box,
   Grid,
@@ -42,7 +41,6 @@ function ScoreboardPage() {
     async function fetchInitialScore() {
       try {
         const response = await ScoreService.getScores();
-        console.log("Initial score", response.data[0]);
         const {
           score_team1,
           score_team2,
@@ -67,7 +65,6 @@ function ScoreboardPage() {
 
   useEffect(() => {
     socket.on("timerUpdate", (value) => {
-      console.log("timerUpdate", value);
       setTimerValue(value);
     });
 
@@ -81,7 +78,6 @@ function ScoreboardPage() {
 
     socket.on("timerValue", (value) => {
       setTimerValue(value);
-      console.log("Valeur du minuteur :", value);
     });
 
     return () => {
@@ -210,7 +206,6 @@ function ScoreboardPage() {
   };
 
   const setTimer = (timerValue) => {
-    console.log("setTimer", timerValue);
     socket.emit("timerUpdate", timerValue);
     setTimerValue(timerValue);
   };
@@ -274,6 +269,7 @@ function ScoreboardPage() {
             <Box className="middleContainer">
               <div className="teamContainer">
                 <TextField
+                  className="teamNameInput"
                   value={team1Name}
                   onChange={handleTeam1NameChange}
                   label="Nom équipe 1"
@@ -327,6 +323,7 @@ function ScoreboardPage() {
               </div>
               <div className="teamContainer">
                 <TextField
+                  className="teamNameInput"
                   value={team2Name}
                   onChange={handleTeam2NameChange}
                   label="Nom équipe 2"
@@ -366,11 +363,11 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
-                     
+                    <IconButton
+                      className="icôneButton"
                       onClick={() => decrementScore(2)}
                     >
-                      <RemoveIcon sx={{ fontSize: iconSize }}/>
+                      <RemoveIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
                 </Box>
@@ -398,11 +395,11 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
-                     
+                    <IconButton
+                      className="icôneButton"
                       onClick={() => incrementFaute(1, 1)}
                     >
-                      <AddIcon sx={{ fontSize: iconSize }}/>
+                      <AddIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
                   <Paper
@@ -410,11 +407,11 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
-                     
+                    <IconButton
+                      className="icôneButton"
                       onClick={() => decrementFaute(1)}
                     >
-                      <RemoveIcon sx={{ fontSize: iconSize }}/>
+                      <RemoveIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
                 </Box>
@@ -430,7 +427,7 @@ function ScoreboardPage() {
                   <Box className="timerContainer">
                     <Box className="editTimerContainer">
                       <Typography
-                        variant={isSmallScreen ? "h5" : "h4"}
+                        variant={isSmallScreen ? "h6" : "h5"}
                         className="timerValue"
                       >
                         {formatTime(timerValue)}
@@ -444,12 +441,12 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
+                    <IconButton
+                      className="icôneButton"
                       onClick={startTimer}
-                      
                       aria-label="Start Timer"
                     >
-                      <PlayArrowIcon sx={{ fontSize: iconSize }}/>
+                      <PlayArrowIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
                   <Paper
@@ -457,12 +454,12 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
+                    <IconButton
+                      className="icôneButton"
                       onClick={stopTimer}
-                     
                       aria-label="Stop Timer"
                     >
-                      <PauseIcon sx={{ fontSize: iconSize }}/>
+                      <PauseIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
 
@@ -471,11 +468,12 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
+                    <IconButton
+                      className="icôneButton"
                       onClick={handleDialogOpen}
                       aria-label="Edit Timer"
                     >
-                      <EditIcon sx={{ fontSize: iconSize }}/>
+                      <EditIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
                 </Box>
@@ -501,11 +499,11 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
-                   
+                    <IconButton
+                      className="icôneButton"
                       onClick={() => incrementFaute(2, 1)}
                     >
-                      <AddIcon sx={{ fontSize: iconSize }}/>
+                      <AddIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
                   <Paper
@@ -513,11 +511,11 @@ function ScoreboardPage() {
                     elevation={2}
                     sx={{ backgroundColor: theme.palette.secondary.main }}
                   >
-                    <IconButton  className="icôneButton"
-                     
+                    <IconButton
+                      className="icôneButton"
                       onClick={() => decrementFaute(2)}
                     >
-                      <RemoveIcon sx={{ fontSize: iconSize }}/>
+                      <RemoveIcon sx={{ fontSize: iconSize }} />
                     </IconButton>
                   </Paper>
                 </Box>
@@ -530,8 +528,8 @@ function ScoreboardPage() {
                 elevation={2}
                 sx={{ backgroundColor: theme.palette.secondary.main }}
               >
-                <IconButton  className="icôneButton"  aria-label="Buzzer">
-                  <SurroundSoundIcon sx={{ fontSize: iconSize }}/>
+                <IconButton className="icôneButton" aria-label="Buzzer">
+                  <SurroundSoundIcon sx={{ fontSize: iconSize }} />
                 </IconButton>
               </Paper>
             </Box>
@@ -545,7 +543,7 @@ function ScoreboardPage() {
                   elevation={2}
                   sx={{ backgroundColor: theme.palette.secondary.main }}
                 >
-                  <IconButton  className="icôneButton" >
+                  <IconButton className="icôneButton">
                     <Typography>{macroNumber}</Typography>
                   </IconButton>
                 </Paper>

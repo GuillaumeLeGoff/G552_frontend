@@ -1,15 +1,16 @@
 import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { Button } from "@mui/material";
+import { useTheme } from "@emotion/react";
 
 function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
+  const theme = useTheme();
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
-    console.log("croppedAreaPixels", croppedAreaPixels);
   }, []);
 
   const createImage = (url) =>
@@ -51,7 +52,6 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
     if (mediaType === "image") {
       if (!imageToCrop || !croppedAreaPixels) return;
       const croppedImage = await getCroppedImage();
-      console.log("donee", { croppedImage });
       uploadMediaCroped([croppedImage]);
     } else if (mediaType === "video") {
       uploadMediaCroped([imageToCrop], croppedAreaPixels);
@@ -90,8 +90,8 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
         }}
       >
         <Button
+          sx={{ backgroundColor: theme.palette.secondary.main }}
           variant="contained"
-          color="primary"
           onClick={handleUpload}
           style={{ marginTop: "16px" }}
         >

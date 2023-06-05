@@ -26,4 +26,7 @@ class ParamService {
   }
 }
 
-export default new ParamService();
+
+const paramServiceInstance = new ParamService();
+
+export default paramServiceInstance;

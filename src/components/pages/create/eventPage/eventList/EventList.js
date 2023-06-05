@@ -20,8 +20,6 @@ import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
 import AddEventDialog from "../../../../dialogs/AddEventDialog";
 import "./EventList.css";
 
-
-
 function EventList({ onEventClick }) {
   useEffect(() => {
     getEvent();
@@ -51,7 +49,6 @@ function EventList({ onEventClick }) {
     }
   }
   async function addEvent() {
-    console.log("addEvent");
     try {
       await eventService.create(name);
       toggleModal();
@@ -63,7 +60,6 @@ function EventList({ onEventClick }) {
   }
 
   function toggleModal() {
-    console.log("toggleModal");
     setModalOpen(!modalOpen);
   }
 
@@ -76,7 +72,6 @@ function EventList({ onEventClick }) {
   }
 
   function openDeleteDialog(event) {
-    console.log(event);
     setDeleteDialogOpen(true);
     setEventToDelete(event);
   }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useDarkMode } from "../../../contexts/DarkModeContext";
 import {
   Box,
@@ -26,8 +25,8 @@ function Profile() {
   const [modalOpen, setModalOpen] = useState(false);
   const [param, setParam] = useState({});
   const [veille, setVeille] = useState({});
-  const [totalSize, setTotalSize] = useState(100); // Taille totale en Go
-  const [usedSize, setUsedSize] = useState(90); // Taille utilisée en Go
+  const totalSize = 100; // Taille totale en Go
+  const usedSize = 90; // Taille utilisée en Go
   const [user, setUser] = useState(null);
   const { darkMode, setDarkMode } = useDarkMode();
 
@@ -42,13 +41,13 @@ function Profile() {
       paramService.getByUserId(user.user.id).then((paramData) => {
         const paramDataItem = paramData?.data?.[0] || {};
         setParam(paramDataItem);
-        console.log("param", paramDataItem);
+
         // Mettre à jour l'état avec les données de param
         veilleService
           .getByUserId(paramDataItem.veille_id)
           .then((veilleData) => {
             setVeille(veilleData?.data || {});
-            console.log("veille", veilleData?.data);
+
             // Mettre à jour l'état avec les données de veille
           });
       });
@@ -56,12 +55,10 @@ function Profile() {
   }, [user]);
 
   const toggleModal = () => {
-    console.log("toggleModal");
     setModalOpen(!modalOpen);
   };
 
   const setIsDarkMode = () => {
-    console.log(darkMode);
     setDarkMode((prevDarkMode) => {
       localStorage.setItem("darkMode", !prevDarkMode);
       return !prevDarkMode;
@@ -71,17 +68,13 @@ function Profile() {
   const handleEventAutoChange = (event) => {
     const updatedParam = { ...param, event_auto: event.target.checked ? 1 : 0 };
     setParam(updatedParam);
-    paramService.update(updatedParam).then((response) => {
-      console.log("Paramètres mis à jour :", response.data);
-    });
+    paramService.update(updatedParam).then((response) => {});
   };
 
   const handleVeilleChange = (event) => {
     const updatedVeille = { ...veille, enable: event.target.checked ? 1 : 0 };
     setVeille(updatedVeille);
-    veilleService.update(updatedVeille).then((response) => {
-      console.log("Paramètres mis à jour :", response.data);
-    });
+    veilleService.update(updatedVeille).then((response) => {});
   };
 
   const handleSliderChange = (event, newValue) => {
@@ -91,9 +84,7 @@ function Profile() {
       end_time: newValue[1],
     };
     setVeille(updatedVeille);
-    veilleService.update(updatedVeille).then((response) => {
-      console.log("Paramètres mis à jour :", response.data);
-    });
+    veilleService.update(updatedVeille).then((response) => {});
   };
 
   const percentage = (usedSize / totalSize) * 100;
@@ -107,7 +98,7 @@ function Profile() {
               <IconButton>
                 <SettingsIcon sx={{ color: "primary.light" }} />
               </IconButton>
-              <Typography variant="h6" className="headerTitle">
+              <Typography variant="h6" className="headerTitlePadding">
                 Paramètres de {username}
               </Typography>
             </div>
@@ -178,7 +169,6 @@ function Profile() {
                 test
               </Button>
               <Typography> Numéro de Stramatel : 0123456789</Typography>
-
             </Stack>
           </Box>
         </Paper>

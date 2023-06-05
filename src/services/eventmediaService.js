@@ -44,5 +44,6 @@ class EventMediaService {
   }
 
 }
+const eventMediaServiceInstance = new EventMediaService();
 
-export default new EventMediaService();
+export default eventMediaServiceInstance;

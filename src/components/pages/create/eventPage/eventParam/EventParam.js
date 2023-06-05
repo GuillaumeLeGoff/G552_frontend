@@ -1,32 +1,40 @@
-import CloseIcon from "@mui/icons-material/Close";
-import { useNavigate } from "react-router-dom";
-import PermMediaIcon from "@mui/icons-material/PermMedia";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Droppable } from "react-beautiful-dnd";
 import {
   Box,
+  IconButton,
   Modal,
   Paper,
   Stack,
   Table,
   TableBody,
   TableContainer,
+  Typography,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import "./EventParam.css";
+import CloseIcon from "@mui/icons-material/Close";
+
+import PauseIcon from "@mui/icons-material/Pause";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import React, { useEffect, useState } from "react";
-import { Droppable } from "react-beautiful-dnd";
-import { useParams } from "react-router-dom";
-import eventMediaService from "../../../../../services/eventMediaService";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useTheme } from "@emotion/react";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+
 import eventService from "../../../../../services/eventService";
-import "../../../../../styles/App.css";
+import eventMediaService from "../../../../../services/eventMediaService";
+import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
 import DeleteMediaEventDialog from "../../../../dialogs/DeleteMediaEventDialog";
 import Media from "../eventMedia/EventMedia";
-import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
+import "./EventParam.css";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 function EventParam(props) {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [event, setEvent] = useState({});
   const [deleteMediaDialogOpen, setDeleteMediaDialogOpen] = useState(false);
   const [deleteEventDialogOpen, setDeleteEventDialogOpen] = useState(false);
@@ -35,44 +43,66 @@ function EventParam(props) {
   const [idEventMediaDelete, setIdEventMediaDelete] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
+
   useEffect(() => {
     props.getEvents();
     getMediasByID();
-    console.log("result", props.eventMedia[0].medias);
-    console.log("result", props.eventMedia[0].medias);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    // trier les medias par media_pos_in_event
     const sortedMedias = props.eventMedia[0]?.medias.sort(
       (a, b) => a.media_pos_in_event - b.media_pos_in_event
     );
 
     if (activeMediaIndex < sortedMedias.length) {
       setCurrentMedia(sortedMedias[activeMediaIndex]);
-      const timer = setTimeout(() => {
-        if (activeMediaIndex === sortedMedias.length - 1) {
-          setActiveMediaIndex(0); // réinitialiser à zéro à la fin du tableau
-        } else {
-          setActiveMediaIndex((prevIndex) => prevIndex + 1);
-        }
-      }, sortedMedias[activeMediaIndex].media_dur_in_event * 1000); // convertir en millisecondes
+      if (isAutoPlayEnabled) {
+        const timer = setTimeout(() => {
+          if (activeMediaIndex === sortedMedias.length - 1) {
+            setActiveMediaIndex(0);
+          } else {
+            setActiveMediaIndex((prevIndex) => prevIndex + 1);
+          }
+        }, sortedMedias[activeMediaIndex].media_dur_in_event * 1000);
 
-      // Nettoyer le timer lors du démontage du composant
-      return () => clearTimeout(timer);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [activeMediaIndex, props.eventMedia]);
-  function getMediasByID() {
-    eventService.getById(props.id).then((result) => {
+  }, [activeMediaIndex, props.eventMedia, isAutoPlayEnabled]);
+
+  async function getMediasByID() {
+    try {
+      const result = await eventService.getById(props.id);
       setEvent(result.data);
-      console.log("result", props.eventMedia[0].medias);
       props.getEvents();
-    });
+    } catch (error) {
+      console.error("Erreur lors de la récupération des médias :", error);
+    }
   }
+
+  function handlePreviousSlide() {
+    if (activeMediaIndex === 0) {
+      setActiveMediaIndex(props.eventMedia[0].medias.length - 1);
+    } else {
+      setActiveMediaIndex((prevIndex) => prevIndex - 1);
+    }
+  }
+
+  function handleNextSlide() {
+    if (activeMediaIndex === props.eventMedia[0].medias.length - 1) {
+      setActiveMediaIndex(0);
+    } else {
+      setActiveMediaIndex((prevIndex) => prevIndex + 1);
+    }
+  }
+
+  function toggleAutoPlay() {
+    setIsAutoPlayEnabled((prevState) => !prevState);
+  }
+
   function handleRowHover(rowId) {
     setHoveredRow(rowId);
   }
@@ -81,7 +111,7 @@ function EventParam(props) {
     setDeleteEventDialogOpen(true);
   }
 
-  function closDeleteEventDialog() {
+  function closeDeleteEventDialog() {
     setDeleteEventDialogOpen(false);
   }
 
@@ -123,6 +153,7 @@ function EventParam(props) {
       console.error("Erreur lors de la suppression d'un événement :", error);
     }
   }
+
   function closeEvent() {
     props.closeEvent();
   }
@@ -165,11 +196,7 @@ function EventParam(props) {
         </Stack>
 
         <TableContainer
-          sx={{
-            maxHeight: "calc(94vh - 125px)",
-            overflowY: "scroll",
-            border: props.isDragging ? "1px dashed grey" : "none", // ajout de la bordure pointillée
-          }}
+         className="tableContainer"
         >
           <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
             <Droppable droppableId={`${props.eventMedia[0].id}`}>
@@ -203,7 +230,10 @@ function EventParam(props) {
       </Paper>
 
       <Modal open={isPlayModalOpen} onClose={closePlayModal}>
-        <Box className="modalBox">
+        <Box
+          className="modalBox"
+          sx={{ backgroundColor: theme.palette.primary.main }}
+        >
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -218,7 +248,7 @@ function EventParam(props) {
                 />
               </IconButton>
               <Typography variant="h6" className="modalHeaderText">
-                Play
+                Diapo
               </Typography>
             </div>
 
@@ -226,23 +256,52 @@ function EventParam(props) {
               <CloseIcon color="secondary" />
             </IconButton>
           </Stack>
-          <Box className="diapoImage">
+          <Box className="diapoBox">
             {currentMedia &&
               (currentMedia.type === "image" ? (
                 <img
+                  className="diapoImage"
                   src={currentMedia.path}
                   alt={`Media ${activeMediaIndex}`}
                 />
               ) : currentMedia.type === "video" ? (
                 <video src={currentMedia.path} controls />
               ) : null)}
+            <Box sx={{ textAlign: "center", marginTop: "16px" , display:"flex"}}>
+              <>
+                <IconButton onClick={handlePreviousSlide}>
+                  <NavigateBeforeIcon color="secondary"  />
+                </IconButton>
+                <Typography p={1}variant="body2" color="text.secondary">
+                  Diapo {activeMediaIndex + 1} /{" "}
+                  {props.eventMedia[0].medias.length}
+                </Typography>
+                <IconButton onClick={handleNextSlide}>
+                  <NavigateNextIcon color="secondary" />
+                </IconButton>
+              </>
+
+              <IconButton variant="contained" onClick={toggleAutoPlay}>
+                {isAutoPlayEnabled ? (
+                  <>
+                    <PauseIcon color="secondary" />
+                    
+                  </>
+                ) : (
+                  <>
+                    <PlayArrowIcon color="secondary" />
+                  
+                  </>
+                )}
+              </IconButton>
+            </Box>
           </Box>
         </Box>
       </Modal>
 
       <DeleteEventDialog
         open={deleteEventDialogOpen}
-        onClose={closDeleteEventDialog}
+        onClose={closeDeleteEventDialog}
         onDelete={deleteEvent}
         eventName={event.name}
       />
@@ -255,5 +314,9 @@ function EventParam(props) {
     </div>
   );
 }
+
+EventParam.propTypes = {
+  // PropTypes here
+};
 
 export default EventParam;

@@ -23,8 +23,10 @@ import "./Medias.css";
 import { LoadingContext } from "../../../../contexts/Context";
 
 import DeleteMediaDialog from "../../../dialogs/DeleteMediaDialog";
+import { useTheme } from "@emotion/react";
 function Medias(props) {
   const uploadService = UploadService();
+  const theme = useTheme();
   const [selectedImage, setSelectedImage] = useState(null);
   const [dialogUpload, setDialogUpload] = useState(false);
   const [dialogDelete, setDialogDelete] = useState(false);
@@ -35,7 +37,6 @@ function Medias(props) {
   const [longPressTimer, setLongPressTimer] = useState(null);
   const setLoading = useContext(LoadingContext);
 
-
   const handleTouchStart = (imageId) => {
     clearTimeout(longPressTimer);
     setLongPressTimer(
@@ -43,7 +44,7 @@ function Medias(props) {
         if (imageId === selectedImage) {
           setSelectedImage(null);
         } else {
-        setSelectedImage(imageId);
+          setSelectedImage(imageId);
         }
       }, 500)
     ); // Appui long de 500 ms
@@ -79,7 +80,7 @@ function Medias(props) {
   function goToCrop(event) {
     if (event.target.files[0].type.split("/")[0] === "video") {
       uploadService
-        .upload(setLoading,event.target.files[0], "video")
+        .upload(setLoading, event.target.files[0], "video")
         .then(() => {
           props.getMedias();
         })
@@ -87,14 +88,15 @@ function Medias(props) {
           console.error(error);
         });
     } else {
-      console.log(event.target.files[0]);
       setOriginalName(event.target.files[0].name);
       const reader = new FileReader();
       reader.addEventListener("load", () => setImageToCrop(reader.result));
       reader.readAsDataURL(event.target.files[0]);
       setMediaType(event.target.files[0].type.split("/")[0]);
       displayDialogUpload();
+      
     }
+    setSelectedImage(null);
   }
 
   function uploadMediaCroped(event) {
@@ -103,7 +105,7 @@ function Medias(props) {
     });
 
     uploadService
-      .upload(setLoading,fileWithOriginalName, mediaType)
+      .upload(setLoading, fileWithOriginalName, mediaType)
       .then(() => {
         props.getMedias();
       })
@@ -136,7 +138,8 @@ function Medias(props) {
             </Typography>
           </div>
           <div className="headerItemRight">
-            <IconButton className="header-button"
+            <IconButton
+              className="header-button"
               onClick={() => {
                 document.getElementById("inputFile").click();
               }}
@@ -236,9 +239,7 @@ function Medias(props) {
                       </Typography>
                     </Box>
                   )
-                ) : (
-                 null
-                )}
+                ) : null}
                 {provided.placeholder}
               </div>
             )}
@@ -247,7 +248,10 @@ function Medias(props) {
       </Paper>
       {/* Modal upload  */}
       <Modal open={dialogUpload} onClose={displayDialogUpload}>
-        <Box className="modalBox">
+        <Box
+          sx={{ backgroundColor: theme.palette.primary.main }}
+          className="modalBox"
+        >
           <Stack
             direction="row"
             justifyContent="space-between"
@@ -255,17 +259,18 @@ function Medias(props) {
             spacing={2}
           >
             <div className="modalHeader">
-              <IconButton >
-                <UploadIcon sx={{ color: "primary.light" }} className="uploadIcon" />
+              <IconButton>
+                <UploadIcon
+                  sx={{ color: "primary.light" }}
+                  className="uploadIcon"
+                />
               </IconButton>
               <Typography variant="h6" className="modalHeaderText">
                 Upload
               </Typography>
             </div>
 
-            <IconButton
-              onClick={displayDialogUpload}
-            >
+            <IconButton onClick={displayDialogUpload}>
               <CloseIcon color="secondary" />
             </IconButton>
           </Stack>

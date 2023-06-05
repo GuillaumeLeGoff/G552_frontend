@@ -43,7 +43,7 @@ return axios.put(URL_API + "/scores/" + scoreId, updatedScore);
 
 // Mettre à jour le timer
 updateTimer(timer) {
-console.log("Updating timer", timer);
+
 return axios.put(
 URL_API + "/timer/" + authService.getCurrentUser().user.id,
 {
@@ -53,4 +53,6 @@ timer: timer,
 }
 }
 
-export default new ScoreService();
+const scoreServiceInstance = new ScoreService();
+
+export default scoreServiceInstance;

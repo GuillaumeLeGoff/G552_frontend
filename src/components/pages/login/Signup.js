@@ -5,10 +5,10 @@ import {
   TextField,
   Button,
   Paper,
-  Typography,
-  InputLabel,
+    InputLabel,
   Select,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import { Container } from "@mui/system";
 
@@ -50,7 +50,7 @@ const Signup = () => {
             onChange={(e) => setUser(e.target.value)}
             required
             fullWidth
-            margin="normal"
+          
           />
           <TextField
             label="Mot de passe"
@@ -59,7 +59,7 @@ const Signup = () => {
             onChange={(e) => setPassword(e.target.value)}
             required
             fullWidth
-            margin="normal"
+          
           />
           <TextField
             label="Confirmer le mot de passe"
@@ -68,7 +68,7 @@ const Signup = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
             fullWidth
-            margin="normal"
+          
           />
           <InputLabel id="demo-simple-select-label">
             Sélectionner un rôle
@@ -84,11 +84,11 @@ const Signup = () => {
             <MenuItem value="admin">Administrateur</MenuItem>
             <MenuItem value="superuser">Super Utilisateur</MenuItem>
           </Select>
-          {/* {error && (
+          {error && (
             <Typography variant="body2" color="error" align="center">
               {error}
             </Typography>
-          )} */}
+          )}
           <Button type="submit" variant="contained" color="primary">
             S'inscrire
           </Button>

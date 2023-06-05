@@ -1,5 +1,4 @@
 import axios from "axios";
-import authHeader from "./authHeader";
 import Config from "../config.json";
 import "../contexts/axiosConfig"
 
@@ -26,4 +25,6 @@ class UserService {
   }
 }
 
-export default new UserService();
+const userServiceInstance = new UserService();
+
+export default userServiceInstance;

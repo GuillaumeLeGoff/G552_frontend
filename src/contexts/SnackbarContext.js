@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from "react";
-import PropTypes from "prop-types";
 import { Alert, Snackbar } from "@mui/material";
 
 const SnackbarContext = createContext();
@@ -11,7 +10,7 @@ export function useSnackbar() {
 export function SnackbarProvider(props) {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarType, setSnackbarType] = useState("");
+  const [snackbarType, setSnackbarType] = useState("info");
 
   function handleSnackbarClose() {
     setSnackbarOpen(false);

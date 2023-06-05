@@ -51,14 +51,14 @@ function ChangePasswordDialog({ open, onClose }) {
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            margin="normal"
+            
           />
           <TextField
             label="Confirme le nouveaux mot de passe"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            margin="normal"
+           
           />
           {error && (
             <Typography variant="body2" color="error" align="center">

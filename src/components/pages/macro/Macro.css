@@ -5,5 +5,14 @@
     max-height: calc(94vh - 200px);
     overflow-y: scroll;
     align-content: center;
-    padding: 8px;
+    padding:0 8px 8px 8px;
   }
+  .selectEvent{
+    width: 25vh;
+   
+  }
+  .tableCellRight{
+    margin-right: 20vh !important;
+  }
+
+  

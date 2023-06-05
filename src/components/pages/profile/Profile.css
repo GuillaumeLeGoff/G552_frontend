@@ -6,6 +6,7 @@
 }
 .profileContainer {
   padding: 1% 8% 0 8% !important;
+  margin: 0 18vw 0 18vw !important;
 }
 
 .passwordContainer{
@@ -14,8 +15,16 @@ justify-content: center;
 flex-direction: column;
 align-items: center;
 }
+.headerTitlePadding {
+  padding: 16px;
+}
 
 .passwordInput{
   width: 80%;
   margin: 0 0 1rem 0!important;
 }
+
+@media (max-width: 600px) {.profileContainer {
+
+  margin: 0 0 0 0 !important;
+}}

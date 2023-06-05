@@ -15,7 +15,6 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
       <DialogContent>
         <TextField
           fullWidth
-          margin="normal"
           id="standard-basic"
           label="Nom de l'événement"
           autocomplete="off"

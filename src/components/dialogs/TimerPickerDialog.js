@@ -6,9 +6,7 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-  TextField,
   MenuItem,
-  InputLabel,
   FormControl,
   Select,
   Typography,
@@ -30,7 +28,7 @@ function TimerPickerDialog({ open, onClose, setTimer, eventName }) {
   };
 
   const handleConfirm = () => {
-    console.log(`Timer set to ${minutes} minutes and ${seconds} seconds`);
+    /* console.log(`Timer set to ${minutes} minutes and ${seconds} seconds`); */
     const timeInSeconds = minutes * 60 + seconds;
     setTimer(timeInSeconds);
     setMinutes(0);

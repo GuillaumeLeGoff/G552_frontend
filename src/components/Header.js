@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Toolbar } from '@mui/material';
+import { AppBar, Toolbar } from '@mui/material';
 import React from 'react';
 
 function Header() {

@@ -32,7 +32,6 @@ import { useSnackbar } from "../contexts/SnackbarContext";
    }
  
    async function upload(setLoading, file) {
-    console.log(file);
      try {
        setLoading(true);
        let formData = new FormData();
