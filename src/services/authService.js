@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useState } from "react";
 
 import Config from "../config.json";
 
@@ -22,6 +21,7 @@ class AuthService {
       });
 
       if (response.data.accessToken) {
+       
         localStorage.setItem("user", JSON.stringify(response.data));
         this.currentUser = response.data;
         window.location.reload();
@@ -61,7 +61,6 @@ class AuthService {
   async updateUser(id, role) {
     try {
       const roles = [role];
-      console.log(id);
       const response = await axios.put(`${SERVER_URL}${USER_URL}/${id}`, {
         roles,
       });
@@ -71,6 +70,12 @@ class AuthService {
       console.log("Error during update:", error);
     }
   }
+  updateAccessToken(newToken) {
+    const user = JSON.parse(localStorage.getItem('user'));
+    user.accessToken = newToken;
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
 
   async changePassword(newPassword) {
     try {

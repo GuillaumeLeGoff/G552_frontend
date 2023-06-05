@@ -23,15 +23,13 @@ class FileService {
   //delete file
   delete(file) {
     axios.delete(URL_API + "/file/" + file._id).then((res) => {
-      console.log(res);
-      console.log(res.data);
+     
     });
   }
   //post file
   post(file) {
     axios.post(URL_API + "/files", file).then((res) => {
-      console.log(res);
-      console.log(res.data);
+    
     });
   }
   put(file) {
@@ -40,10 +38,11 @@ class FileService {
         duration: file.duration,
       })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
+   
       });
   }
 }
 
-export default new FileService();
+const fileServiceInstance = new FileService();
+
+export default fileServiceInstance;

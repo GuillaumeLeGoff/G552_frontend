@@ -13,7 +13,6 @@ class EventService {
   };
 
   static async create(name) {
-    console.log(name);
     const currentUser = authService.getCurrentUser();
     const userId = currentUser?.user?.id;
     try {
@@ -21,8 +20,7 @@ class EventService {
         name: name,
         userId: userId,
       });
-      console.log(res);
-      console.log(res.data);
+     
     } catch (error) {
       console.log(error);
     }
