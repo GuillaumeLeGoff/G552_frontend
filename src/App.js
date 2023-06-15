@@ -25,8 +25,15 @@ import Header from "./components/Header";
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
   const { darkMode } = useDarkMode();
+  const loadingState = {
+    loading: loading,
+    progress: progress,
+    setLoading: setLoading,
+    setProgress: setProgress,
 
+  };
 
   const theme = darkMode ? darkTheme : clairTheme;
 
@@ -34,7 +41,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <BrowserRouter>
-        <LoadingContext.Provider value={setLoading}>
+        <LoadingContext.Provider value={loadingState}>
           {loading && (
             <Box
               style={{

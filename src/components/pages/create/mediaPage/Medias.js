@@ -35,7 +35,8 @@ function Medias(props) {
   const [originalName, setOriginalName] = useState(null);
   const [mediaType, setMediaType] = useState(null);
   const [longPressTimer, setLongPressTimer] = useState(null);
-  const setLoading = useContext(LoadingContext);
+  const { loading, setLoading } = useContext(LoadingContext);
+  const { progress, setProgress } = useContext(LoadingContext);
 
   const handleTouchStart = (imageId) => {
     clearTimeout(longPressTimer);
@@ -78,9 +79,10 @@ function Medias(props) {
   }
 
   function goToCrop(event) {
-    if (event.target.files[0].type.split("/")[0] === "video") {
+    console.log("upload");
+   if (event.target.files[0].type.split("/")[0] === "video") {
       uploadService
-        .upload(setLoading, event.target.files[0], "video")
+        .upload(setLoading, event.target.files[0], setProgress)
         .then(() => {
           props.getMedias();
         })
@@ -94,7 +96,6 @@ function Medias(props) {
       reader.readAsDataURL(event.target.files[0]);
       setMediaType(event.target.files[0].type.split("/")[0]);
       displayDialogUpload();
-      
     }
     setSelectedImage(null);
   }
@@ -105,7 +106,7 @@ function Medias(props) {
     });
 
     uploadService
-      .upload(setLoading, fileWithOriginalName, mediaType)
+      .upload(setLoading, fileWithOriginalName, setProgress)
       .then(() => {
         props.getMedias();
       })

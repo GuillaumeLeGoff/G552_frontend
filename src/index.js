@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { DarkModeProvider } from "./contexts/DarkModeContext";
 import { SnackbarProvider  } from "./contexts/SnackbarContext";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root"),{hotOnly: false});
 root.render(
   <SnackbarProvider >
     <DarkModeProvider>
