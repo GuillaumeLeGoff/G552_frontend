@@ -15,11 +15,11 @@ axios.interceptors.request.use(
 );
 
 axios.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      if (error.response && error.response.status === 401) {
-        authService.logout();
-      }
-      return Promise.reject(error);
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      authService.logout();
     }
-  );
+    return Promise.reject(error);
+  }
+);

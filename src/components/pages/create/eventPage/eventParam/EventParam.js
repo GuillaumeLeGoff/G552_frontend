@@ -53,6 +53,7 @@ function EventParam(props) {
   }, []);
 
   useEffect(() => {
+    console.log("activeMediaIndex");
     const sortedMedias = props.eventMedia[0]?.medias.sort(
       (a, b) => a.media_pos_in_event - b.media_pos_in_event
     );
@@ -71,7 +72,8 @@ function EventParam(props) {
         return () => clearTimeout(timer);
       }
     }
-  }, [activeMediaIndex, props.eventMedia, isAutoPlayEnabled]);
+   
+  }, [ props.eventMedia, isAutoPlayEnabled]);
 
   async function getMediasByID() {
     try {

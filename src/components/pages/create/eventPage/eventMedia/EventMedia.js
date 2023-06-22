@@ -1,10 +1,13 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, TableCell, TableRow, TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import "./EventMedias.css";
 
 function EventMedia(props) {
+  useEffect(() => {
+    console.log('props.item',props.item);
+  }, [props.item]);
   function handleDurationChange(event) {
     props.updateMedia(event.target.value, props.index);
   }
