@@ -54,9 +54,12 @@ function EventParam(props) {
 
   useEffect(() => {
     console.log("activeMediaIndex");
-    const sortedMedias = props.eventMedia[0]?.medias.sort(
+    var sortedMedias = "";
+    if (props.eventMedia[0]?.medias.length > 0) {
+      sortedMedias = props.eventMedia[0]?.medias.sort(
       (a, b) => a.media_pos_in_event - b.media_pos_in_event
     );
+    }
 
     if (activeMediaIndex < sortedMedias.length) {
       setCurrentMedia(sortedMedias[activeMediaIndex]);

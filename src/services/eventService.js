@@ -1,6 +1,6 @@
 import axios from "axios";
 import PropTypes from "prop-types";
-import Config from "../config.json";
+import Config from "../config/config.json";
 import authService from "./authService";
 import "../contexts/axiosConfig"
 

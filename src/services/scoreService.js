@@ -1,5 +1,5 @@
 import axios from "axios";
-import Config from "../config.json";
+import Config from "../config/config.json";
 import "../contexts/axiosConfig";
 import authService from "./authService";
 const URL_API = Config.SERVER_URL;

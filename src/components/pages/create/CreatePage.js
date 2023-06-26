@@ -216,6 +216,7 @@ function Create() {
           EventMediaService.update(updates)
             .then((updateResult) => {
               console.log("Media positions updated:", updateResult);
+              getEvents();
             })
             .catch((error) => {
               console.error("Error updating media positions:", error);

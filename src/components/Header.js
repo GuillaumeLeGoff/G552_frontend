@@ -1,5 +1,6 @@
 import { AppBar, Toolbar } from '@mui/material';
 import React from 'react';
+import LanguageSelector from './LanguageSelector';
 
 function Header() {
   return (
@@ -23,6 +24,7 @@ function Header() {
           style={{ width: "200px", height: "auto" }}
         />
       </Toolbar>
+      <LanguageSelector />
     </AppBar>
   );
 }

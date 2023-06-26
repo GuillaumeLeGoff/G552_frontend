@@ -14,11 +14,13 @@
     "axios": "^1.2.2",
     "canvas-toBlob": "^1.0.0",
     "fluent-ffmpeg": "^2.1.2",
+    "i18next": "^23.2.3",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-easy-crop": "^4.7.1",
+    "react-i18next": "^13.0.1",
     "react-image-crop": "^10.0.9",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.6.2",
@@ -29,7 +31,6 @@
   },
   "scripts": {
     "start": "set PORT=300 && react-scripts start",
-   
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

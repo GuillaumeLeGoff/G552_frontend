@@ -1,5 +1,5 @@
 import axios from "axios";
-import Config from "../config.json";
+import Config from "../config/config.json";
 import "../contexts/axiosConfig"
 
 const URL_API = Config.SERVER_URL;
@@ -28,6 +28,7 @@ class EventMediaService {
     return axios.post(URL_API + "/eventmedias", eventMedia);
   }
   delete(id,mediaToDelete) {
+    console.log("mediaToDelete",mediaToDelete);
     return axios.delete(URL_API + "/eventmedias/"+id , { data: mediaToDelete });
   }
 

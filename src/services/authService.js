@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import Config from "../config.json";
+import Config from "../config/config.json";
 
 const SERVER_URL = Config.SERVER_URL;
 const SIGN_IN_URL = "/auth/signin";

@@ -1,0 +1,11 @@
+{
+    "login.title": "Inicio de sesión",
+    "login.userLabel": "Usuario",
+    "login.passwordLabel": "Contraseña",
+    "login.loginButton": "Iniciar sesión",
+    "login.errorText": "Usuario o contraseña incorrectos",
+    "login.sportFootball": "Fútbol",
+    "login.sportBasketball": "Baloncesto",
+    "login.sportTennis": "Tenis"
+  }
+  

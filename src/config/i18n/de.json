@@ -1,0 +1,10 @@
+{
+  "login.title": "Anmeldung",
+  "login.userLabel": "Benutzer",
+  "login.passwordLabel": "Passwort",
+  "login.loginButton": "Anmelden",
+  "login.errorText": "Ungültiger Benutzername oder ungültiges Passwort",
+  "login.sportFootball": "Fußball",
+  "login.sportBasketball": "Basketball",
+  "login.sportTennis": "Tennis"
+}
