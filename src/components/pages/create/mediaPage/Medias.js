@@ -24,7 +24,9 @@ import { LoadingContext } from "../../../../contexts/Context";
 
 import DeleteMediaDialog from "../../../dialogs/DeleteMediaDialog";
 import { useTheme } from "@emotion/react";
+import { useTranslation } from "react-i18next";
 function Medias(props) {
+  const { t } = useTranslation(); // Utilisation de useTranslation
   const uploadService = UploadService();
   const theme = useTheme();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -128,173 +130,173 @@ function Medias(props) {
 
   return (
     <>
-      <Paper className="mainPaper">
-        <Stack className="headerSection">
-          <div className="headerItemLeft">
-            <IconButton className="header-button">
-              <ImageIcon sx={{ color: "primary.light" }} />
+    <Paper className="mainPaper">
+      <Stack className="headerSection">
+        <div className="headerItemLeft">
+          <IconButton className="header-button">
+            <ImageIcon sx={{ color: "primary.light" }} />
+          </IconButton>
+          <Typography variant="h6" className="headerTitle">
+            {t("media")}
+          </Typography>
+        </div>
+        <div className="headerItemRight">
+          <IconButton
+            className="header-button"
+            onClick={() => {
+              document.getElementById("inputFile").click();
+            }}
+          >
+            <AddIcon color="secondary" />
+          </IconButton>
+
+          <input
+            type="file"
+            id="inputFile"
+            style={{ display: "none" }}
+            onChange={goToCrop}
+          />
+        </div>
+      </Stack>
+      <Box className="container-medias">
+        <Droppable
+          droppableId={`${props.eventMedia[1].id}`}
+          isDropDisabled={true}
+        >
+          {(provided) => (
+            <div ref={provided.innerRef}>
+              {props.eventMedia[1].medias ? (
+                props.eventMedia[1].medias.length > 0 ? (
+                  <ImageList variant="masonry" cols={2} gap={8}>
+                    {props.eventMedia[1].medias.map((file, index) => (
+                      <ImageListItem key={file.id}>
+                        <Draggable
+                          disableInteractiveElementBlocking
+                          key={file.id}
+                          draggableId={file.id.toString()}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <React.Fragment>
+                              <div
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                ref={provided.innerRef}
+                                onTouchStart={() => handleTouchStart(file.id)}
+                                onTouchEnd={handleTouchEnd}
+                              >
+                                {file.type === "video" ? (
+                                  <div>
+                                    <video
+                                      onClick={() =>
+                                        handleImageClick(file.id)
+                                      }
+                                      alt={file.title}
+                                      className={`${
+                                        file.id === selectedImage
+                                          ? "image"
+                                          : "selected-image"
+                                      } media-size`}
+                                    >
+                                      <source
+                                        src={file.path}
+                                        type="video/mp4"
+                                      />
+                                    </video>
+                                    <PlayCircleFilledIcon className="playCircleFilledIcon" />
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <img
+                                      onClick={() =>
+                                        handleImageClick(file.id)
+                                      }
+                                      src={file.path}
+                                      alt={file.title}
+                                      className={`${
+                                        file.id === selectedImage
+                                          ? "image"
+                                          : "selected-image"
+                                      } media-size`}
+                                    />
+                                  </div>
+                                )}
+                                {file.id === selectedImage && (
+                                  <DeleteIcon
+                                    onClick={() => OpenDialogDelete(file)}
+                                    color="warning"
+                                    className="deleteIcon"
+                                  />
+                                )}
+                              </div>
+                            </React.Fragment>
+                          )}
+                        </Draggable>
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
+                ) : (
+                  <Box className="Info">
+                    <Typography variant="body1" color="text.secondary">
+                      {t("ajouterMedia")}
+                    </Typography>
+                  </Box>
+                )
+              ) : null}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </Box>
+    </Paper>
+    {/* Modal upload  */}
+    <Modal open={dialogUpload} onClose={displayDialogUpload}>
+      <Box
+        sx={{ backgroundColor: theme.palette.primary.main }}
+        className="modalBox"
+      >
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          spacing={2}
+        >
+          <div className="modalHeader">
+            <IconButton>
+              <UploadIcon
+                sx={{ color: "primary.light" }}
+                className="uploadIcon"
+              />
             </IconButton>
-            <Typography variant="h6" className="headerTitle">
-              Media
+            <Typography variant="h6" className="modalHeaderText">
+              {t("upload")}
             </Typography>
           </div>
-          <div className="headerItemRight">
-            <IconButton
-              className="header-button"
-              onClick={() => {
-                document.getElementById("inputFile").click();
-              }}
-            >
-              <AddIcon color="secondary" />
-            </IconButton>
 
-            <input
-              type="file"
-              id="inputFile"
-              style={{ display: "none" }}
-              onChange={goToCrop}
-            />
-          </div>
+          <IconButton onClick={displayDialogUpload}>
+            <CloseIcon color="secondary" />
+          </IconButton>
         </Stack>
-        <Box className="container-medias">
-          <Droppable
-            droppableId={`${props.eventMedia[1].id}`}
-            isDropDisabled={true}
-          >
-            {(provided) => (
-              <div ref={provided.innerRef}>
-                {props.eventMedia[1].medias ? (
-                  props.eventMedia[1].medias.length > 0 ? (
-                    <ImageList variant="masonry" cols={2} gap={8}>
-                      {props.eventMedia[1].medias.map((file, index) => (
-                        <ImageListItem key={file.id}>
-                          <Draggable
-                            disableInteractiveElementBlocking
-                            key={file.id}
-                            draggableId={file.id.toString()}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <React.Fragment>
-                                <div
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  ref={provided.innerRef}
-                                  onTouchStart={() => handleTouchStart(file.id)}
-                                  onTouchEnd={handleTouchEnd}
-                                >
-                                  {file.type === "video" ? (
-                                    <div>
-                                      <video
-                                        onClick={() =>
-                                          handleImageClick(file.id)
-                                        }
-                                        alt={file.title}
-                                        className={`${
-                                          file.id === selectedImage
-                                            ? "image"
-                                            : "selected-image"
-                                        } media-size`}
-                                      >
-                                        <source
-                                          src={file.path}
-                                          type="video/mp4"
-                                        />
-                                      </video>
-                                      <PlayCircleFilledIcon className="playCircleFilledIcon" />
-                                    </div>
-                                  ) : (
-                                    <div>
-                                      <img
-                                        onClick={() =>
-                                          handleImageClick(file.id)
-                                        }
-                                        src={file.path}
-                                        alt={file.title}
-                                        className={`${
-                                          file.id === selectedImage
-                                            ? "image"
-                                            : "selected-image"
-                                        } media-size`}
-                                      />
-                                    </div>
-                                  )}
-                                  {file.id === selectedImage && (
-                                    <DeleteIcon
-                                      onClick={() => OpenDialogDelete(file)}
-                                      color="warning"
-                                      className="deleteIcon"
-                                    />
-                                  )}
-                                </div>
-                              </React.Fragment>
-                            )}
-                          </Draggable>
-                        </ImageListItem>
-                      ))}
-                    </ImageList>
-                  ) : (
-                    <Box className="Info">
-                      <Typography variant="body1" color="text.secondary">
-                        Ajouter media "+"
-                      </Typography>
-                    </Box>
-                  )
-                ) : null}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </Box>
-      </Paper>
-      {/* Modal upload  */}
-      <Modal open={dialogUpload} onClose={displayDialogUpload}>
-        <Box
-          sx={{ backgroundColor: theme.palette.primary.main }}
-          className="modalBox"
-        >
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            spacing={2}
-          >
-            <div className="modalHeader">
-              <IconButton>
-                <UploadIcon
-                  sx={{ color: "primary.light" }}
-                  className="uploadIcon"
-                />
-              </IconButton>
-              <Typography variant="h6" className="modalHeaderText">
-                Upload
-              </Typography>
-            </div>
+        {imageToCrop ? (
+          <>
+            <Crop
+              imageToCrop={imageToCrop}
+              uploadMediaCroped={uploadMediaCroped}
+              mediaType={mediaType}
+            />
+          </>
+        ) : null}
+      </Box>
+    </Modal>
 
-            <IconButton onClick={displayDialogUpload}>
-              <CloseIcon color="secondary" />
-            </IconButton>
-          </Stack>
-          {imageToCrop ? (
-            <>
-              <Crop
-                imageToCrop={imageToCrop}
-                uploadMediaCroped={uploadMediaCroped}
-                mediaType={mediaType}
-              />
-            </>
-          ) : null}
-        </Box>
-      </Modal>
-
-      {/* Modal confirm suppression file */}
-      <DeleteMediaDialog
-        open={dialogDelete}
-        onClose={displayDialogDelete}
-        DeleteFile={DeleteFile}
-        displayDialogDelete={displayDialogDelete}
-      />
-    </>
+    {/* Modal confirm suppression file */}
+    <DeleteMediaDialog
+      open={dialogDelete}
+      onClose={displayDialogDelete}
+      DeleteFile={DeleteFile}
+      displayDialogDelete={displayDialogDelete}
+    />
+  </>
   );
 }
 

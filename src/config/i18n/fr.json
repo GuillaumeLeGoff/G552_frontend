@@ -1,10 +1,33 @@
 {
-  "login.title": "Connexion",
-  "login.userLabel": "Utilisateur",
-  "login.passwordLabel": "Mot de passe",
-  "login.loginButton": "Se connecter",
-  "login.errorText": "Nom d'utilisateur ou mot de passe incorrect",
-  "login.sportFootball": "Football",
-  "login.sportBasketball": "Basketball",
-  "login.sportTennis": "Tennis"
+  "loginTitle": "Connexion",
+  "usernameLabel": "Utilisateur",
+  "passwordLabel": "Mot de passe",
+  "football": "Football",
+  "basketball": "Basketball",
+  "tennis": "Tennis",
+  "loginButton": "Se connecter",
+  "loginErrorMessage": "Nom d'utilisateur ou mot de passe incorrect",
+  "eventListTitle": "Liste des Événements",
+  "eventListEmptyText": "Ajouter un événement '+'",
+  "diaporama": "Diaporama",
+  "deposezDesMediasIci": "Déposez des médias ici",
+  "media": "Média",
+  "ajouterMedia": "Ajouter média \"+\"",
+  "upload": "Upload",
+  "passwordMismatch": "Les mots de passe ne correspondent pas",
+  "changePassword": "Modifier le mot de passe",
+  "passwordChangeSuccess": "Le mot de passe a été modifié avec succès",
+  "newPassword": "Nouveau mot de passe",
+  "confirmNewPassword": "Confirmer le nouveau mot de passe",
+  "macro": {
+    "title": "Macro",
+    "number": "Numéro",
+    "event": "Événement",
+    "none": "Aucun"
+  },
+  "profile": {
+    "settingsOf": "Paramètres de",
+    "changePassword": "Modifier son mot de passe",
+    "darkMode": "Mode sombre"
+  }
 }

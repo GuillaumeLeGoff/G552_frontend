@@ -1,5 +1,4 @@
-import AuthService from "../../../services/authService";
-import "../../../styles/App.css";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -14,20 +13,24 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import React, { useState } from "react";
+import { useTranslation } from "react-i18next"; // Importez useTranslation depuis react-i18next
 import "./login.css";
+import AuthService from "../../../services/authService";
+import "../../../styles/App.css";
+
 function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const { t } = useTranslation(); // Utilisez useTranslation pour accéder aux traductions
 
   async function handleSubmit(e) {
     console.log(user, password);
-    e.preventDefault(); // Empêcher le comportement par défaut du formulaire
+    e.preventDefault();
     try {
       await AuthService.login(user, password);
     } catch (error) {
-      setError("Nom d'utilisateur ou mot de passe incorrect");
+      setError(t("loginErrorMessage")); // Utilisez la traduction pour le message d'erreur
     }
   }
 
@@ -38,7 +41,7 @@ function Login() {
           <div style={{ display: "flex", alignItems: "center" }}>
             <IconButton sx={{ ml: 2 }}></IconButton>
             <Typography className="title" variant="h6" color="primary.light">
-              Login
+              {t("loginTitle")} {/* Utilisez la traduction pour le titre */}
             </Typography>
           </div>
         </Stack>
@@ -50,41 +53,41 @@ function Login() {
           paddingX={5}
           pb={5}
         >
-        <form className="form" onSubmit={handleSubmit}>
-          <FormControl  className="form-control"  >
-            <InputLabel>Utilisateur</InputLabel>
-            <Select
-              label="Mot de passe"
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              required
-              fullWidth
-              margin="normal"
-            >
-              <MenuItem value="football">Football</MenuItem>
-              <MenuItem value="basketball">Basketball</MenuItem>
-              <MenuItem value="tennis">Tennis</MenuItem>
-            </Select>
+          <form className="form" onSubmit={handleSubmit}>
+            <FormControl className="form-control">
+              <InputLabel>{t("usernameLabel")}</InputLabel>
+              <Select
+                label={t("passwordLabel")} 
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
+                required
+                fullWidth
+                margin="normal"
+              >
+                <MenuItem value="football">{t("football")}</MenuItem>
+                <MenuItem value="basketball">{t("basketball")}</MenuItem>
+                <MenuItem value="tennis">{t("tennis")}</MenuItem>
+              </Select>
 
-            <TextField
-              className="text-field-mdp"
-              label="Mot de passe"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              fullWidth
-              margin="normal"
-            />
-            {error && (
-              <Typography variant="body2" color="error" align="center">
-                {error}
-              </Typography>
-            )}
-            <Button type="submit" variant="contained" color="secondary">
-              Se connecter
-            </Button>
-          </FormControl>
+              <TextField
+                className="text-field-mdp"
+                label={t("passwordLabel")}
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                fullWidth
+                margin="normal"
+              />
+              {error && (
+                <Typography variant="body2" color="error" align="center">
+                  {error}
+                </Typography>
+              )}
+              <Button type="submit" variant="contained" color="secondary">
+                {t("loginButton")} 
+              </Button>
+            </FormControl>
           </form>
         </Box>
       </Paper>

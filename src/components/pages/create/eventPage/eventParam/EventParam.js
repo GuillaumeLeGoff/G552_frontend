@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Droppable } from "react-beautiful-dnd";
+import { useTranslation } from "react-i18next"; // Import de useTranslation
 import {
   Box,
   IconButton,
@@ -32,6 +33,7 @@ import "./EventParam.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 function EventParam(props) {
+  const { t } = useTranslation(); // Utilisation de useTranslation
   const theme = useTheme();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -57,8 +59,8 @@ function EventParam(props) {
     var sortedMedias = "";
     if (props.eventMedia[0]?.medias.length > 0) {
       sortedMedias = props.eventMedia[0]?.medias.sort(
-      (a, b) => a.media_pos_in_event - b.media_pos_in_event
-    );
+        (a, b) => a.media_pos_in_event - b.media_pos_in_event
+      );
     }
 
     if (activeMediaIndex < sortedMedias.length) {
@@ -75,8 +77,7 @@ function EventParam(props) {
         return () => clearTimeout(timer);
       }
     }
-   
-  }, [ props.eventMedia, isAutoPlayEnabled]);
+  }, [props.eventMedia, isAutoPlayEnabled]);
 
   async function getMediasByID() {
     try {
@@ -181,7 +182,7 @@ function EventParam(props) {
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h7" className="headerTitle">
-              Event: {event.name}
+              {t("diaporama")}: {event.name}
             </Typography>
           </div>
           <div className="headerItemRight">
@@ -200,9 +201,7 @@ function EventParam(props) {
           </div>
         </Stack>
 
-        <TableContainer
-         className="tableContainer"
-        >
+        <TableContainer className="tableContainer">
           <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
             <Droppable droppableId={`${props.eventMedia[0].id}`}>
               {(provided, snapshot) => (
@@ -222,7 +221,7 @@ function EventParam(props) {
                   ) : (
                     <Box className="Info">
                       <Typography variant="body1" color="text.secondary">
-                        Drop medias here
+                        {t("deposezDesMediasIci")}
                       </Typography>
                     </Box>
                   )}
@@ -253,7 +252,7 @@ function EventParam(props) {
                 />
               </IconButton>
               <Typography variant="h6" className="modalHeaderText">
-                Diapo
+                {t("diaporama")}
               </Typography>
             </div>
 
@@ -267,18 +266,20 @@ function EventParam(props) {
                 <img
                   className="diapoImage"
                   src={currentMedia.path}
-                  alt={`Media ${activeMediaIndex}`}
+                  alt={`${t("media")} ${activeMediaIndex}`}
                 />
               ) : currentMedia.type === "video" ? (
                 <video src={currentMedia.path} controls />
               ) : null)}
-            <Box sx={{ textAlign: "center", marginTop: "16px" , display:"flex"}}>
+            <Box
+              sx={{ textAlign: "center", marginTop: "16px", display: "flex" }}
+            >
               <>
                 <IconButton onClick={handlePreviousSlide}>
-                  <NavigateBeforeIcon color="secondary"  />
+                  <NavigateBeforeIcon color="secondary" />
                 </IconButton>
-                <Typography p={1}variant="body2" color="text.secondary">
-                  Diapo {activeMediaIndex + 1} /{" "}
+                <Typography p={1} variant="body2" color="text.secondary">
+                  {t("diapo")} {activeMediaIndex + 1} /{" "}
                   {props.eventMedia[0].medias.length}
                 </Typography>
                 <IconButton onClick={handleNextSlide}>
@@ -290,12 +291,10 @@ function EventParam(props) {
                 {isAutoPlayEnabled ? (
                   <>
                     <PauseIcon color="secondary" />
-                    
                   </>
                 ) : (
                   <>
                     <PlayArrowIcon color="secondary" />
-                  
                   </>
                 )}
               </IconButton>
@@ -321,7 +320,7 @@ function EventParam(props) {
 }
 
 EventParam.propTypes = {
-  // PropTypes here
+  // PropTypes ici
 };
 
 export default EventParam;

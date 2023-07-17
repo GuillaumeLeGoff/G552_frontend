@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Paper,
   Stack,
@@ -14,13 +15,15 @@ import eventService from "../../../../../services/eventService";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PropTypes from "prop-types";
 
-import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next"; // Importez useTranslation depuis react-i18next
 import { Box } from "@mui/system";
 import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
 import AddEventDialog from "../../../../dialogs/AddEventDialog";
 import "./EventList.css";
 
 function EventList({ onEventClick }) {
+  const { t } = useTranslation(); // Utilisez useTranslation pour accéder aux traductions
+
   useEffect(() => {
     getEvent();
   }, []);
@@ -90,7 +93,7 @@ function EventList({ onEventClick }) {
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              Event
+              {t("eventListTitle")}
             </Typography>
           </div>
           <div className="headerItemRight">
@@ -144,7 +147,7 @@ function EventList({ onEventClick }) {
             ) : (
               <Box className="Info">
                 <Typography variant="body1" color="text.secondary">
-                  Ajouter event "+"
+                  {t("eventListEmptyText")}
                 </Typography>
               </Box>
             )
@@ -171,6 +174,7 @@ function EventList({ onEventClick }) {
     </div>
   );
 }
+
 EventList.propTypes = {
   onEventClick: PropTypes.func.isRequired,
 };

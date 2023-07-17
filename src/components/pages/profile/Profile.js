@@ -19,6 +19,7 @@ import authService from "../../../services/authService";
 import "./Profile.css";
 import paramService from "../../../services/paramService";
 import veilleService from "../../../services/veilleService";
+import LanguageSelector from "../../LanguageSelector";
 
 function Profile() {
   const [username, setUsername] = useState("John Doe");
@@ -168,6 +169,7 @@ function Profile() {
               <Button variant="contained" color="secondary">
                 test
               </Button>
+              <LanguageSelector />
               <Typography> Numéro de Stramatel : 0123456789</Typography>
             </Stack>
           </Box>

@@ -1,10 +1,33 @@
 {
-  "login.title": "Anmeldung",
-  "login.userLabel": "Benutzer",
-  "login.passwordLabel": "Passwort",
-  "login.loginButton": "Anmelden",
-  "login.errorText": "Ungültiger Benutzername oder ungültiges Passwort",
-  "login.sportFootball": "Fußball",
-  "login.sportBasketball": "Basketball",
-  "login.sportTennis": "Tennis"
+  "loginTitle": "Anmeldung",
+  "usernameLabel": "Benutzername",
+  "passwordLabel": "Passwort",
+  "football": "Fußball",
+  "basketball": "Basketball",
+  "tennis": "Tennis",
+  "loginButton": "Anmelden",
+  "loginErrorMessage": "Ungültiger Benutzername oder Passwort",
+  "eventListTitle": "Veranstaltungsliste",
+  "eventListEmptyText": "Fügen Sie eine Veranstaltung hinzu '+'",
+  "diaporama": "Slideshow",
+  "deposezDesMediasIci": "Platziere hier Ihre Medien",
+  "media": "Medien",
+  "ajouterMedia": "Medien hinzufügen \"+\"",
+  "upload": "Hochladen",
+  "passwordMismatch": "Die Passwörter stimmen nicht überein",
+  "changePassword": "Passwort ändern",
+  "passwordChangeSuccess": "Das Passwort wurde erfolgreich geändert",
+  "newPassword": "Neues Passwort",
+  "confirmNewPassword": "Neues Passwort bestätigen",
+  "macro": {
+    "title": "Makro",
+    "number": "Nummer",
+    "event": "Ereignis",
+    "none": "Keine"
+  },
+  "profile": {
+    "settingsOf": "Einstellungen von",
+    "changePassword": "Passwort ändern",
+    "darkMode": "Dunkler Modus"
+  }
 }

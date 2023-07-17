@@ -12,8 +12,10 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AuthService from "../../../services/authService";
+import { useTranslation } from "react-i18next"; // Import de useTranslation
 
 function ChangePassword() {
+  const { t } = useTranslation(); // Utilisation de useTranslation
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
@@ -24,7 +26,7 @@ function ChangePassword() {
 
     // Vérifier si les mots de passe correspondent
     if (newPassword !== confirmPassword) {
-      setError("Les mots de passe ne correspondent pas");
+      setError(t("passwordMismatch")); // Utilisation de la traduction
       return;
     }
 
@@ -43,6 +45,7 @@ function ChangePassword() {
         setError(error.response.data.message);
       });
   }
+
   function disconnect() {
     AuthService.logout();
     window.location.reload();
@@ -57,7 +60,7 @@ function ChangePassword() {
               <CloseIcon color="secondary" />
             </IconButton>
             <Typography variant="h6" color="primary.light" className="title">
-              Modifier le mot de passe
+              {t("changePassword")} 
             </Typography>
           </div>
         </Stack>
@@ -70,13 +73,13 @@ function ChangePassword() {
         >
           {success ? (
             <Typography variant="body1" color="success.main" align="center">
-              Le mot de passe a été modifié avec succès.
+              {t("passwordChangeSuccess")} 
             </Typography>
           ) : (
             <form className="form" onSubmit={handleSubmit}>
               <FormControl className="form-control">
                 <TextField
-                  label="Nouveau mot de passe"
+                  label={t("newPassword")} 
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
@@ -85,7 +88,7 @@ function ChangePassword() {
                 />
                 <TextField
                   className="text-field-mdp"
-                  label="Confirmer le nouveau mot de passe"
+                  label={t("confirmNewPassword")} 
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -98,7 +101,7 @@ function ChangePassword() {
                   </Typography>
                 )}
                 <Button type="submit" variant="contained" color="secondary">
-                  Modifier le mot de passe
+                  {t("changePassword")} {/* Utilisation de la traduction */}
                 </Button>
               </FormControl>
             </form>

@@ -24,7 +24,7 @@ function Header() {
           style={{ width: "200px", height: "auto" }}
         />
       </Toolbar>
-      <LanguageSelector />
+      
     </AppBar>
   );
 }

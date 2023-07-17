@@ -1,11 +1,33 @@
 {
-    "login.title": "Inicio de sesión",
-    "login.userLabel": "Usuario",
-    "login.passwordLabel": "Contraseña",
-    "login.loginButton": "Iniciar sesión",
-    "login.errorText": "Usuario o contraseña incorrectos",
-    "login.sportFootball": "Fútbol",
-    "login.sportBasketball": "Baloncesto",
-    "login.sportTennis": "Tenis"
+  "loginTitle": "Login",
+  "usernameLabel": "Username",
+  "passwordLabel": "Password",
+  "football": "Football",
+  "basketball": "Basketball",
+  "tennis": "Tennis",
+  "loginButton": "Log In",
+  "loginErrorMessage": "Invalid username or password",
+  "eventListTitle": "Event List",
+  "eventListEmptyText": "Add an event '+'", 
+  "diaporama": "Slideshow",
+  "deposezDesMediasIci": "Drop your media here",
+  "media": "Media",
+  "ajouterMedia": "Add Media \"+\"",
+  "upload": "Upload",
+  "passwordMismatch": "Passwords do not match",
+  "changePassword": "Change Password",
+  "passwordChangeSuccess": "Password has been changed successfully",
+  "newPassword": "New Password",
+  "confirmNewPassword": "Confirm New Password",
+  "macro": {
+    "title": "Macro",
+    "number": "Number",
+    "event": "Event",
+    "none": "None"
+  },
+  "profile": {
+    "settingsOf": "Settings of",
+    "changePassword": "Change Password",
+    "darkMode": "Dark Mode"
   }
-  
+}

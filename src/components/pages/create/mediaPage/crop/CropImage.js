@@ -2,9 +2,11 @@ import React, { useState, useCallback } from "react";
 import Cropper from "react-easy-crop";
 import { Button } from "@mui/material";
 import { useTheme } from "@emotion/react";
+import { useTranslation } from "react-i18next"; // Import de useTranslation
 
 function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
   const theme = useTheme();
+  const { t } = useTranslation(); // Utilisation de useTranslation
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -95,7 +97,7 @@ function Crop({ imageToCrop, uploadMediaCroped, mediaType }) {
           onClick={handleUpload}
           style={{ marginTop: "16px" }}
         >
-          Upload
+          {t("upload")} {/* Utilisation de la traduction */}
         </Button>
       </div>
     </div>

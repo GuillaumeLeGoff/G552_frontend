@@ -15,12 +15,14 @@ import {
   Typography,
 } from "@mui/material";
 import KeyboardIcon from "@mui/icons-material/Keyboard";
+import { useTranslation } from "react-i18next"; // Importer useTranslation depuis react-i18next
 import eventService from "../../../services/eventService";
 import macroService from "../../../services/macroService";
 import "./Macro.css";
-function Macro() {
-  const [macros, setMacros] = useState(null);
 
+function Macro() {
+  const { t } = useTranslation(); // Utiliser le hook useTranslation pour la traduction
+  const [macros, setMacros] = useState(null);
   const [events, setEvents] = useState([]);
 
   useEffect(() => {
@@ -33,16 +35,17 @@ function Macro() {
       setEvents(result.data);
     });
   }
+
   function getMacro() {
     macroService.getById().then((result) => {
       const sortedData = result.data.sort((a, b) => a.button_id - b.button_id);
       const updatedData = sortedData.map((macro) => {
         return { ...macro, event_id: macro.event_id || 0 };
       });
-
       setMacros(updatedData);
     });
   }
+
   function updateMacro(macro) {
     if (macro.event_id === "choisir event") {
       macro.event_id = null;
@@ -59,7 +62,7 @@ function Macro() {
               <KeyboardIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              Macro
+              {t("macro.title")} {/* Utiliser t("clé de traduction") pour traduire le titre */}
             </Typography>
           </div>
         </Stack>
@@ -67,9 +70,9 @@ function Macro() {
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
-                <TableCell>Numéro</TableCell>
+                <TableCell>{t("macro.number")}</TableCell> {/* Traduire l'en-tête du numéro */}
                 <TableCell className="tableCellRight" align="right">
-                  Event
+                  {t("macro.event")} {/* Traduire l'en-tête de l'événement */}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -97,7 +100,7 @@ function Macro() {
                             setMacros(updatedData);
                           }}
                         >
-                          <MenuItem value="choisir event">none</MenuItem>
+                          <MenuItem value="choisir event">{t("macro.none")}</MenuItem> {/* Traduire l'option "aucun" */}
                           {events.map((event) => (
                             <MenuItem key={event.id} value={event.id}>
                               {event.name}

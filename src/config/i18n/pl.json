@@ -1,10 +1,33 @@
 {
-  "login.title": "Logowanie",
-  "login.userLabel": "Użytkownik",
-  "login.passwordLabel": "Hasło",
-  "login.loginButton": "Zaloguj się",
-  "login.errorText": "Nieprawidłowy użytkownik lub hasło",
-  "login.sportFootball": "Piłka nożna",
-  "login.sportBasketball": "Koszykówka",
-  "login.sportTennis": "Tenis"
+  "loginTitle": "Logowanie",
+  "usernameLabel": "Użytkownik",
+  "passwordLabel": "Hasło",
+  "football": "Piłka nożna",
+  "basketball": "Koszykówka",
+  "tennis": "Tenis",
+  "loginButton": "Zaloguj się",
+  "loginErrorMessage": "Nieprawidłowa nazwa użytkownika lub hasło",
+  "eventListTitle": "Lista Wydarzeń",
+  "eventListEmptyText": "Dodaj wydarzenie '+'",
+  "diaporama": "Pokaz slajdów",
+  "deposezDesMediasIci": "Upuść media tutaj",
+  "media": "Media",
+  "ajouterMedia": "Dodaj media \"+\"",
+  "upload": "Prześlij",
+  "passwordMismatch": "Hasła nie są zgodne",
+  "changePassword": "Zmień hasło",
+  "passwordChangeSuccess": "Hasło zostało pomyślnie zmienione",
+  "newPassword": "Nowe hasło",
+  "confirmNewPassword": "Potwierdź nowe hasło",
+  "macro": {
+    "title": "Makro",
+    "number": "Numer",
+    "event": "Wydarzenie",
+    "none": "Wybierz wydarzenie"
+  },
+  "profile": {
+    "settingsOf": "Ustawienia",
+    "changePassword": "Zmień hasło",
+    "darkMode": "Tryb ciemny"
+  }
 }
