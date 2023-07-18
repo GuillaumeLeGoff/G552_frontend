@@ -21,6 +21,7 @@ import "./Scoreboard.css";
 import ScoreService from "../../../services/scoreService";
 import { io } from "socket.io-client";
 import TimerPickerDialog from "../../dialogs/TimerPickerDialog";
+import modeServiceInstance from "../../../services/modeService";
 
 function ScoreboardPage() {
   const theme = useTheme();
@@ -242,6 +243,12 @@ function ScoreboardPage() {
     );
   };
 
+  function playScoring() {
+    const mode = { mode: "scoring", eventId: null };
+    modeServiceInstance.setMode(mode);
+  }
+
+
   return (
     <>
       <Grid item xs={12}>
@@ -263,6 +270,9 @@ function ScoreboardPage() {
               >
                 <RestartAltIcon color="secondary" />
               </IconButton>
+              <IconButton className="header-button">
+                <PlayArrowIcon onClick={playScoring} color="secondary" />
+            </IconButton>
             </div>
           </Stack>
           <Box className="mainContainer">

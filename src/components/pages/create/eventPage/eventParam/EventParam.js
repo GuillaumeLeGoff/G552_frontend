@@ -31,6 +31,7 @@ import DeleteMediaEventDialog from "../../../../dialogs/DeleteMediaEventDialog";
 import Media from "../eventMedia/EventMedia";
 import "./EventParam.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import modeServiceInstance from "../../../../../services/modeService";
 
 function EventParam(props) {
   const { t } = useTranslation(); // Utilisation de useTranslation
@@ -55,7 +56,6 @@ function EventParam(props) {
   }, []);
 
   useEffect(() => {
-    console.log("activeMediaIndex");
     var sortedMedias = "";
     if (props.eventMedia[0]?.medias.length > 0) {
       sortedMedias = props.eventMedia[0]?.medias.sort(
@@ -164,6 +164,11 @@ function EventParam(props) {
     props.closeEvent();
   }
 
+  function playDiapo() {
+    const mode = { mode: "diaporama", eventId: event.id };
+    modeServiceInstance.setMode(mode);
+  }
+
   return (
     <div>
       <Paper className="mainPaper">
@@ -196,7 +201,7 @@ function EventParam(props) {
               <SlideshowIcon color="secondary" />
             </IconButton>
             <IconButton className="header-button">
-              <PlayArrowIcon color="secondary" />
+              <PlayArrowIcon onClick={playDiapo} color="secondary" />
             </IconButton>
           </div>
         </Stack>
