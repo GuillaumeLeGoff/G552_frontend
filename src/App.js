@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, ThemeProvider } from "@mui/material";
 import LoadingScreen from "./components/LoadingScreen";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -35,7 +35,9 @@ function App() {
     setLoading: setLoading,
     setProgress: setProgress,
   };
-
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
   const theme = darkMode ? darkTheme : clairTheme;
 
   return (

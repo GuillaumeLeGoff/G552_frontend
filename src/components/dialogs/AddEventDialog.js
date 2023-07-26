@@ -17,7 +17,7 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
           fullWidth
           id="standard-basic"
           label="Nom de l'événement"
-          autocomplete="off"
+          autoComplete="off"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />

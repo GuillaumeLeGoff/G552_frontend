@@ -23,18 +23,21 @@ function ChangePassword() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    const user = JSON.parse(localStorage.getItem("user"));
+    
     // Vérifier si les mots de passe correspondent
     if (newPassword !== confirmPassword) {
       setError(t("passwordMismatch")); // Utilisation de la traduction
       return;
     }
+    AuthService.updateFirstLogin(user.user.id)
 
     // Appeler le service d'authentification pour changer le mot de passe
-    AuthService.changePassword(newPassword)
+    /* AuthService.changePassword(newPassword)
       .then(() => {
-        // Met à jour la valeur 'firstLogin' dans le localStorage
-        const user = JSON.parse(localStorage.getItem("user"));
+       
+
+            AuthService.updateFirstLogin(user.user.id)
         user.user.firstLogin = 0;
         localStorage.setItem("user", JSON.stringify(user));
         setSuccess(true);
@@ -43,7 +46,7 @@ function ChangePassword() {
       })
       .catch((error) => {
         setError(error.response.data.message);
-      });
+      }); */
   }
 
   function disconnect() {
