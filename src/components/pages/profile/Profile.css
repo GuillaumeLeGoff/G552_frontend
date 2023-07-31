@@ -5,8 +5,15 @@
   justify-content: space-between !important;
 }
 .profileContainer {
+  min-height: calc(94vh - 200px);
+  max-height: calc(94vh - 200px);
+  overflow-y: scroll;
+  overflow: auto;
   padding: 1% 8% 0 8% !important;
-  margin: 0 18vw 0 18vw !important;
+ /*  margin: 0 10vw 0 10vw !important; */
+}
+.titleParam {
+  margin-bottom: 20px !important;
 }
 
 .passwordContainer{
@@ -28,3 +35,7 @@ align-items: center;
 
   margin: 0 0 0 0 !important;
 }}
+
+.divider{
+  margin: 1rem 20px 1rem 20px !important;
+}

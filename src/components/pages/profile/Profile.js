@@ -11,6 +11,7 @@ import {
   Slider,
   LinearProgress,
   Button,
+  Divider,
 } from "@mui/material";
 import "../../../styles/Global.css";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -105,73 +106,89 @@ function Profile() {
             </div>
           </Stack>
           <Box className="profileContainer">
-            <Stack spacing={2}>
-              <Stack direction="column" spacing={1}>
-                <Button
-                  onClick={toggleModal}
-                  variant="contained"
-                  color="secondary"
-                >
-                  Modifier son mot de passe
-                </Button>
-              </Stack>
-              <Stack className="switchContainer">
-                <Typography>Mode sombre</Typography>
-                <Switch
-                  checked={darkMode}
-                  onChange={setIsDarkMode}
-                  color="secondary"
-                />
-              </Stack>
-              <Stack className="switchContainer">
-                <Typography>Event auto</Typography>
-                <Switch
-                  color="secondary"
-                  checked={param.event_auto === 1}
-                  onChange={handleEventAutoChange}
-                />
-              </Stack>
-              <Stack className="switchContainer">
-                <Typography>Mise en veille automatique</Typography>
-                <Switch
-                  color="secondary"
-                  checked={veille.enable === 1}
-                  onChange={handleVeilleChange}
-                />
-              </Stack>
-              <Stack className="switchContainer">
-                <Slider
-                  color="secondary"
-                  value={[veille.start_time, veille.end_time]}
-                  min={0}
-                  max={24}
-                  step={1}
-                  marks={[
-                    { value: 0, label: "0h" },
-                    { value: 6, label: "6h" },
-                    { value: 12, label: "12h" },
-                    { value: 18, label: "18h" },
-                    { value: 24, label: "24h" },
-                  ]}
-                  valueLabelDisplay="auto"
-                  onChange={handleSliderChange}
-                  disabled={veille.enable === 0}
-                />
-              </Stack>
-              <Stack className="switchContainer">
-                <Typography>Espace de stockage utilisé</Typography>
-              </Stack>
-              <LinearProgress
-                variant="determinate"
-                value={percentage}
-                color={percentage > 80 ? "error" : "secondary"}
+            <Grid direction="row" justifyContent="center" container>
+              <Grid item xs={12} md={5}>
+                <Typography className="titleParam" variant="h6">Paramètres du compte</Typography>
+                <Stack spacing={2}>
+                  <Stack direction="column" spacing={1}>
+                    <Button
+                      onClick={toggleModal}
+                      variant="contained"
+                      color="secondary"
+                    >
+                      Modifier son mot de passe
+                    </Button>
+                  </Stack>
+                  <Stack className="switchContainer">
+                    <Typography>Mode sombre</Typography>
+                    <Switch
+                      checked={darkMode}
+                      onChange={setIsDarkMode}
+                      color="secondary"
+                    />
+                  </Stack>
+                  <Stack className="switchContainer">
+                    <Typography>Espace de stockage utilisé</Typography>
+                  </Stack>
+                  <LinearProgress
+                    variant="determinate"
+                    value={percentage}
+                    color={percentage > 80 ? "error" : "secondary"}
+                  />
+                  <Button variant="contained" color="secondary">
+                    test
+                  </Button>
+                  <LanguageSelector />
+                  <Typography> Numéro de Stramatel : 0123456789</Typography>
+                </Stack>
+              </Grid>
+              <Divider
+                className="divider"
+                orientation="vertical"
+                flexItem
+                md={2}
               />
-              <Button variant="contained" color="secondary">
-                test
-              </Button>
-              <LanguageSelector />
-              <Typography> Numéro de Stramatel : 0123456789</Typography>
-            </Stack>
+              <Grid item xs={12} md={5}>
+                <Typography  className="titleParam" variant="h6">Paramètres principaux</Typography>
+                <Stack spacing={2}>
+                  <Stack className="switchContainer">
+                    <Typography>Event auto</Typography>
+                    <Switch
+                      color="secondary"
+                      checked={param.event_auto === 1}
+                      onChange={handleEventAutoChange}
+                    />
+                  </Stack>
+                  <Stack className="switchContainer">
+                    <Typography>Mise en veille automatique</Typography>
+                    <Switch
+                      color="secondary"
+                      checked={veille.enable === 1}
+                      onChange={handleVeilleChange}
+                    />
+                  </Stack>
+                  <Stack className="switchContainer">
+                    <Slider
+                      color="secondary"
+                      value={[veille.start_time, veille.end_time]}
+                      min={0}
+                      max={24}
+                      step={1}
+                      marks={[
+                        { value: 0, label: "0h" },
+                        { value: 6, label: "6h" },
+                        { value: 12, label: "12h" },
+                        { value: 18, label: "18h" },
+                        { value: 24, label: "24h" },
+                      ]}
+                      valueLabelDisplay="auto"
+                      onChange={handleSliderChange}
+                      disabled={veille.enable === 0}
+                    />
+                  </Stack>
+                </Stack>
+              </Grid>
+            </Grid>
           </Box>
         </Paper>
       </Grid>
