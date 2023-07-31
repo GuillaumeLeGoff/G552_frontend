@@ -36,7 +36,7 @@ function ScoreboardPage() {
   const [timerValue, setTimerValue] = useState(0);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const socket = io("ws://localhost:8080/ws/desk");
+  /* const socket = io("ws://localhost:8080/ws/desk"); */
 
   useEffect(() => {
     async function fetchInitialScore() {
@@ -64,7 +64,7 @@ function ScoreboardPage() {
     fetchInitialScore();
   }, []);
 
-  useEffect(() => {
+  /* useEffect(() => {
     socket.on("timerUpdate", (value) => {
       setTimerValue(value);
     });
@@ -84,7 +84,7 @@ function ScoreboardPage() {
     return () => {
       socket.off("timerValue");
     };
-  }, [socket]);
+  }, [socket]); */
 
   const formatTime = (timeInSeconds) => {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -103,11 +103,11 @@ function ScoreboardPage() {
   };
 
   const startTimer = () => {
-    socket.emit("startTimer");
+   /*  socket.emit("startTimer"); */
   };
 
   const stopTimer = () => {
-    socket.emit("stopTimer");
+   /*  socket.emit("stopTimer"); */
   };
 
   const incrementScore = (team, add) => {
@@ -207,7 +207,7 @@ function ScoreboardPage() {
   };
 
   const setTimer = (timerValue) => {
-    socket.emit("timerUpdate", timerValue);
+ /*    socket.emit("timerUpdate", timerValue); */
     setTimerValue(timerValue);
   };
 

@@ -23,6 +23,8 @@ import { clairTheme } from "./themes/clairTheme.ts";
 import ChangePassword from "./components/pages/login/ChangePassword";
 import ScoreboardPage from "./components/pages/scoreboard/ScoreboardPage";
 import Header from "./components/Header";
+import ParamTennis from "./components/pages/scoreboard/TennisScoreboard/ParamTennis";
+import TennisScoreboard from "./components/pages/scoreboard/TennisScoreboard/ScoreboardTennis";
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
@@ -102,7 +104,8 @@ function App() {
                   <Routes>
                     {/* Autres routes */}
                     <Route path="*" element={<Navigate to="/login" />} />
-                    <Route path="login" element={<Login />} />
+                    {/* <Route path="login" element={<Login />} /> */}
+                    <Route path="login" element={<TennisScoreboard />} />
                   </Routes>
                 </Grid>
               )}
