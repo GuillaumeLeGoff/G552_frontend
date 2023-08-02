@@ -104,8 +104,8 @@ function App() {
                   <Routes>
                     {/* Autres routes */}
                     <Route path="*" element={<Navigate to="/login" />} />
-                    {/* <Route path="login" element={<Login />} /> */}
-                    <Route path="login" element={<TennisScoreboard />} />
+                    <Route path="login" element={<Login />} />
+                  {/*   <Route path="login" element={<TennisScoreboard />} /> */}
                   </Routes>
                 </Grid>
               )}
