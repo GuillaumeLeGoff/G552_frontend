@@ -13,6 +13,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import AuthService from "../../../services/authService";
 import { useTranslation } from "react-i18next"; // Import de useTranslation
+import "./login.css";
 
 function ChangePassword() {
   const { t } = useTranslation(); // Utilisation de useTranslation
@@ -23,18 +24,19 @@ function ChangePassword() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    const user = JSON.parse(localStorage.getItem("user"));
     // Vérifier si les mots de passe correspondent
     if (newPassword !== confirmPassword) {
       setError(t("passwordMismatch")); // Utilisation de la traduction
       return;
-    }
 
-    // Appeler le service d'authentification pour changer le mot de passe
+    }
+console.log(user.user);
+
     AuthService.changePassword(newPassword)
       .then(() => {
-        // Met à jour la valeur 'firstLogin' dans le localStorage
-        const user = JSON.parse(localStorage.getItem("user"));
+        
+        
         user.user.firstLogin = 0;
         localStorage.setItem("user", JSON.stringify(user));
         setSuccess(true);
@@ -79,6 +81,7 @@ function ChangePassword() {
             <form className="form" onSubmit={handleSubmit}>
               <FormControl className="form-control">
                 <TextField
+                className="text-field-mdp"
                   label={t("newPassword")} 
                   type="password"
                   value={newPassword}
