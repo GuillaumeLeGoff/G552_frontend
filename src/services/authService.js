@@ -5,6 +5,7 @@ import Config from "../config/config.json";
 const SERVER_URL = Config.SERVER_URL;
 const SIGN_IN_URL = "/auth/signin";
 const SIGN_UP_URL = "/auth/signup";
+const UPDATE_FIRST_LOGIN = "/auth/updateFirstLogin";
 const USER_URL = "/users";
 const CHANGE_PASSWORD_URL = "/auth/modifyPassword";
 
@@ -21,7 +22,6 @@ class AuthService {
       });
 
       if (response.data.accessToken) {
-       
         localStorage.setItem("user", JSON.stringify(response.data));
         this.currentUser = response.data;
         window.location.reload();
@@ -71,11 +71,10 @@ class AuthService {
     }
   }
   updateAccessToken(newToken) {
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem("user"));
     user.accessToken = newToken;
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem("user", JSON.stringify(user));
   }
-
 
   async changePassword(newPassword) {
     try {
@@ -98,6 +97,17 @@ class AuthService {
 
   getCurrentUser() {
     return JSON.parse(localStorage.getItem("user"));
+  }
+  async updateFirstLogin(id) {
+    try {
+      const response = await axios.post(
+        `${SERVER_URL}${UPDATE_FIRST_LOGIN}/${id}`
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log("Error during firstLogin:", error);
+    }
   }
 }
 

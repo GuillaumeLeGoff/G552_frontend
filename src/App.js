@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, ThemeProvider } from "@mui/material";
 import LoadingScreen from "./components/LoadingScreen";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -23,6 +23,8 @@ import { clairTheme } from "./themes/clairTheme.ts";
 import ChangePassword from "./components/pages/login/ChangePassword";
 import ScoreboardPage from "./components/pages/scoreboard/ScoreboardPage";
 import Header from "./components/Header";
+import ParamTennis from "./components/pages/scoreboard/TennisScoreboard/ParamTennis";
+import TennisScoreboard from "./components/pages/scoreboard/TennisScoreboard/ScoreboardTennis";
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
@@ -35,7 +37,9 @@ function App() {
     setLoading: setLoading,
     setProgress: setProgress,
   };
-
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
   const theme = darkMode ? darkTheme : clairTheme;
 
   return (
@@ -100,7 +104,8 @@ function App() {
                   <Routes>
                     {/* Autres routes */}
                     <Route path="*" element={<Navigate to="/login" />} />
-                    <Route path="login" element={<Login />} />
+                    {/* <Route path="login" element={<Login />} /> */}
+                    <Route path="login" element={<TennisScoreboard />} />
                   </Routes>
                 </Grid>
               )}
