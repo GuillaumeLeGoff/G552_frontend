@@ -11,7 +11,6 @@ import {
 function DisconnectDialog({ open, onClose, logout }) {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Confirmer la suppression</DialogTitle>
       <DialogContent>
         <DialogContentText>
           Voulez-vous vraiment vous déconnecter ?
