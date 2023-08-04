@@ -25,6 +25,7 @@ import ScoreboardPage from "./components/pages/scoreboard/ScoreboardPage";
 import Header from "./components/Header";
 import ParamTennis from "./components/pages/scoreboard/TennisScoreboard/ParamTennis";
 import TennisScoreboard from "./components/pages/scoreboard/TennisScoreboard/ScoreboardTennis";
+import Scoreboard from "./components/pages/scoreboard/Scoreboard";
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
@@ -89,7 +90,7 @@ function App() {
                     <Route path="create/:id" element={<Create />} />
                     <Route path="macro" element={<Macro />} />
                     <Route path="profile" element={<Profile />} />
-                    <Route path="scoreboard" element={<ScoreboardPage />} />
+                    <Route path="scoreboard" element={<Scoreboard />} />
                   </Routes>
                 </Grid>
               ) : (

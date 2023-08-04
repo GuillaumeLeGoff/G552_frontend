@@ -22,28 +22,26 @@ function ParamTennis({ open, onCloseModal }) {
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
   const [numOfSets, setNumOfSets] = useState("");
-  const [gamesPerSet, setGamesPerSet] = useState("");
-  const [lastSetType, setLastSetType] = useState("");
+
+  const [setType, setSetType] = useState("");
   const [decidingPoint, setDecidingPoint] = useState(false);
   const [tieBreak, setTieBreak] = useState(false);
   const [tieBreakInFinalSet, setTieBreakInFinalSet] = useState(false);
 
   useEffect(() => {
     scoringTennisService.getAll().then((res) => {
+      console.log(res);
       const data = res.data[0];
       console.log(data);
       setPlayer1(data.player1_name);
       setPlayer2(data.player2_name);
       setNumOfSets(data.number_of_sets);
-      setGamesPerSet(data.games_per_set);
-      setLastSetType(data.last_set_type);
+      setSetType(data.set_type);
       setDecidingPoint(data.deciding_point === 1 ? true : false);
       setTieBreak(data.tie_break === 1 ? true : false);
       setTieBreakInFinalSet(data.tie_break_in_final_set === 1 ? true : false);
     });
   }, []);
-
-    
 
   const handleStartClick = () => {
     const decidingPointConvert = decidingPoint ? 1 : 0;
@@ -53,8 +51,8 @@ function ParamTennis({ open, onCloseModal }) {
       player1,
       player2,
       numOfSets,
-      gamesPerSet,
-      lastSetType,
+
+      setType,
       decidingPointConvert,
       tieBreakConvert,
       tieBreakInFinalSetConvert,
@@ -126,30 +124,10 @@ function ParamTennis({ open, onCloseModal }) {
                 </FormControl>
               </Grid>
             </Grid>
-            <Grid
-              className="Param"
-              container
-              direction="row"
-              alignItems="center"
-            >
-              <Grid item xs={6}>
-                <Typography>Jeux par set</Typography>
-              </Grid>
-
-              <Grid item xs={6}>
-                <FormControl fullWidth>
-                  <Select
-                    value={gamesPerSet}
-                    onChange={(e) => setGamesPerSet(e.target.value)}
-                  >
-                    <MenuItem value={6}>6</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+           
           </Grid>
 
-          <Divider className="divider" orientation="vertical" flexItem md={2} />
+          {/* <Divider className="divider" orientation="vertical" flexItem md={2} />
 
           <Grid item xs={12} md={5}>
             <Grid
@@ -164,13 +142,14 @@ function ParamTennis({ open, onCloseModal }) {
               <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Select
-                    value={lastSetType}
-                    onChange={(e) => setLastSetType(e.target.value)}
+                    value={setType}
+                    onChange={(e) => setSetType(e.target.value)}
                   >
-                    <MenuItem value={"normal"}>Normal (7 points)</MenuItem>
-                    <MenuItem value={"tieBreak"}>
-                      Tie-Break (10 points)
-                    </MenuItem>
+                    <MenuItem value={0}>Normal </MenuItem>
+                    <MenuItem value={7}>(7 points)</MenuItem>
+                    <MenuItem value={10}>Tie-Break (10 points)</MenuItem>
+
+                    
                   </Select>
                 </FormControl>
               </Grid>
@@ -242,7 +221,7 @@ function ParamTennis({ open, onCloseModal }) {
                 />
               </Grid>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
         <DialogActions>
           <Button
