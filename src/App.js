@@ -11,6 +11,7 @@ import Macro from "./components/pages/macro/Macro";
 import Profile from "./components/pages/profile/Profile";
 import Navbar from "./components/NavBar";
 
+
 import { LoadingContext } from "./contexts/Context";
 
 import AuthService from "./services/authService";

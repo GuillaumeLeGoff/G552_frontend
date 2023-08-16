@@ -35,3 +35,8 @@ export const darkTheme = createTheme({
         },
       }, 
 });
+
+document.documentElement.style.setProperty('--primary-main', darkTheme.palette.primary.main);
+document.documentElement.style.setProperty('--secondary-main', darkTheme.palette.secondary.main);
+document.documentElement.style.setProperty('--background-default', darkTheme.palette.background.default);
+document.documentElement.style.setProperty('--text-primary', darkTheme.palette.text.primary);
