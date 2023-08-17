@@ -17,19 +17,45 @@ import { useTranslation } from "react-i18next"; // Importez useTranslation depui
 import "./login.css";
 import AuthService from "../../../services/authService";
 import "../../../styles/App.css";
+import UserConectedDialog from "../../dialogs/UserConectedDialog";
+import ActiveSessionsService from "../../../services/activeSessionsService";
 
 function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [userConectedDialog, setUserConectedDialog] = useState(false);
   const { t } = useTranslation(); // Utilisez useTranslation pour accéder aux traductions
+
+  function deleteUserConected() {
+    console.log("deleteUserConected");
+    ActiveSessionsService.deleteCurrentUser();
+    closeuserConectedDialog();
+  }
+
+
+  function userConectedDialogOpen() {
+    setUserConectedDialog(true);
+
+  }
+
+  function closeuserConectedDialog() {
+    setUserConectedDialog(false);
+   
+  }
 
   async function handleSubmit(e) {
     console.log(user, password);
     e.preventDefault();
     try {
-      await AuthService.login(user, password);
+      await AuthService.login(user, password).then((response) => {
+       
+        if (response.userConected && response.userConected === true) {
+          userConectedDialogOpen();
+        }
+      });
     } catch (error) {
+   
       setError(t("loginErrorMessage")); // Utilisez la traduction pour le message d'erreur
     }
   }
@@ -91,6 +117,11 @@ function Login() {
           </form>
         </Box>
       </Paper>
+      <UserConectedDialog
+        open={userConectedDialog}
+        onClose={closeuserConectedDialog}
+        userDisconet={deleteUserConected}
+      />
     </Grid>
   );
 }

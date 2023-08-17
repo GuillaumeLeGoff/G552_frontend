@@ -3,28 +3,29 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
+  DialogTitle,
   Button,
+  DialogContentText,
 } from "@mui/material";
 
-function DisconnectDialog({ open, onClose, logout }) {
+
+function UserConectedDialog({ open, onClose, userDisconet }) {
   return (
     <Dialog open={open} onClose={onClose}>
+      <DialogTitle>Utilisateur deja connecter</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Voulez-vous vraiment vous déconnecter ?
-        </DialogContentText>
+        <DialogContentText>Voulez-vous le déconnecter ?</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">
-          Annuler
+          Non
         </Button>
-        <Button onClick={logout} color="secondary">
-          Déconnexion
+        <Button onClick={userDisconet} color="secondary">
+          Oui
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-export default DisconnectDialog;
+export default UserConectedDialog;
