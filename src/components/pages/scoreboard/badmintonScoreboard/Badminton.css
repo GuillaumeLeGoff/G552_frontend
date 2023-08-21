@@ -1,12 +1,11 @@
 .mainBox {
-  padding: 2vw !important;
+  padding: 0 2vw 2vw 2vw !important;
 }
 
 .gridItem {
   display: flex !important;
-  justify-content: center !important;
+  justify-content: space-around !important;
   flex-direction: column !important;
-  width: 100%; 
   gap: 1vw !important;
   padding-right: 2vw !important;
 }
@@ -20,6 +19,11 @@
   width: 100%;
 }
 
+.buttonEdit {
+  height: 10vh;
+  width: 100%;
+}
+
 .itemPaperColor {
   background-color: var(--secondary-main) !important;
 }
@@ -29,16 +33,12 @@
 }
 
 .divider {
-  margin: 1.5vw 0 1.5vw 0 !important;
   width: 80%;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
-.buttonEdit {
-  height: 10vh;
-  width: 100%;
-}
+
 
 .buttonEditMargin {
   margin-right: 1vw !important;
@@ -48,17 +48,39 @@
   flex-direction: column !important;
 }
 
+.hiddenSpace {
+  visibility: hidden !important;
+}
+
 .centered {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
 }
+
+.iconServeurTrue {
+  color: white;
+}
+
+.iconServeurFalse {
+  color: var(--primary-main);
+}
 /* Styles for phone */
 @media (max-width: 600px) {
-  .itemPaperScore {
-    height: 25vw;
-    width: 20vw;
+.itemPaperTypo{
+  height: 12vh;
+  width: 100%;
+}
+  .buttonEdit {
+    height: 8vh;
+    width: 100%;
   }
+
+  .buttonEditTimer {
+    height: 3.6vh; ;
+    width: 3.6vh;
+  }
+
 }
 
 /* Styles for tablet */

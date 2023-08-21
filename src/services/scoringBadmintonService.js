@@ -4,12 +4,9 @@ import Config from "../config/config.json";
 const URL_API = Config.SERVER_URL;
 
 class scoringBadmintonService {
-  create(score) {
-    return axios.post(URL_API + "/Badminton", score);
-  }
 
   update(score) {
-    return axios.put(URL_API + "/Badminton/" + score.id, score);
+    return axios.put(URL_API + "/Badminton", score);
   }
 
   updateMatchConfig(config) {
