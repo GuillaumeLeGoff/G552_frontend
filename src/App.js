@@ -1,30 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, ThemeProvider } from "@mui/material";
-import LoadingScreen from "./components/LoadingScreen";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import Create from "./components/pages/create/CreatePage";
 import { I18nextProvider } from "react-i18next";
 import i18n from "./config/i18n/i18n";
-import Login from "./components/pages/login/LoginPage";
-import Macro from "./components/pages/macro/Macro";
-import Profile from "./components/pages/profile/Profile";
-import Navbar from "./components/NavBar";
 
+import { darkTheme } from "./themes/darkTheme.ts";
+import { clairTheme } from "./themes/clairTheme.ts";
+import { useDarkMode } from "./contexts/DarkModeContext";
 import { LoadingContext } from "./contexts/Context";
 
 import AuthService from "./services/authService";
-import "./styles/App.css";
-import { darkTheme } from "./themes/darkTheme.ts";
-
-import { useDarkMode } from "./contexts/DarkModeContext";
-
-import { clairTheme } from "./themes/clairTheme.ts";
 import ChangePassword from "./components/pages/login/ChangePassword";
 import ScoreboardPage from "./components/pages/scoreboard/ScoreboardPage";
 import Header from "./components/Header";
 import ParamTennis from "./components/pages/scoreboard/TennisScoreboard/ParamTennis";
 import TennisScoreboard from "./components/pages/scoreboard/TennisScoreboard/ScoreboardTennis";
+import Scoreboard from "./components/pages/scoreboard/Scoreboard";
+import Login from "./components/pages/login/LoginPage";
+import Macro from "./components/pages/macro/Macro";
+import Profile from "./components/pages/profile/Profile";
+import Navbar from "./components/NavBar";
+import LoadingScreen from "./components/LoadingScreen";
+import Create from "./components/pages/create/CreatePage";
+
+import { switchToDarkTheme } from "./themes/darkTheme.ts";
+import { switchToClairTheme } from "./themes/clairTheme.ts";
+
+import "./styles/App.css";
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
@@ -40,6 +43,14 @@ function App() {
   useEffect(() => {
     console.log(token);
   }, [token]);
+
+  useEffect(() => {
+    if (darkMode) {
+      switchToDarkTheme();
+    } else {
+      switchToClairTheme();
+    }
+  }, [darkMode]);
   const theme = darkMode ? darkTheme : clairTheme;
 
   return (
@@ -89,7 +100,7 @@ function App() {
                     <Route path="create/:id" element={<Create />} />
                     <Route path="macro" element={<Macro />} />
                     <Route path="profile" element={<Profile />} />
-                    <Route path="scoreboard" element={<ScoreboardPage />} />
+                    <Route path="scoreboard" element={<Scoreboard />} />
                   </Routes>
                 </Grid>
               ) : (

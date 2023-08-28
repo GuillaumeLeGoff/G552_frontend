@@ -26,3 +26,9 @@ export const clairTheme = createTheme({
     },
   },
 });
+export function switchToClairTheme() {
+  document.documentElement.style.setProperty('--primary-main', clairTheme.palette.primary.main);
+  document.documentElement.style.setProperty('--secondary-main', clairTheme.palette.secondary.main);
+  document.documentElement.style.setProperty('--background-default', clairTheme.palette.background.default);
+  document.documentElement.style.setProperty('--text-primary', clairTheme.palette.text.primary);
+}

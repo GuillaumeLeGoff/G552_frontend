@@ -1,15 +1,30 @@
-import { Box, Grid, IconButton, Paper, Stack, Typography } from '@mui/material';
-import React from 'react'
+import { Box, Grid, IconButton, Paper, Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import authService from "../../../services/authService";
+import ScoreboardTennis from "./TennisScoreboard/ScoreboardTennis";
+import ScoreboardBadminton from "./badmintonScoreboard/ScoreboardBadminton";
 
 function Scoreboard() {
-    return (
-        <Grid item xs={12}>
+  const [currentUser , setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    setCurrentUser(authService.getCurrentUser());
+    
+  }, []);
+
+  return (
+    <>
+
+      {currentUser && currentUser.user.username === "tennis" && (<ScoreboardTennis/> ) }
+    {currentUser && currentUser.user.username === "basketball" && (<ScoreboardBadminton/> ) }
+    </>
+    /* <Grid item xs={12}>
           <Paper className="mainPaper">
             <Stack
              className="headerSection">
               <div className="headerItemLeft">
                 <IconButton>
-          {/*         <ScoreboardIcon sx={{ color: "primary.light" }} /> */}
+                  <ScoreboardIcon sx={{ color: "primary.light" }} /> 
                 </IconButton>
                 <Typography variant="h6" className="headerTitle">
                   Scoreboard
@@ -17,14 +32,14 @@ function Scoreboard() {
               </div>
               <div className="headerItemRight">
                 <IconButton
-                  /* onClick={resetScores} */
+                  onClick={resetScores}
                   className="header-button"
                   aria-label="Reset Scores"
                 >
-                  {/*   <RestartAltIcon color="secondary" /> */}
+                    <RestartAltIcon color="secondary" />
                 </IconButton>
                 <IconButton className="header-button">
-                  {/*  <PlayArrowIcon onClick={playScoring} color="secondary" /> */}
+                   <PlayArrowIcon onClick={playScoring} color="secondary" />
                 </IconButton>
               </div>
             </Stack>
@@ -32,8 +47,8 @@ function Scoreboard() {
              
             </Box>
           </Paper>
-        </Grid>
-      );
+        </Grid> */
+  );
 }
 
-export default Scoreboard
+export default Scoreboard;
