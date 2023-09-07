@@ -195,9 +195,9 @@ function ScoreboardTennis() {
   return (
     <>
       <Grid item xs={12}>
-        <Paper className="mainPaper">
-          <Stack className="headerSection">
-            <div className="headerItemLeft">
+        <Paper className="mainPaperPage">
+          <Stack className="herderTitlePage">
+            <div className="headerLeft">
               <IconButton>
                 <ScoreboardIcon sx={{ color: "primary.light" }} />
               </IconButton>
@@ -205,12 +205,12 @@ function ScoreboardTennis() {
                 Scoreboard
               </Typography>
             </div>
-            <div className="headerItemRight">
+            <div className="headerRight">
               <IconButton onClick={handleOpenModal}>
-                <SettingsIcon color="secondary" />
+                <SettingsIcon sx={{ color: "secondary.main" }} />
               </IconButton>
               <IconButton className="header-button">
-                {/*  <PlayArrowIcon onClick={playScoring} color="secondary" /> */}
+                {/*  <PlayArrowIcon onClick={playScoring} sx={{ color: "secondary.main" }} /> */}
               </IconButton>
             </div>
           </Stack>

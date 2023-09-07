@@ -55,9 +55,9 @@ function Macro() {
 
   return (
     <Grid item xs={12}>
-      <Paper className="mainPaper">
-        <Stack className="headerSection">
-          <div className="headerItemLeft">
+      <Paper className="mainPaperPage">
+        <Stack className="herderTitlePage">
+          <div className="headerLeft">
             <IconButton>
               <KeyboardIcon sx={{ color: "primary.light" }} />
             </IconButton>

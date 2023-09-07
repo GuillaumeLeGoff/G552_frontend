@@ -19,10 +19,10 @@ function Scoreboard() {
     {currentUser && currentUser.user.username === "basketball" && (<ScoreboardBadminton/> ) }
     </>
     /* <Grid item xs={12}>
-          <Paper className="mainPaper">
+          <Paper className="mainPaperPage">
             <Stack
-             className="headerSection">
-              <div className="headerItemLeft">
+             className="herderTitlePage">
+              <div className="headerLeft">
                 <IconButton>
                   <ScoreboardIcon sx={{ color: "primary.light" }} /> 
                 </IconButton>
@@ -30,16 +30,16 @@ function Scoreboard() {
                   Scoreboard
                 </Typography>
               </div>
-              <div className="headerItemRight">
+              <div className="headerRight">
                 <IconButton
                   onClick={resetScores}
                   className="header-button"
                   aria-label="Reset Scores"
                 >
-                    <RestartAltIcon color="secondary" />
+                    <RestartAltIcon sx={{ color: "secondary.main" }} />
                 </IconButton>
                 <IconButton className="header-button">
-                   <PlayArrowIcon onClick={playScoring} color="secondary" />
+                   <PlayArrowIcon onClick={playScoring} sx={{ color: "secondary.main" }} />
                 </IconButton>
               </div>
             </Stack>

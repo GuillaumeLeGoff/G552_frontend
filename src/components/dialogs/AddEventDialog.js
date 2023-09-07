@@ -23,10 +23,10 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} sx={{ color: "secondary.main" }}>
           Annuler
         </Button>
-        <Button onClick={onAdd} color="secondary" disabled={!name.trim()}>
+        <Button onClick={onAdd} sx={{ color: "secondary.main" }} disabled={!name.trim()}>
           Ajouter
         </Button>
       </DialogActions>

@@ -17,10 +17,10 @@ function UserConectedDialog({ open, onClose, userDisconet }) {
         <DialogContentText>Voulez-vous le déconnecter ?</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} sx={{ color: "secondary.main" }}>
           Non
         </Button>
-        <Button onClick={userDisconet} color="secondary">
+        <Button onClick={userDisconet} sx={{ color: "secondary.main" }}>
           Oui
         </Button>
       </DialogActions>

@@ -17,10 +17,10 @@ function DeleteMediaDialog({ open, onClose, DeleteFile, displayDialogDelete }) {
         <DialogContentText>Voulez-vous supprimer ce media?</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={displayDialogDelete} color="secondary">
+        <Button onClick={displayDialogDelete} sx={{ color: "secondary.main" }}>
           Annuler
         </Button>
-        <Button onClick={DeleteFile} color="secondary">
+        <Button onClick={DeleteFile} sx={{ color: "secondary.main" }}>
           Confirme
         </Button>
       </DialogActions>

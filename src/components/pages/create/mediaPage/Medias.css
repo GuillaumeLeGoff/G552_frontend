@@ -90,12 +90,7 @@
   right: 5px;
 }
 /* ===== Modal ===== */
-.modalBox {
-  height: 100%;
-  width: 100%;
-  background-color: #203038;
-  padding: 16px;
-}
+
 
 .modalHeader {
   display: flex;

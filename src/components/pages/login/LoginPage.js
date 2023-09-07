@@ -110,7 +110,7 @@ function Login() {
                   {error}
                 </Typography>
               )}
-              <Button type="submit" variant="contained" color="secondary">
+              <Button type="submit" variant="contained" sx={{ color: "secondary.main" }}>
                 {t("loginButton")} 
               </Button>
             </FormControl>

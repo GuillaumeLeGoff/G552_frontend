@@ -252,9 +252,9 @@ function ScoreboardPage() {
   return (
     <>
       <Grid item xs={12}>
-        <Paper className="mainPaper">
-          <Stack className="headerSection">
-            <div className="headerItemLeft">
+        <Paper className="mainPaperPage">
+          <Stack className="herderTitlePage">
+            <div className="headerLeft">
               <IconButton>
                 <ScoreboardIcon sx={{ color: "primary.light" }} />
               </IconButton>
@@ -262,16 +262,16 @@ function ScoreboardPage() {
                 Scoreboard
               </Typography>
             </div>
-            <div className="headerItemRight">
+            <div className="headerRight">
               <IconButton
                 onClick={resetScores}
                 className="header-button"
                 aria-label="Reset Scores"
               >
-                <RestartAltIcon color="secondary" />
+                <RestartAltIcon sx={{ color: "secondary.main" }} />
               </IconButton>
               <IconButton className="header-button">
-                <PlayArrowIcon onClick={playScoring} color="secondary" />
+                <PlayArrowIcon onClick={playScoring} sx={{ color: "secondary.main" }} />
             </IconButton>
             </div>
           </Stack>

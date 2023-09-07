@@ -1,15 +1,52 @@
-.container {
+.mainContainer {
+  margin: 3vh;
+  font-family: system-ui !important;
+  padding-bottom: 50px;
+}
+.herderTitlePage {
+  flex-direction: row !important;
+  justify-content: space-between;
+}
+.headerTitle {
+  padding: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.headerLeft {
+  display: flex;
+  flex-direction: row;
+  margin-left: 16px;
+}
+.headerRight {
+  display: flex;
+  margin-right: 16px;
+}
+.headerButton {
+  margin-top: 12px !important;
+  margin-bottom: 12px !important;
+}
+.mainPaperPage {
+  height: calc(94vh - 120px);
+}
+.containerPage {
   display: flex;
   justify-content: center;
-  overflow-y: auto; /* Utilise "auto" au lieu de "scroll" */
   align-content: center;
+  overflow-y: scroll;
   padding: 8px;
-}
-.mainPaper {
-  min-height: calc(94vh - 120px);
-    max-height: calc(94vh - 120px);
+  flex-direction: column;
+  justify-content: flex-start;
+
+  height: calc(94vh - 184px);
 }
 
+.infoPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(94vh - 184px);
+}
 .container::-webkit-scrollbar {
   width: 8px; /* Largeur de la barre de défilement */
 }
@@ -28,10 +65,20 @@
   border-radius: 4px; /* Bordure arrondie de la piste de défilement */
 }
 
-
-.header-button {
-  margin-top: 12px !important;
-  margin-bottom: 12px !important;
+@media (max-width: 600px) {
+  .headerTitle {
+    max-width: 300px;
+  }
 }
 
+@media (min-width: 601px) and (max-width: 1280px) {
+  .headerTitle {
+    max-width: 440px;
+  }
+}
 
+@media (min-width: 1281px) {
+  .headerTitle {
+    max-width: 680px;
+  }
+}

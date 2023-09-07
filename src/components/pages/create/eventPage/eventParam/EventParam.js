@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Droppable } from "react-beautiful-dnd";
-import { useTranslation } from "react-i18next"; // Import de useTranslation
+import { useTranslation } from "react-i18next";
 import {
   Box,
   IconButton,
-  Modal,
   Paper,
   Stack,
   Table,
@@ -15,29 +14,28 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-import PauseIcon from "@mui/icons-material/Pause";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useTheme } from "@emotion/react";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 
 import eventService from "../../../../../services/eventService";
 import eventMediaService from "../../../../../services/eventMediaService";
 import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
 import DeleteMediaEventDialog from "../../../../dialogs/DeleteMediaEventDialog";
-import Media from "../eventMedia/EventMedia";
-import "./EventParam.css";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Media from "../eventMedia/EventMedias";
+
+
 import modeServiceInstance from "../../../../../services/modeService";
+import DiaporamaModal from "../../../../dialogs/DiaporamaModal";
 
 function EventParam(props) {
-  const { t } = useTranslation(); // Utilisation de useTranslation
-  const theme = useTheme();
-  const navigate = useNavigate();
+
   const { id } = useParams();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
+
   const [event, setEvent] = useState({});
   const [deleteMediaDialogOpen, setDeleteMediaDialogOpen] = useState(false);
   const [deleteEventDialogOpen, setDeleteEventDialogOpen] = useState(false);
@@ -51,7 +49,7 @@ function EventParam(props) {
   useEffect(() => {
     props.getEvents();
     getMediasByID();
-
+    console.log("test0",props.eventMedia[0].medias);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -73,11 +71,10 @@ function EventParam(props) {
             setActiveMediaIndex((prevIndex) => prevIndex + 1);
           }
         }, sortedMedias[activeMediaIndex].media_dur_in_event * 1000);
-
         return () => clearTimeout(timer);
       }
     }
-  }, [props.eventMedia, isAutoPlayEnabled]);
+  }, [props.eventMedia, isAutoPlayEnabled, activeMediaIndex]);
 
   async function getMediasByID() {
     try {
@@ -171,143 +168,92 @@ function EventParam(props) {
 
   return (
     <div>
-      <Paper className="mainPaper">
-        <Stack className="headerSection">
-          <div className="headerItemLeft">
+      <Paper className="mainPaperPage">
+        <Stack className="herderTitlePage">
+          <Box className="headerLeft">
             <IconButton
-              className="header-button"
+              className="headerButton"
               onClick={() => {
                 props.onEventClick("");
                 closeEvent();
               }}
             >
-              <CloseIcon color="secondary" />
+              <CloseIcon sx={{ color: "secondary.main" }} />
             </IconButton>
-            <IconButton className="main-header-button header-button">
+            <IconButton className="headerButton">
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
-            <Typography variant="h7" className="headerTitle">
+            <Typography
+              className="headerTitle"
+              variant="h6"
+              sx={{ color: "text.primary" }}
+            >
               {t("diaporama")}: {event.name}
             </Typography>
-          </div>
-          <div className="headerItemRight">
+          </Box>
+          <Box className="headerRight">
             <IconButton
-              className="header-button"
+              className="headerButton"
               onClick={openDeleteEventDialog}
             >
-              <DeleteIcon color="secondary" />
+              <DeleteIcon sx={{ color: "secondary.main" }} />
             </IconButton>
-            <IconButton onClick={openPlayModal} className="header-button">
-              <SlideshowIcon color="secondary" />
+            <IconButton onClick={openPlayModal} className="headerButton">
+              <SlideshowIcon sx={{ color: "secondary.main" }} />
             </IconButton>
-            <IconButton className="header-button">
-              <PlayArrowIcon onClick={playDiapo} color="secondary" />
+            <IconButton className="headerButton">
+              <PlayArrowIcon
+                onClick={playDiapo}
+                sx={{ color: "secondary.main" }}
+              />
             </IconButton>
-          </div>
+          </Box>
         </Stack>
-
-        <TableContainer className="tableContainer">
-          <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
-            <Droppable droppableId={`${props.eventMedia[0].id}`}>
-              {(provided, snapshot) => (
-                <TableBody ref={provided.innerRef}>
-                  {props.eventMedia[0].medias.length ? (
-                    props.eventMedia[0].medias.map((item, index) => (
-                      <Media
-                        updateMedia={props.updateMedia}
-                        handleRowHover={handleRowHover}
-                        openDeleteDialog={openDeleteDialog}
-                        hoveredRow={hoveredRow}
-                        key={item.id}
-                        index={index}
-                        item={item}
-                      />
-                    ))
-                  ) : (
-                    <Box className="Info">
-                      <Typography variant="body1" color="text.secondary">
-                        {t("deposezDesMediasIci")}
-                      </Typography>
-                    </Box>
-                  )}
-                  {provided.placeholder}
-                </TableBody>
-              )}
-            </Droppable>
-          </Table>
-        </TableContainer>
+        <Stack>
+          <TableContainer className="containerPage">
+            <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
+              <Droppable droppableId={`${props.eventMedia[0].id}`}>
+                {(provided, snapshot) => (
+                  <TableBody ref={provided.innerRef}>
+                    {props.eventMedia[0].medias.length ? (
+                      props.eventMedia[0].medias.map((item, index) => (
+                        <Media
+                          updateMedia={props.updateMedia}
+                          handleRowHover={handleRowHover}
+                          openDeleteDialog={openDeleteDialog}
+                          hoveredRow={hoveredRow}
+                          key={item.id}
+                          index={index}
+                          item={item}
+                        />
+                      ))
+                    ) : (
+                      <Box className="infoPage">
+                        <Typography color="text.secondary">
+                          {t("deposezDesMediasIci")}
+                        </Typography>
+                      </Box>
+                    )}
+                    {provided.placeholder}
+                  </TableBody>
+                )}
+              </Droppable>
+            </Table>
+          </TableContainer>
+        </Stack>
       </Paper>
 
-      <Modal open={isPlayModalOpen} onClose={closePlayModal}>
-        <Box
-          className="modalBox"
-          sx={{ backgroundColor: theme.palette.primary.main }}
-        >
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            spacing={2}
-          >
-            <div className="modalHeader">
-              <IconButton>
-                <PlayArrowIcon
-                  sx={{ color: "primary.light" }}
-                  className="uploadIcon"
-                />
-              </IconButton>
-              <Typography variant="h6" className="modalHeaderText">
-                {t("diaporama")}
-              </Typography>
-            </div>
-
-            <IconButton onClick={closePlayModal}>
-              <CloseIcon color="secondary" />
-            </IconButton>
-          </Stack>
-          <Box className="diapoBox">
-            {currentMedia &&
-              (currentMedia.type === "image" ? (
-                <img
-                  className="diapoImage"
-                  src={currentMedia.path}
-                  alt={`${t("media")} ${activeMediaIndex}`}
-                />
-              ) : currentMedia.type === "video" ? (
-                <video src={currentMedia.path} controls />
-              ) : null)}
-            <Box
-              sx={{ textAlign: "center", marginTop: "16px", display: "flex" }}
-            >
-              <>
-                <IconButton onClick={handlePreviousSlide}>
-                  <NavigateBeforeIcon color="secondary" />
-                </IconButton>
-                <Typography p={1} variant="body2" color="text.secondary">
-                  {t("diapo")} {activeMediaIndex + 1} /{" "}
-                  {props.eventMedia[0].medias.length}
-                </Typography>
-                <IconButton onClick={handleNextSlide}>
-                  <NavigateNextIcon color="secondary" />
-                </IconButton>
-              </>
-
-              <IconButton variant="contained" onClick={toggleAutoPlay}>
-                {isAutoPlayEnabled ? (
-                  <>
-                    <PauseIcon color="secondary" />
-                  </>
-                ) : (
-                  <>
-                    <PlayArrowIcon color="secondary" />
-                  </>
-                )}
-              </IconButton>
-            </Box>
-          </Box>
-        </Box>
-      </Modal>
-
+      <DiaporamaModal
+        open={isPlayModalOpen}
+        onClose={closePlayModal}
+        currentMedia= {currentMedia}
+        activeMediaIndex={activeMediaIndex}
+        handlePreviousSlide={handlePreviousSlide}
+        eventMedia={props.eventMedia}
+        toggleAutoPlay={toggleAutoPlay}
+        handleNextSlide={handleNextSlide}
+        isAutoPlayEnabled={isAutoPlayEnabled}
+    />
       <DeleteEventDialog
         open={deleteEventDialogOpen}
         onClose={closeDeleteEventDialog}
@@ -323,9 +269,5 @@ function EventParam(props) {
     </div>
   );
 }
-
-EventParam.propTypes = {
-  // PropTypes ici
-};
 
 export default EventParam;

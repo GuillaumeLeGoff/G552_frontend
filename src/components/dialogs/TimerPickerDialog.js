@@ -92,7 +92,7 @@ function TimerPickerDialog({ open, onClose, setTimer, eventName }) {
         <Button onClick={onClose} color="primary">
           Annuler
         </Button>
-        <Button onClick={handleConfirm} color="secondary">
+        <Button onClick={handleConfirm} sx={{ color: "secondary.main" }}>
           Valider
         </Button>
       </DialogActions>

@@ -168,7 +168,7 @@ function ParamTennis({ open, onCloseModal }) {
                 <FormControlLabel
                   control={
                     <Switch
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                       checked={decidingPoint}
                       onChange={(e) => setDecidingPoint(e.target.checked)}
                     />
@@ -190,7 +190,7 @@ function ParamTennis({ open, onCloseModal }) {
                 <FormControlLabel
                   control={
                     <Switch
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                       checked={tieBreak}
                       onChange={(e) => setTieBreak(e.target.checked)}
                     />
@@ -212,7 +212,7 @@ function ParamTennis({ open, onCloseModal }) {
                 <FormControlLabel
                   control={
                     <Switch
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                       checked={tieBreakInFinalSet}
                       onChange={(e) => setTieBreakInFinalSet(e.target.checked)}
                     />
@@ -226,7 +226,7 @@ function ParamTennis({ open, onCloseModal }) {
         <DialogActions>
           <Button
             variant="contained"
-            color="secondary"
+            sx={{ color: "secondary.main" }}
             onClick={handleStartClick}
           >
             Valider

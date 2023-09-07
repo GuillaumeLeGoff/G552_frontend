@@ -19,10 +19,10 @@ function DeleteMediaEventDialog({ open, onClose, onDelete }) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} sx={{ color: "secondary.main" }}>
           Annuler
         </Button>
-        <Button onClick={onDelete} color="secondary">
+        <Button onClick={onDelete} sx={{ color: "secondary.main" }}>
           Supprimer
         </Button>
       </DialogActions>

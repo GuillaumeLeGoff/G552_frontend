@@ -6,30 +6,21 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Box,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
+
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
-import eventService from "../../../../../services/eventService";
 import DeleteIcon from "@mui/icons-material/Delete";
-import PropTypes from "prop-types";
 
-import { useTranslation } from "react-i18next"; // Importez useTranslation depuis react-i18next
-import { Box } from "@mui/system";
+import eventService from "../../../../../services/eventService";
 import DeleteEventDialog from "../../../../dialogs/DeleteEventDialog";
 import AddEventDialog from "../../../../dialogs/AddEventDialog";
-import "./EventList.css";
 
 function EventList({ onEventClick }) {
-  const { t } = useTranslation(); // Utilisez useTranslation pour accéder aux traductions
-
-  useEffect(() => {
-    getEvent();
-  }, []);
-
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
   const [name, setName] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [event, setEvent] = useState(undefined);
@@ -37,6 +28,13 @@ function EventList({ onEventClick }) {
   const [eventToDelete, setEventToDelete] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
 
+  const { t } = useTranslation();
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  useEffect(() => {
+    getEvent();
+  }, []);
+  
   async function getEvent() {
     const result = await eventService.get();
     setEvent(result.data);
@@ -85,44 +83,44 @@ function EventList({ onEventClick }) {
   }
 
   return (
-    <div>
-      <Paper className="mainPaper">
-        <Stack className="headerSection">
-          <div className="headerItemLeft">
-            <IconButton className="header-button">
+    <Box>
+      <Paper className="mainPaperPage">
+        <Stack className="herderTitlePage">
+          <Box className="headerLeft">
+            <IconButton className="headerButton">
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
-            <Typography variant="h6" className="headerTitle">
+            <Typography
+              variant="h6"
+              sx={{ color: "text.primary" }}
+              className="headerTitle"
+            >
               {t("eventListTitle")}
             </Typography>
-          </div>
-          <div className="headerItemRight">
-            <IconButton className="header-button" onClick={toggleModal}>
-              <AddIcon color="secondary" />
+          </Box>
+          <Box className="headerRight">
+            <IconButton className="headerButton" onClick={toggleModal}>
+              <AddIcon sx={{ color: "secondary.main" }} />
             </IconButton>
-          </div>
+          </Box>
         </Stack>
-
-        <Box className="containerEventList">
-          {event !== undefined ? (
-            event.length > 0 ? (
-              event.map((row) => (
+        <Stack>
+          {event && event.length ? (
+            <Box className="containerPage">
+              {event.map((row) => (
                 <Table size="big" key={row.id}>
                   <TableBody>
                     <TableRow
                       {...(isMobile
-                        ? {
-                            onClick: () => handleRowHover(row.id),
-                          }
+                        ? { onClick: () => handleRowHover(row.id) }
                         : {
                             onMouseEnter: () => handleRowHover(row.id),
                             onMouseLeave: () => handleRowHover(null),
                           })}
                       hover
                       onClick={() => onEventClick(row.id)}
-                      key={row.id}
                     >
-                      <TableCell className="eventTitle">{row.name}</TableCell>
+                      <TableCell>{row.name}</TableCell>
                       <TableCell p={0} align="right">
                         {hoveredRow === row.id && (
                           <IconButton
@@ -134,8 +132,7 @@ function EventList({ onEventClick }) {
                             }}
                           >
                             <DeleteIcon
-                              sx={{ fontSize: 15 }}
-                              color="secondary"
+                              sx={{ fontSize: 15, color: "secondary.main" }}
                             />
                           </IconButton>
                         )}
@@ -143,27 +140,23 @@ function EventList({ onEventClick }) {
                     </TableRow>
                   </TableBody>
                 </Table>
-              ))
-            ) : (
-              <Box className="Info">
-                <Typography variant="body1" color="text.secondary">
-                  {t("eventListEmptyText")}
-                </Typography>
-              </Box>
-            )
+              ))}
+            </Box>
           ) : (
-            ""
+            <Box className="infoPage">
+              <Typography sx={{ color: "text.secondary" }}>
+                {t("eventListEmptyText")}
+              </Typography>
+            </Box>
           )}
-        </Box>
+        </Stack>
       </Paper>
-
       <DeleteEventDialog
         open={deleteDialogOpen}
         onClose={closeDeleteDialog}
         onDelete={deleteEvent}
         eventName={eventToDelete && eventToDelete.name}
       />
-
       <AddEventDialog
         open={modalOpen}
         onClose={toggleModal}
@@ -171,12 +164,8 @@ function EventList({ onEventClick }) {
         name={name}
         setName={setName}
       />
-    </div>
+    </Box>
   );
 }
-
-EventList.propTypes = {
-  onEventClick: PropTypes.func.isRequired,
-};
 
 export default EventList;

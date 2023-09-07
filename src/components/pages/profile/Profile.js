@@ -13,7 +13,6 @@ import {
   Button,
   Divider,
 } from "@mui/material";
-import "../../../styles/Global.css";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ChangePasswordDialog from "../../dialogs/ChangePasswordDialog";
 import authService from "../../../services/authService";
@@ -94,9 +93,9 @@ function Profile() {
   return (
     <>
       <Grid item xs={12}>
-        <Paper className="mainPaper">
-          <Stack className="headerSection">
-            <div className="headerItemLeft">
+        <Paper className="mainPaperPage">
+          <Stack className="herderTitlePage">
+            <div className="headerLeft">
               <IconButton>
                 <SettingsIcon sx={{ color: "primary.light" }} />
               </IconButton>
@@ -114,7 +113,7 @@ function Profile() {
                     <Button
                       onClick={toggleModal}
                       variant="contained"
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                     >
                       Modifier son mot de passe
                     </Button>
@@ -124,7 +123,7 @@ function Profile() {
                     <Switch
                       checked={darkMode}
                       onChange={setIsDarkMode}
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                     />
                   </Stack>
                   <Stack className="switchContainer">
@@ -135,7 +134,7 @@ function Profile() {
                     value={percentage}
                     color={percentage > 80 ? "error" : "secondary"}
                   />
-                  <Button variant="contained" color="secondary">
+                  <Button variant="contained" sx={{ color: "secondary.main" }}>
                     test
                   </Button>
                   <LanguageSelector />
@@ -154,7 +153,7 @@ function Profile() {
                   <Stack className="switchContainer">
                     <Typography>Event auto</Typography>
                     <Switch
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                       checked={param.event_auto === 1}
                       onChange={handleEventAutoChange}
                     />
@@ -162,14 +161,14 @@ function Profile() {
                   <Stack className="switchContainer">
                     <Typography>Mise en veille automatique</Typography>
                     <Switch
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                       checked={veille.enable === 1}
                       onChange={handleVeilleChange}
                     />
                   </Stack>
                   <Stack className="switchContainer">
                     <Slider
-                      color="secondary"
+                      sx={{ color: "secondary.main" }}
                       value={[veille.start_time, veille.end_time]}
                       min={0}
                       max={24}

@@ -59,7 +59,7 @@ console.log(user.user);
         <Stack>
           <div style={{ display: "flex", alignItems: "center" }}>
             <IconButton onClick={disconnect} sx={{ ml: 2 }}>
-              <CloseIcon color="secondary" />
+              <CloseIcon sx={{ color: "secondary.main" }} />
             </IconButton>
             <Typography variant="h6" color="primary.light" className="title">
               {t("changePassword")} 
@@ -74,7 +74,7 @@ console.log(user.user);
           pb={5}
         >
           {success ? (
-            <Typography variant="body1" color="success.main" align="center">
+            <Typography color="success.main" align="center">
               {t("passwordChangeSuccess")} 
             </Typography>
           ) : (
@@ -103,7 +103,7 @@ console.log(user.user);
                     {error}
                   </Typography>
                 )}
-                <Button type="submit" variant="contained" color="secondary">
+                <Button type="submit" variant="contained" sx={{ color: "secondary.main" }}>
                   {t("changePassword")} {/* Utilisation de la traduction */}
                 </Button>
               </FormControl>

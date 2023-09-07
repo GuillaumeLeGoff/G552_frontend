@@ -26,7 +26,7 @@ import Create from "./components/pages/create/CreatePage";
 
 import { switchToDarkTheme } from "./themes/darkTheme.ts";
 import { switchToClairTheme } from "./themes/clairTheme.ts";
-
+import "./styles/Global.css";
 import "./styles/App.css";
 
 function App() {
@@ -73,7 +73,7 @@ function App() {
               </Box>
             )}
             <Header />
-            <Box className="Container">
+            <Box className="mainContainer">
               {token && token.user.firstLogin === 1 ? (
                 <Grid
                   container

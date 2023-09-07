@@ -1,13 +1,10 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, TableCell, TableRow, TextField } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import "./EventMedias.css";
 
 function EventMedia(props) {
-  useEffect(() => {
-    console.log('props.item',props.item);
-  }, [props.item]);
   function handleDurationChange(event) {
     props.updateMedia(event.target.value, props.index);
   }
@@ -67,7 +64,7 @@ function EventMedia(props) {
                   props.openDeleteDialog(props.index);
                 }}
               >
-                <DeleteIcon color="secondary" />
+                <DeleteIcon sx={{ color: "secondary.main" }} />
               </IconButton>
             ) : (
               <IconButton sx={{ p: 0 }} className="event-media-icon-button">

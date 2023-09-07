@@ -130,9 +130,9 @@ function Medias(props) {
 
   return (
     <>
-      <Paper className="mainPaper">
-        <Stack className="headerSection">
-          <div className="headerItemLeft">
+      <Paper className="mainPaperPage">
+        <Stack className="herderTitlePage">
+          <div className="headerLeft">
             <IconButton className="header-button">
               <ImageIcon sx={{ color: "primary.light" }} />
             </IconButton>
@@ -140,14 +140,14 @@ function Medias(props) {
               {t("media")}
             </Typography>
           </div>
-          <div className="headerItemRight">
+          <div className="headerRight">
             <IconButton
               className="header-button"
               onClick={() => {
                 document.getElementById("inputFile").click();
               }}
             >
-              <AddIcon color="secondary" />
+              <AddIcon sx={{ color: "secondary.main" }} />
             </IconButton>
 
             <input
@@ -242,7 +242,7 @@ function Medias(props) {
                     </ImageList>
                   ) : (
                     <Box className="Info">
-                      <Typography variant="body1" color="text.secondary">
+                      <Typography color="text.secondary">
                         {t("ajouterMedia")}
                       </Typography>
                     </Box>
@@ -279,7 +279,7 @@ function Medias(props) {
             </div>
 
             <IconButton onClick={displayDialogUpload}>
-              <CloseIcon color="secondary" />
+              <CloseIcon sx={{ color: "secondary.main" }} />
             </IconButton>
           </Stack>
           {imageToCrop ? (

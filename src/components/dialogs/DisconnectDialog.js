@@ -16,10 +16,10 @@ function DisconnectDialog({ open, onClose, logout }) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button onClick={onClose} sx={{ color: "secondary.main" }}>
           Annuler
         </Button>
-        <Button onClick={logout} color="secondary">
+        <Button onClick={logout} sx={{ color: "secondary.main" }}>
           Déconnexion
         </Button>
       </DialogActions>

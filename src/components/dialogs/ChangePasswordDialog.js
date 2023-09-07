@@ -72,7 +72,7 @@ function ChangePasswordDialog({ open, onClose }) {
           onClick={handleSubmit}
           type="submit"
           variant="contained"
-          color="secondary"
+          sx={{ color: "secondary.main" }}
         >
           Envoyer
         </Button>
