@@ -9,11 +9,10 @@ import {
   MenuItem,
   FormControl,
   Select,
-  Typography,
   Box,
 } from "@mui/material";
 
-function TimerPickerDialog({ open, onClose, setTimer, eventName }) {
+function TimerPickerDialog({ open, onClose, setTimer }) {
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
@@ -63,10 +62,6 @@ function TimerPickerDialog({ open, onClose, setTimer, eventName }) {
               ))}
             </Select>
           </FormControl>
-          <Typography variant="h5" component="span">
-            {" "}
-            :{" "}
-          </Typography>
           <FormControl sx={{ minWidth: 120, maxWidth: 200 }}>
             <Select
               MenuProps={{
@@ -89,7 +84,7 @@ function TimerPickerDialog({ open, onClose, setTimer, eventName }) {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button onClick={onClose} sx={{ color: "primary.main"}}>
           Annuler
         </Button>
         <Button onClick={handleConfirm} sx={{ color: "secondary.main" }}>

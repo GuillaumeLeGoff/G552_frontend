@@ -121,7 +121,7 @@ function EventList({ onEventClick }) {
                       onClick={() => onEventClick(row.id)}
                     >
                       <TableCell>{row.name}</TableCell>
-                      <TableCell p={0} align="right">
+                      <TableCell sx={{ p: 0 }} align="right">
                         {hoveredRow === row.id && (
                           <IconButton
                             sx={{ p: 0 }}

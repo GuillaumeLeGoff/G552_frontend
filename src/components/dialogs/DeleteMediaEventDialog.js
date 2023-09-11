@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   Button,
   Dialog,
@@ -29,11 +28,5 @@ function DeleteMediaEventDialog({ open, onClose, onDelete }) {
     </Dialog>
   );
 }
-
-DeleteMediaEventDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-};
 
 export default DeleteMediaEventDialog;

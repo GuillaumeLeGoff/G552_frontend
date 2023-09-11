@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Button,
@@ -13,35 +14,33 @@ import {
   InputLabel,
   FormControl,
 } from "@mui/material";
-import { useTranslation } from "react-i18next"; // Importez useTranslation depuis react-i18next
-import "./login.css";
+import LoginIcon from "@mui/icons-material/Login";
+
 import AuthService from "../../../services/authService";
-import "../../../styles/App.css";
 import UserConectedDialog from "../../dialogs/UserConectedDialog";
 import ActiveSessionsService from "../../../services/activeSessionsService";
+
+import "./login.css";
+import "../../../styles/App.css";
 
 function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [userConectedDialog, setUserConectedDialog] = useState(false);
-  const { t } = useTranslation(); // Utilisez useTranslation pour accéder aux traductions
+  const { t } = useTranslation();
 
   function deleteUserConected() {
-    console.log("deleteUserConected");
     ActiveSessionsService.deleteCurrentUser();
     closeuserConectedDialog();
   }
 
-
   function userConectedDialogOpen() {
     setUserConectedDialog(true);
-
   }
 
   function closeuserConectedDialog() {
     setUserConectedDialog(false);
-   
   }
 
   async function handleSubmit(e) {
@@ -49,72 +48,70 @@ function Login() {
     e.preventDefault();
     try {
       await AuthService.login(user, password).then((response) => {
-       
         if (response.userConected && response.userConected === true) {
           userConectedDialogOpen();
         }
       });
     } catch (error) {
-   
-      setError(t("loginErrorMessage")); // Utilisez la traduction pour le message d'erreur
+      setError(t("loginErrorMessage"));
     }
   }
 
   return (
-    <Grid item xs={10} style={{ maxWidth: "calc(50vh)" }}>
+    <Grid item>
       <Paper>
-        <Stack>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton sx={{ ml: 2 }}></IconButton>
-            <Typography className="title" variant="h6" color="primary.light">
-              {t("loginTitle")} {/* Utilisez la traduction pour le titre */}
+        <Stack className="herderTitlePage">
+          <Box className="headerLeft">
+            <IconButton>
+              <LoginIcon
+                sx={{ color: "primary.light" }}
+                className="headerButton"
+              />
+            </IconButton>
+            <Typography
+              className="headerTitle"
+              variant="h6"
+              sx={{ color: "primary.light" }}
+            >
+              {t("loginTitle")}
             </Typography>
-          </div>
+          </Box>
         </Stack>
 
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          paddingX={5}
-          pb={5}
-        >
-          <form className="form" onSubmit={handleSubmit}>
-            <FormControl className="form-control">
-              <InputLabel>{t("usernameLabel")}</InputLabel>
-              <Select
-                label={t("passwordLabel")} 
-                value={user}
-                onChange={(e) => setUser(e.target.value)}
-                required
-                fullWidth
-                margin="normal"
-              >
-                <MenuItem value="football">{t("football")}</MenuItem>
-                <MenuItem value="basketball">{t("basketball")}</MenuItem>
-                <MenuItem value="tennis">{t("tennis")}</MenuItem>
-              </Select>
-
-              <TextField
-                className="text-field-mdp"
-                label={t("passwordLabel")}
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                fullWidth
-                margin="normal"
-              />
-              {error && (
-                <Typography variant="body2" color="error" align="center">
-                  {error}
-                </Typography>
-              )}
-              <Button type="submit" variant="contained" sx={{ color: "secondary.main" }}>
-                {t("loginButton")} 
-              </Button>
-            </FormControl>
-          </form>
+        <Box className="centeredContainer">
+          <FormControl>
+            <InputLabel>{t("usernameLabel")}</InputLabel>
+            <Select
+              label={t("passwordLabel")}
+              value={user}
+              onChange={(e) => setUser(e.target.value)}
+              required
+              margin="normal"
+            >
+              <MenuItem value="football">{t("football")}</MenuItem>
+              <MenuItem value="basketball">{t("basketball")}</MenuItem>
+              <MenuItem value="tennis">{t("tennis")}</MenuItem>
+            </Select>
+            <TextField
+              label={t("passwordLabel")}
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              fullWidth
+              margin="normal"
+            />
+            <Typography variant="body2" color="error" align="center">
+              {error || " "}
+            </Typography>
+            <Button
+              type="submit"
+              sx={{ color: "secondary.main" }}
+              onClick={handleSubmit}
+            >
+              {t("loginButton")}
+            </Button>
+          </FormControl>
         </Box>
       </Paper>
       <UserConectedDialog

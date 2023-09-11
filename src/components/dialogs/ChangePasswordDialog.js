@@ -18,6 +18,13 @@ function ChangePasswordDialog({ open, onClose }) {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const handleClose = () => {
+    setNewPassword("");
+    setConfirmPassword("");
+    setError(null);
+    onClose();
+  };
+
   function handleSubmit(e) {
     e.preventDefault();
 
@@ -42,36 +49,43 @@ function ChangePasswordDialog({ open, onClose }) {
   }
 
   return (
-    <Dialog fullWidth open={open} onClose={onClose}>
+    <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle>Modifier mot de passe</DialogTitle>
-      <DialogContent>
-        <FormControl className="form-control">
+      <DialogContent sx={{ padding: "0px 20px" }}>
+        <FormControl sx={{ width: "100%" }}>
           <TextField
+            sx={{ marginTop: "16px" }}
             label="Nouveau mot de passe"
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            
           />
           <TextField
+            sx={{ marginTop: "16px" }}
             label="Confirme le nouveaux mot de passe"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-           
           />
-          {error && (
-            <Typography variant="body2" color="error" align="center">
-              {error}
-            </Typography>
-          )}
         </FormControl>
+        <Typography
+          variant="body2"
+          sx={{
+            color: error ? "error.main" : "transparent",
+            textAlign: "center",
+            height: "1.5em",
+          }}
+        >
+          {error || " "}
+        </Typography>
       </DialogContent>
       <DialogActions>
+        <Button onClick={onClose} sx={{ color: "secondary.main" }}>
+          Annuler
+        </Button>
         <Button
           onClick={handleSubmit}
           type="submit"
-          variant="contained"
           sx={{ color: "secondary.main" }}
         >
           Envoyer

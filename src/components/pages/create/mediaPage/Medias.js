@@ -129,18 +129,18 @@ function Medias(props) {
   }
 
   return (
-    <>
+    <Box>
       <Paper className="mainPaperPage">
         <Stack className="herderTitlePage">
-          <div className="headerLeft">
+          <Box className="headerLeft">
             <IconButton className="header-button">
               <ImageIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
               {t("media")}
             </Typography>
-          </div>
-          <div className="headerRight">
+          </Box>
+          <Box className="headerRight">
             <IconButton
               className="header-button"
               onClick={() => {
@@ -156,9 +156,9 @@ function Medias(props) {
               style={{ display: "none" }}
               onChange={goToCrop}
             />
-          </div>
+          </Box>
         </Stack>
-        <Box className="container-medias">
+        <Box className="containerPage">
           <Droppable
             droppableId={`${props.eventMedia[1].id}`}
             isDropDisabled={true}
@@ -241,7 +241,7 @@ function Medias(props) {
                       ))}
                     </ImageList>
                   ) : (
-                    <Box className="Info">
+                    <Box className="infoPage">
                       <Typography color="text.secondary">
                         {t("ajouterMedia")}
                       </Typography>
@@ -301,7 +301,7 @@ function Medias(props) {
         DeleteFile={DeleteFile}
         displayDialogDelete={displayDialogDelete}
       />
-    </>
+    </Box>
   );
 }
 
