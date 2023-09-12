@@ -12,12 +12,9 @@ import { LoadingContext } from "./contexts/Context";
 
 import AuthService from "./services/authService";
 import ChangePassword from "./components/pages/login/ChangePassword";
-import ScoreboardPage from "./components/pages/scoreboard/ScoreboardPage";
 import Header from "./components/Header";
-import ParamTennis from "./components/pages/scoreboard/TennisScoreboard/ParamTennis";
-import TennisScoreboard from "./components/pages/scoreboard/TennisScoreboard/ScoreboardTennis";
 import Scoreboard from "./components/pages/scoreboard/Scoreboard";
-import Login from "./components/pages/login/LoginPage";
+import Login from "./components/pages/login/Login";
 import Macro from "./components/pages/macro/Macro";
 import Profile from "./components/pages/profile/Profile";
 import Navbar from "./components/NavBar";
@@ -77,11 +74,12 @@ function App() {
               {token && token.user.firstLogin === 1 ? (
                 <Grid
                   container
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{ minHeight: "calc(94vh - 56px)" }}
-                  spacing={2}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: "calc(94vh -  120px )",
+                    spacing: 2,
+                  }}
                 >
                   <Routes>
                     <Route
@@ -92,31 +90,28 @@ function App() {
                   </Routes>
                 </Grid>
               ) : token ? (
-                <Grid container spacing={2}>
-                  <Routes>
-                    {/* Autres routes */}
-                    <Route path="*" element={<Navigate to="/create" />} />
-                    <Route path="create" element={<Create />} />
-                    <Route path="create/:id" element={<Create />} />
-                    <Route path="macro" element={<Macro />} />
-                    <Route path="profile" element={<Profile />} />
-                    <Route path="scoreboard" element={<Scoreboard />} />
-                  </Routes>
-                </Grid>
+                <Routes>
+                  <Route path="*" element={<Navigate to="/create" />} />
+                  <Route path="create" element={<Create />} />
+                  <Route path="create/:id" element={<Create />} />
+                  <Route path="scoreboard" element={<Scoreboard />} />
+                  <Route path="macro" element={<Macro />} />
+                  <Route path="profile" element={<Profile />} />
+                </Routes>
               ) : (
                 <Grid
                   container
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                  style={{ minHeight: "calc(94vh - 56px)" }}
-                  spacing={2}
+                  sx={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    minHeight: "calc(94vh -  120px )",
+                    spacing: 2,
+                  }}
                 >
                   <Routes>
-                    {/* Autres routes */}
                     <Route path="*" element={<Navigate to="/login" />} />
                     <Route path="login" element={<Login />} />
-                  {/*   <Route path="login" element={<TennisScoreboard />} /> */}
+                    {/*   <Route path="login" element={<TennisScoreboard />} /> */}
                   </Routes>
                 </Grid>
               )}

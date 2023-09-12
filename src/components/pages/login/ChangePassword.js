@@ -6,14 +6,12 @@ import {
   Grid,
   IconButton,
   Paper,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AuthService from "../../../services/authService";
 import { useTranslation } from "react-i18next"; // Import de useTranslation
-import "./login.css";
 
 function ChangePassword() {
   const { t } = useTranslation(); // Utilisation de useTranslation
@@ -25,18 +23,12 @@ function ChangePassword() {
   function handleSubmit(e) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
-    // Vérifier si les mots de passe correspondent
     if (newPassword !== confirmPassword) {
-      setError(t("passwordMismatch")); // Utilisation de la traduction
-      return;
-
+      setError(t("passwordMismatch")); 
     }
-console.log(user.user);
 
     AuthService.changePassword(newPassword)
       .then(() => {
-        
-        
         user.user.firstLogin = 0;
         localStorage.setItem("user", JSON.stringify(user));
         setSuccess(true);
@@ -45,7 +37,7 @@ console.log(user.user);
       })
       .catch((error) => {
         setError(error.response.data.message);
-      }); 
+      });
   }
 
   function disconnect() {
@@ -54,60 +46,66 @@ console.log(user.user);
   }
 
   return (
-    <Grid item xs={10} style={{ maxWidth: "calc(50vh)" }}>
+    <Grid item>
       <Paper>
-        <Stack>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <IconButton onClick={disconnect} sx={{ ml: 2 }}>
-              <CloseIcon sx={{ color: "secondary.main" }} />
+        <Box className="herderTitlePage">
+          <Box className="headerLeft">
+            <IconButton onClick={disconnect}>
+              <CloseIcon
+                sx={{ color: "secondary.main" }}
+                className="headerButton"
+              />
             </IconButton>
-            <Typography variant="h6" color="primary.light" className="title">
-              {t("changePassword")} 
+            <Typography
+              className="headerTitle"
+              variant="h6"
+              sx={{ color: "primary.light" }}
+            >
+              {t("changePassword")}
             </Typography>
-          </div>
-        </Stack>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          paddingX={5}
-          pb={5}
-        >
+          </Box>
+        </Box>
+        <Box className="centeredContainer">
           {success ? (
             <Typography color="success.main" align="center">
-              {t("passwordChangeSuccess")} 
+              {t("passwordChangeSuccess")}
             </Typography>
           ) : (
-            <form className="form" onSubmit={handleSubmit}>
-              <FormControl className="form-control">
-                <TextField
-                className="text-field-mdp"
-                  label={t("newPassword")} 
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  required
-                  fullWidth
-                />
-                <TextField
-                  className="text-field-mdp"
-                  label={t("confirmNewPassword")} 
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  fullWidth
-                />
-                {error && (
-                  <Typography variant="body2" color="error" align="center">
-                    {error}
-                  </Typography>
-                )}
-                <Button type="submit" variant="contained" sx={{ color: "secondary.main" }}>
-                  {t("changePassword")} {/* Utilisation de la traduction */}
-                </Button>
-              </FormControl>
-            </form>
+            <FormControl sx={{ width: "35vh" }}>
+              <TextField
+                label={t("newPassword")}
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+
+              />
+              <TextField
+                label={t("confirmNewPassword")}
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                margin="normal"
+              />
+              <Typography
+                variant="body2"
+                sx={{
+                  color: error ? "error.main" : "transparent",
+                  textAlign: "center",
+                  height: "1.5em",
+                }}
+              >
+                {error || " "}
+              </Typography>
+              <Button
+                type="submit"
+                sx={{ color: "secondary.main" }}
+                onClick={handleSubmit}
+              >
+                {t("changePassword")}
+              </Button>
+            </FormControl>
           )}
         </Box>
       </Paper>

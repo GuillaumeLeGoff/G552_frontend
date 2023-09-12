@@ -238,27 +238,29 @@ function Create() {
     }
   };
   return (
-    <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-      <Grid item xs={12} md={8}>
-        <Event
-          updateMedia={updateMedia}
-          eventMedia={eventMedia}
-          setEventMedia={setEventMedia}
-          id={id}
-          isDragging={isDragging}
-          getEvents={getEvents}
-          closeEvent={closeEvent}
-        />
-      </Grid>
-      <Grid item xs={12} md={4}>
-        <Medias
-          eventMedia={eventMedia}
-          setEventMedia={setEventMedia}
-          getEvents={getEvents}
-          getMedias={getMedias}
-        />
-      </Grid>
-    </DragDropContext>
+    <Grid container spacing={2}>
+      <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+        <Grid item xs={12} md={8}>
+          <Event
+            updateMedia={updateMedia}
+            eventMedia={eventMedia}
+            setEventMedia={setEventMedia}
+            id={id}
+            isDragging={isDragging}
+            getEvents={getEvents}
+            closeEvent={closeEvent}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Medias
+            eventMedia={eventMedia}
+            setEventMedia={setEventMedia}
+            getEvents={getEvents}
+            getMedias={getMedias}
+          />
+        </Grid>
+      </DragDropContext>
+    </Grid>
   );
 }
 

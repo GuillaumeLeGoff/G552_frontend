@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import EventParam from "./eventParam/EventParam";
 import EventList from "./eventList/EventList";
 import { useNavigate } from "react-router-dom";
@@ -30,14 +29,5 @@ function Event(props) {
     </div>
   );
 }
-
-Event.propTypes = {
-  id: PropTypes.string,
-  updateMedia: PropTypes.func,
-  getEvents: PropTypes.func,
-  eventMedia: PropTypes.arrayOf(PropTypes.object),
-  setEventMedia: PropTypes.func,
-  isDragging: PropTypes.bool,
-};
 
 export default Event;

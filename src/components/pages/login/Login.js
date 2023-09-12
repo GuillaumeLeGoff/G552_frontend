@@ -7,7 +7,6 @@ import {
   IconButton,
   Paper,
   Select,
-  Stack,
   TextField,
   Typography,
   MenuItem,
@@ -20,8 +19,6 @@ import AuthService from "../../../services/authService";
 import UserConectedDialog from "../../dialogs/UserConectedDialog";
 import ActiveSessionsService from "../../../services/activeSessionsService";
 
-import "./login.css";
-import "../../../styles/App.css";
 
 function Login() {
   const [user, setUser] = useState("");
@@ -44,7 +41,6 @@ function Login() {
   }
 
   async function handleSubmit(e) {
-    console.log(user, password);
     e.preventDefault();
     try {
       await AuthService.login(user, password).then((response) => {
@@ -60,9 +56,9 @@ function Login() {
   return (
     <Grid item>
       <Paper>
-        <Stack className="herderTitlePage">
+        <Box className="herderTitlePage">
           <Box className="headerLeft">
-            <IconButton>
+            <IconButton disabled>
               <LoginIcon
                 sx={{ color: "primary.light" }}
                 className="headerButton"
@@ -76,32 +72,38 @@ function Login() {
               {t("loginTitle")}
             </Typography>
           </Box>
-        </Stack>
+        </Box>
 
         <Box className="centeredContainer">
-          <FormControl>
+          <FormControl sx={{ width: "35vh" }}>
             <InputLabel>{t("usernameLabel")}</InputLabel>
             <Select
               label={t("passwordLabel")}
               value={user}
               onChange={(e) => setUser(e.target.value)}
               required
-              margin="normal"
             >
               <MenuItem value="football">{t("football")}</MenuItem>
               <MenuItem value="basketball">{t("basketball")}</MenuItem>
               <MenuItem value="tennis">{t("tennis")}</MenuItem>
             </Select>
             <TextField
+            
               label={t("passwordLabel")}
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              fullWidth
               margin="normal"
             />
-            <Typography variant="body2" color="error" align="center">
+            <Typography
+              variant="body2"
+              sx={{
+                color: error ? "error.main" : "transparent",
+                textAlign: "center",
+                height: "1.5em",
+              }}
+            >
               {error || " "}
             </Typography>
             <Button
