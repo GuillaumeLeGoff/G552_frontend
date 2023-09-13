@@ -19,7 +19,6 @@ import AuthService from "../../../services/authService";
 import UserConectedDialog from "../../dialogs/UserConectedDialog";
 import ActiveSessionsService from "../../../services/activeSessionsService";
 
-
 function Login() {
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
@@ -75,45 +74,42 @@ function Login() {
         </Box>
 
         <Box className="centeredContainer">
-          <FormControl sx={{ width: "35vh" }}>
-            <InputLabel>{t("usernameLabel")}</InputLabel>
-            <Select
-              label={t("passwordLabel")}
-              value={user}
-              onChange={(e) => setUser(e.target.value)}
-              required
-            >
-              <MenuItem value="football">{t("football")}</MenuItem>
-              <MenuItem value="basketball">{t("basketball")}</MenuItem>
-              <MenuItem value="tennis">{t("tennis")}</MenuItem>
-            </Select>
-            <TextField
-            
-              label={t("passwordLabel")}
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              margin="normal"
-            />
-            <Typography
-              variant="body2"
-              sx={{
-                color: error ? "error.main" : "transparent",
-                textAlign: "center",
-                height: "1.5em",
-              }}
-            >
-              {error || " "}
-            </Typography>
-            <Button
-              type="submit"
-              sx={{ color: "secondary.main" }}
-              onClick={handleSubmit}
-            >
-              {t("loginButton")}
-            </Button>
-          </FormControl>
+          <form onSubmit={handleSubmit}>
+            <FormControl sx={{ width: "35vh" }}>
+              <InputLabel>{t("usernameLabel")}</InputLabel>
+              <Select
+                label={t("passwordLabel")}
+                value={user}
+                onChange={(e) => setUser(e.target.value)}
+                required
+              >
+                <MenuItem value="football">{t("football")}</MenuItem>
+                <MenuItem value="basketball">{t("basketball")}</MenuItem>
+                <MenuItem value="tennis">{t("tennis")}</MenuItem>
+              </Select>
+              <TextField
+                label={t("passwordLabel")}
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                margin="normal"
+              />
+              <Typography
+                variant="body2"
+                sx={{
+                  color: error ? "error.main" : "transparent",
+                  textAlign: "center",
+                  height: "1.5em",
+                }}
+              >
+                {error || " "}
+              </Typography>
+              <Button type="submit" sx={{ color: "secondary.main" }}>
+                {t("loginButton")}
+              </Button>
+            </FormControl>
+          </form>
         </Box>
       </Paper>
       <UserConectedDialog

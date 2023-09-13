@@ -24,7 +24,7 @@ function ChangePassword() {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if (newPassword !== confirmPassword) {
-      setError(t("passwordMismatch")); 
+      setError(t("passwordMismatch"));
     }
 
     AuthService.changePassword(newPassword)
@@ -71,41 +71,38 @@ function ChangePassword() {
               {t("passwordChangeSuccess")}
             </Typography>
           ) : (
-            <FormControl sx={{ width: "35vh" }}>
-              <TextField
-                label={t("newPassword")}
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-
-              />
-              <TextField
-                label={t("confirmNewPassword")}
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-                margin="normal"
-              />
-              <Typography
-                variant="body2"
-                sx={{
-                  color: error ? "error.main" : "transparent",
-                  textAlign: "center",
-                  height: "1.5em",
-                }}
-              >
-                {error || " "}
-              </Typography>
-              <Button
-                type="submit"
-                sx={{ color: "secondary.main" }}
-                onClick={handleSubmit}
-              >
-                {t("changePassword")}
-              </Button>
-            </FormControl>
+            <form onSubmit={handleSubmit}>
+              <FormControl sx={{ width: "35vh" }}>
+                <TextField
+                  label={t("newPassword")}
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+                <TextField
+                  label={t("confirmNewPassword")}
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  margin="normal"
+                />
+                <Typography
+                  variant="body2"
+                  sx={{
+                    color: error ? "error.main" : "transparent",
+                    textAlign: "center",
+                    height: "1.5em",
+                  }}
+                >
+                  {error || " "}
+                </Typography>
+                <Button type="submit" sx={{ color: "secondary.main" }}>
+                  {t("changePassword")}
+                </Button>
+              </FormControl>
+            </form>
           )}
         </Box>
       </Paper>

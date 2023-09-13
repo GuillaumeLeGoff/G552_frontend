@@ -87,7 +87,7 @@ function EventList({ onEventClick }) {
       <Paper className="mainPaperPage">
         <Stack className="herderTitlePage">
           <Box className="headerLeft">
-            <IconButton className="headerButton">
+            <IconButton disabled className="headerButton">
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography

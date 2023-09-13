@@ -10,16 +10,24 @@ import {
   Typography,
   Slider,
   LinearProgress,
-  Button,
-  Divider,
 } from "@mui/material";
+
+import PermMediaIcon from "@mui/icons-material/PermMedia";
 import SettingsIcon from "@mui/icons-material/Settings";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LockIcon from "@mui/icons-material/Lock";
+import StorageIcon from "@mui/icons-material/Storage";
+import BugReportIcon from "@mui/icons-material/BugReport";
+import PhoneIcon from "@mui/icons-material/Phone";
+import LanguageIcon from "@mui/icons-material/Language";
+import ModeNightIcon from "@mui/icons-material/ModeNight";
+
 import ChangePasswordDialog from "../../dialogs/ChangePasswordDialog";
 import authService from "../../../services/authService";
-import "./Profile.css";
 import paramService from "../../../services/paramService";
 import veilleService from "../../../services/veilleService";
 import LanguageSelector from "../../LanguageSelector";
+import "./Profile.css";
 
 function Profile() {
   const [username, setUsername] = useState("John Doe");
@@ -95,80 +103,176 @@ function Profile() {
       <Grid item xs={12}>
         <Paper className="mainPaperPage">
           <Stack className="herderTitlePage">
-            <div className="headerLeft">
-              <IconButton>
+            <Box className="headerLeft">
+              <IconButton disabled className="headerButton">
                 <SettingsIcon sx={{ color: "primary.light" }} />
               </IconButton>
-              <Typography variant="h6" className="headerTitlePadding">
+              <Typography
+                variant="h6"
+                sx={{ color: "text.primary" }}
+                className="headerTitle"
+              >
                 Paramètres de {username}
               </Typography>
-            </div>
+            </Box>
           </Stack>
-          <Box className="profileContainer">
-            <Grid direction="row" justifyContent="center" container>
-              <Grid item xs={12} md={5}>
-                <Typography className="titleParam" variant="h6">Paramètres du compte</Typography>
+          <Box
+            className="containerPage"
+            sx={{ paddingLeft: 6, paddingRight: 6 }}
+          >
+            <Grid container spacing={6}>
+              <Grid item xs={6}>
                 <Stack spacing={2}>
-                  <Stack direction="column" spacing={1}>
-                    <Button
-                      onClick={toggleModal}
-                      variant="contained"
-                      sx={{ color: "secondary.main" }}
+                  <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                    Application
+                  </Typography>
+                  <Stack
+                    onClick={toggleModal}
+                    direction="row"
+                    alignItems="center"
+                    spacing={3}
+                  >
+                    <IconButton disabled>
+                      <LockIcon sx={{ color: "text.secondary" }} />
+                    </IconButton>
+                    <Typography
+                      variant="h8"
+                      sx={{
+                        color: "text.primary",
+                        textTransform: "none",
+                        padding: "0",
+                      }}
                     >
                       Modifier son mot de passe
-                    </Button>
+                    </Typography>
                   </Stack>
-                  <Stack className="switchContainer">
-                    <Typography>Mode sombre</Typography>
-                    <Switch
-                      checked={darkMode}
-                      onChange={setIsDarkMode}
-                      sx={{ color: "secondary.main" }}
-                    />
+                  <Stack
+                    onClick={setIsDarkMode}
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={3}
+                  >
+                    <Stack spacing={3} direction="row" alignItems="center">
+                      <IconButton disabled>
+                        <DarkModeIcon sx={{ color: "text.secondary" }} />
+                      </IconButton>
+                      <Typography variant="h8" sx={{ color: "text.primary" }}>
+                        Mode sombre
+                      </Typography>
+                    </Stack>
+                    <Switch checked={darkMode} color="secondary" />
                   </Stack>
-                  <Stack className="switchContainer">
-                    <Typography>Espace de stockage utilisé</Typography>
+                  <Stack
+                    onClick={toggleModal}
+                    direction="row"
+                    alignItems="center"
+                    spacing={3}
+                  >
+                    <IconButton disabled>
+                      <StorageIcon sx={{ color: "text.secondary" }} />
+                    </IconButton>
+
+                    <Box sx={{ flexGrow: 1 }}>
+                      <Typography variant="h8" sx={{ color: "text.primary" }}>
+                        Espace de stockage utilisé
+                      </Typography>
+                      <LinearProgress
+                        variant="determinate"
+                        value={percentage}
+                        color={percentage > 80 ? "error" : "secondary"}
+                      />
+                    </Box>
                   </Stack>
-                  <LinearProgress
-                    variant="determinate"
-                    value={percentage}
-                    color={percentage > 80 ? "error" : "secondary"}
-                  />
-                  <Button variant="contained" sx={{ color: "secondary.main" }}>
-                    test
-                  </Button>
-                  <LanguageSelector />
-                  <Typography> Numéro de Stramatel : 0123456789</Typography>
+                  <Stack direction="row" alignItems="center" spacing={3}>
+                    <IconButton disabled>
+                      <BugReportIcon sx={{ color: "text.secondary" }} />
+                    </IconButton>
+                    <Typography variant="h8" sx={{ color: "text.primary" }}>
+                      Test Panneaux
+                    </Typography>
+                  </Stack>
+
+                  <Stack
+                    justifyContent="space-between"
+                    direction="row"
+                    alignItems="center"
+                    spacing={3}
+                  >
+                    <Stack spacing={3} direction="row" alignItems="center">
+                      <IconButton disabled>
+                        <LanguageIcon sx={{ color: "text.secondary" }} />
+                      </IconButton>
+                      <Typography variant="h8" sx={{ color: "text.primary" }}>
+                        Langues
+                      </Typography>
+                    </Stack>
+                    <LanguageSelector />
+                  </Stack>
+                </Stack>
+                <Stack spacing={2}>
+                  <Typography
+                    variant="h6"
+                    sx={{ mt: 2, color: "text.secondary" }}
+                  >
+                    Info
+                  </Typography>
+                  <Stack direction="row" alignItems="center" spacing={3}>
+                    <IconButton disabled>
+                      <PhoneIcon sx={{ color: "text.secondary" }} />
+                    </IconButton>
+                    <Typography variant="h8" sx={{ color: "text.primary" }}>
+                      0123456789
+                    </Typography>
+                  </Stack>
                 </Stack>
               </Grid>
-              <Divider
-                className="divider"
-                orientation="vertical"
-                flexItem
-                md={2}
-              />
-              <Grid item xs={12} md={5}>
-                <Typography  className="titleParam" variant="h6">Paramètres principaux</Typography>
+              <Grid item xs={6}>
                 <Stack spacing={2}>
-                  <Stack className="switchContainer">
-                    <Typography>Event auto</Typography>
+                  <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                    Compte
+                  </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={3}
+                    onClick={handleEventAutoChange}
+                  >
+                    <Stack spacing={3} direction="row" alignItems="center">
+                      <IconButton disabled>
+                        <PermMediaIcon sx={{ color: "text.secondary" }} />
+                      </IconButton>
+                      <Typography>Event auto</Typography>
+                    </Stack>
                     <Switch
-                      sx={{ color: "secondary.main" }}
+                      color="secondary"
                       checked={param.event_auto === 1}
-                      onChange={handleEventAutoChange}
                     />
                   </Stack>
-                  <Stack className="switchContainer">
-                    <Typography>Mise en veille automatique</Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={3}
+                    onClick={handleVeilleChange}
+                  >
+                    <Stack spacing={3} direction="row" alignItems="center">
+                      <IconButton disabled>
+                        <ModeNightIcon sx={{ color: "text.secondary" }} />
+                      </IconButton>
+                      <Typography>Mise en veille automatique</Typography>
+                    </Stack>
                     <Switch
-                      sx={{ color: "secondary.main" }}
+                      color="secondary"
                       checked={veille.enable === 1}
                       onChange={handleVeilleChange}
                     />
                   </Stack>
-                  <Stack className="switchContainer">
+                  <Stack>
                     <Slider
-                      sx={{ color: "secondary.main" }}
+                      m={5}
+                      color="secondary"
                       value={[veille.start_time, veille.end_time]}
                       min={0}
                       max={24}

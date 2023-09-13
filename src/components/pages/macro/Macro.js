@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Box,
   Grid,
@@ -14,14 +15,14 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+
 import KeyboardIcon from "@mui/icons-material/Keyboard";
-import { useTranslation } from "react-i18next"; // Importer useTranslation depuis react-i18next
+
 import eventService from "../../../services/eventService";
 import macroService from "../../../services/macroService";
-import "./Macro.css";
 
 function Macro() {
-  const { t } = useTranslation(); // Utiliser le hook useTranslation pour la traduction
+  const { t } = useTranslation();
   const [macros, setMacros] = useState(null);
   const [events, setEvents] = useState([]);
 
@@ -67,26 +68,23 @@ function Macro() {
           </Box>
         </Stack>
         <Stack>
-          <Box className="containerPage">
+          <Box className="containerPage" sx={{paddingTop: "0"}}>
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
                   <TableCell>{t("macro.number")}</TableCell>{" "}
-                  {/* Traduire l'en-tête du numéro */}
-                  <TableCell className="tableCellRight" align="right">
-                    {t("macro.event")} {/* Traduire l'en-tête de l'événement */}
-                  </TableCell>
+                  <TableCell align="right">{t("macro.event")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {macros !== null
+                {macros
                   ? macros.map((macro, index1) => (
                       <TableRow key={macro.button_id}>
                         <TableCell>{macro.button_id}</TableCell>
                         <TableCell align="right">
                           <Select
+                          sx={{ width: "30vh" }}
                             align="left"
-                            className="selectEvent"
                             value={macro.event_id || "choisir event"}
                             onChange={(e) => {
                               const updatedData = macros.map(
@@ -109,8 +107,7 @@ function Macro() {
                           >
                             <MenuItem value="choisir event">
                               {t("macro.none")}
-                            </MenuItem>{" "}
-                            {/* Traduire l'option "aucun" */}
+                            </MenuItem>
                             {events.map((event) => (
                               <MenuItem key={event.id} value={event.id}>
                                 {event.name}

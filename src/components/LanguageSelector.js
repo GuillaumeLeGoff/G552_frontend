@@ -2,43 +2,46 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
-
-
 function LanguageSelector() {
   const { i18n } = useTranslation();
-  const [selectedLanguage, setSelectedLanguage] = useState(i18n.language.split('-')[0]);
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    i18n.language.split("-")[0]
+  );
 
   useEffect(() => {
-    setSelectedLanguage(i18n.language.split('-')[0]);
+    setSelectedLanguage(i18n.language.split("-")[0]);
   }, [i18n.language]);
 
   const changeLanguage = (event) => {
     const selectedLanguage = event.target.value;
     setSelectedLanguage(selectedLanguage);
     i18n.changeLanguage(selectedLanguage);
-    localStorage.setItem('i18nextLng', selectedLanguage);
+    localStorage.setItem("i18nextLng", selectedLanguage);
   };
-
-
 
   return (
     <Box>
-      <FormControl>
+      <FormControl size="small">
         <Select value={selectedLanguage} onChange={changeLanguage}>
           <MenuItem value="en">
-            <img src={"/medias/flag/en.png"} alt="English" width={20} height={20} /> 
+            {/* <Box src={"/medias/flag/en.png"} alt="English" width={20} height={20} /> */}
+            English
           </MenuItem>
           <MenuItem value="fr">
-            <img src={"/medias/flag/fr.png"} alt="Français" width={20} height={20} /> 
+            {/*   <Box src={"/medias/flag/fr.png"} alt="Français" width={20} height={20} />  */}
+            Français
           </MenuItem>
           <MenuItem value="pl">
-            <img src={"/medias/flag/pl.png"} alt="Polski" width={20} height={20} /> 
+            {/* <Box src={"/medias/flag/pl.png"} alt="Polski" width={20} height={20} />  */}
+            Polski
           </MenuItem>
           <MenuItem value="de">
-            <img src={"/medias/flag/de.png"} alt="Deutsch" width={20} height={20} /> 
+            {/* <Box src={"/medias/flag/de.png"} alt="Deutsch" width={20} height={20} />  */}
+            Deutsch
           </MenuItem>
           <MenuItem value="es">
-            <img src={"/medias/flag/es.png"} alt="Español" width={20} height={20} /> 
+            {/* <Box src={"/medias/flag/es.png"} alt="Español" width={20} height={20} />  */}
+            Español
           </MenuItem>
         </Select>
       </FormControl>
