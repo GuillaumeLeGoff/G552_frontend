@@ -1,0 +1,36 @@
+{
+    "badminton": {
+      "option1": "number_of_sets",
+      "option2": "deciding_point",
+      "option3": "tie_break",
+      "option4": "tie_break_in_final_set",
+      "option5": "games_per_set",
+      "option6": "",
+      "option7": "set_type",
+      "option8": ""
+
+    },
+    "volleyball": {
+      "option1": "number_of_sets",
+      "option2": "points_per_set",
+      "option3": "points_last-set",
+      "option4": "",
+      "option5": "",
+      "option6": "",
+      "option7": "",
+      "option8": ""
+    },
+
+    "indoor_soccer": {
+        "option1": "",
+        "option2": "",
+        "option3": "",
+        "option4": "",
+        "option5": "",
+        "option6": "",
+        "option7": "",
+        "option8": ""
+      }
+
+
+  }

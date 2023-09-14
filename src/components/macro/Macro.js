@@ -68,11 +68,11 @@ function Macro() {
           </Box>
         </Stack>
         <Stack>
-          <Box className="containerPage" sx={{paddingTop: "0"}}>
+          <Box className="containerPage" sx={{ paddingTop: "0" }}>
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>{t("macro.number")}</TableCell>{" "}
+                  <TableCell>{t("macro.number")}</TableCell>
                   <TableCell align="right">{t("macro.event")}</TableCell>
                 </TableRow>
               </TableHead>
@@ -83,7 +83,7 @@ function Macro() {
                         <TableCell>{macro.button_id}</TableCell>
                         <TableCell align="right">
                           <Select
-                          sx={{ width: "30vh" }}
+                            sx={{ width: "30vh" }}
                             align="left"
                             value={macro.event_id || "choisir event"}
                             onChange={(e) => {
