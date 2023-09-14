@@ -11,20 +11,20 @@ import { useDarkMode } from "./contexts/DarkModeContext";
 import { LoadingContext } from "./contexts/Context";
 
 import AuthService from "./services/authService";
-import ChangePassword from "./components/pages/login/ChangePassword";
-import Header from "./components/Header";
-import Scoreboard from "./components/pages/scoreboard/Scoreboard";
-import Login from "./components/pages/login/Login";
-import Macro from "./components/pages/macro/Macro";
-import Profile from "./components/pages/profile/Profile";
-import Navbar from "./components/NavBar";
-import LoadingScreen from "./components/LoadingScreen";
-import Create from "./components/pages/create/CreatePage";
+import ChangePassword from "./components/login/ChangePassword";
+import Header from "./components/common/Header";
+import Scoreboard from "./components/scoreboard/Scoreboard";
+import Login from "./components/login/Login";
+import Macro from "./components/macro/Macro";
+import Profile from "./components/profile/Profile";
+import Navbar from "./components/common/NavBar";
+import LoadingScreen from "./components/common/LoadingScreen";
+import MediaAndDiaporamaManager from "./components/common/MediaAndDiaporamaManager";
 
 import { switchToDarkTheme } from "./themes/darkTheme.ts";
 import { switchToClairTheme } from "./themes/clairTheme.ts";
 import "./styles/Global.css";
-import "./styles/App.css";
+
 
 function App() {
   const [token] = useState(AuthService.getCurrentUser());
@@ -69,7 +69,7 @@ function App() {
                 <LoadingScreen />
               </Box>
             )}
-            <Header />
+            <Header darkMode={darkMode}/>
             <Box className="mainContainer">
               {token && token.user.firstLogin === 1 ? (
                 <Grid
@@ -92,8 +92,8 @@ function App() {
               ) : token ? (
                 <Routes>
                   <Route path="*" element={<Navigate to="/create" />} />
-                  <Route path="create" element={<Create />} />
-                  <Route path="create/:id" element={<Create />} />
+                  <Route path="create" element={<MediaAndDiaporamaManager />} />
+                  <Route path="create/:id" element={<MediaAndDiaporamaManager />} />
                   <Route path="scoreboard" element={<Scoreboard />} />
                   <Route path="macro" element={<Macro />} />
                   <Route path="profile" element={<Profile />} />

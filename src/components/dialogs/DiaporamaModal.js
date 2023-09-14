@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, IconButton, Modal, Stack, Typography } from "@mui/material";
-import { useTheme } from "@emotion/react";
+
 import { useTranslation } from "react-i18next";
 
 import PauseIcon from "@mui/icons-material/Pause";
@@ -12,15 +12,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 function DiaporamaModal(props) {
-  const theme = useTheme();
+
   const { t } = useTranslation();
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Box
         sx={{
-          backgroundColor: theme.palette.primary.main,
+          backgroundColor: "primary.main",
           height: "100%",
-          padding: 2,
         }}
       >
         <Stack className="herderTitlePage">

@@ -9,8 +9,10 @@ import {
   Typography,
   FormControl,
 } from "@mui/material";
-import authService from "../../services/authService";
+
 import { useSnackbar } from "../../contexts/SnackbarContext";
+import authService from "../../services/authService";
+
 
 function ChangePasswordDialog({ open, onClose }) {
   const { openSnackbar } = useSnackbar();
@@ -49,10 +51,10 @@ function ChangePasswordDialog({ open, onClose }) {
   }
 
   return (
-    <Dialog fullWidth open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Modifier mot de passe</DialogTitle>
       <DialogContent sx={{ padding: "0px 20px" }}>
-        <FormControl sx={{ width: "100%" }}>
+        <FormControl sx={{minWidth:"40vh"}}>
           <TextField
             sx={{ marginTop: "16px" }}
             label="Nouveau mot de passe"
@@ -62,7 +64,7 @@ function ChangePasswordDialog({ open, onClose }) {
           />
           <TextField
             sx={{ marginTop: "16px" }}
-            label="Confirme le nouveaux mot de passe"
+            label="Confirme mot de passe"
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -92,6 +94,8 @@ function ChangePasswordDialog({ open, onClose }) {
         </Button>
       </DialogActions>
     </Dialog>
+
+    
   );
 }
 
