@@ -23,12 +23,12 @@ import EastIcon from "@mui/icons-material/East";
 import PauseIcon from "@mui/icons-material/Pause";
 import EditIcon from "@mui/icons-material/Edit";
 import SurroundSoundIcon from "@mui/icons-material/SurroundSound";
+import authService from "../../../services/authService";
 
-import ScoringBadmintonService from "../../../services/scoringBadmintonService";
+import ScoreService from "../../../services/scoreService";
 import MacroShortcut from "../MacroShortcut";
 import SettingsModal from "./ParamBadminton";
 import "./Badminton.css";
-
 
 function ScoreboardBadminton() {
   const [player1, setPlayer1] = useState("");
@@ -49,34 +49,76 @@ function ScoreboardBadminton() {
   const medTypo = isMobile ? "h6" : "h5";
 
   useEffect(() => {
-    console.log(timer);
-    ScoringBadmintonService.getAll().then((res) => {
-      const data = res.data[0];
-      console.log(data);
-      setPlayer1(data.player1_name);
-      setPlayer2(data.player2_name);
-      setNumOfSets(data.number_of_sets);
-      setMaxSetPoints(data.max_set_points);
-      setScorePlayer1(data.score_player1);
-      setScorePlayer2(data.score_player2);
-      setSetsWonPlayer1(data.sets_won_player1);
-      setSetsWonPlayer2(data.sets_won_player2);
-      setNumOfPoints(data.points_per_set);
-      setServer(data.server_name);
-      setTimer(data.timer);
+    getData().then((data) => {
+      setUsestate(data);
+      console.log("data01", data);
+
+      if (!data.max_set_points) {
+        initializeSetting(data);
+      }
     });
   }, []);
 
   const [winner, setWinner] = useState("");
 
+  const getData = async () => {
+    const res = await ScoreService.getByUserId(
+      authService.getCurrentUser().user.id
+    );
+    const data = res.data[0];
+    return data;
+  };
+
+  const setUsestate = async (data) => {
+    console.log("data02", data);
+    setPlayer1(data.nom_team1);
+    setPlayer2(data.nom_team2);
+    setNumOfSets(data.number_of_sets);
+    setMaxSetPoints(data.max_set_points);
+    setScorePlayer1(data.score_team1);
+    setScorePlayer2(data.score_team2);
+    setSetsWonPlayer1(data.sets_team1);
+    setSetsWonPlayer2(data.sets_team2);
+    setNumOfPoints(data.points_per_set);
+    setServer(data.server_name);
+    setTimer(data.timer);
+  };
+
+  const initializeSetting = async (data) => {
+    try {
+      const score = {
+        option1: 3,
+        option2: 21,
+        option3: 30,
+        option4: null,
+        option5: null,
+        option6: null,
+        option7: data.nom_team1,
+        option8: null,
+      };
+      await ScoreService.updateSetting(authService.getCurrentUser().user.id, score);
+    } catch (error) {
+      console.error(
+        "Erreur lors de la mise à jour de la base de données",
+        error
+      );
+    }
+  };
+
   const checkSetWinner = async (newScorePlayer1, newScorePlayer2) => {
     let newSetsWonPlayer1 = setsWonPlayer1;
     let newSetsWonPlayer2 = setsWonPlayer2;
-  
+
     // Mettre à jour le score et le serveur dans la base de données
-    const updateDatabase = async (newScorePlayer1, newScorePlayer2, newSetsWonPlayer1, newSetsWonPlayer2, newServer) => {
+    const updateDatabase = async (
+      newScorePlayer1,
+      newScorePlayer2,
+      newSetsWonPlayer1,
+      newSetsWonPlayer2,
+      newServer
+    ) => {
       try {
-        await ScoringBadmintonService.update({
+        await ScoreService.update({
           score_player1: newScorePlayer1,
           score_player2: newScorePlayer2,
           sets_won_player1: newSetsWonPlayer1,
@@ -84,49 +126,62 @@ function ScoreboardBadminton() {
           server_name: newServer,
         });
       } catch (error) {
-        console.error("Erreur lors de la mise à jour de la base de données", error);
+        console.error(
+          "Erreur lors de la mise à jour de la base de données",
+          error
+        );
       }
     };
-  
+
     // Vérification pour le joueur 1
-    if (newScorePlayer1 >= numOfPoints && newScorePlayer1 - newScorePlayer2 >= 2) {
+    if (
+      newScorePlayer1 >= numOfPoints &&
+      newScorePlayer1 - newScorePlayer2 >= 2
+    ) {
       newSetsWonPlayer1 += 1;
       setServer(player2); // Changement de serveur
     }
-  
+
     // Vérification pour le joueur 2
-    else if (newScorePlayer2 >= numOfPoints && newScorePlayer2 - newScorePlayer1 >= 2) {
+    else if (
+      newScorePlayer2 >= numOfPoints &&
+      newScorePlayer2 - newScorePlayer1 >= 2
+    ) {
       newSetsWonPlayer2 += 1;
       setServer(player1); // Changement de serveur
     }
-  
+
     // Mettre à jour les états locaux et la base de données
     await updateDatabase();
-  
+
     // Vérifie si nous avons un gagnant
     if (newSetsWonPlayer1 >= numOfSets) {
       setWinner(player1);
     } else if (newSetsWonPlayer2 >= numOfSets) {
       setWinner(player2);
     }
-  
+
     // Mettre à jour les états de sets gagnés
     setSetsWonPlayer1(newSetsWonPlayer1);
     setSetsWonPlayer2(newSetsWonPlayer2);
   };
-  
+
   const handleScoreChangePlayer1 = async (increment) => {
-    const newScore = increment ? scorePlayer1 + 1 : Math.max(0, scorePlayer1 - 1);
+    const newScore = increment
+      ? scorePlayer1 + 1
+      : Math.max(0, scorePlayer1 - 1);
     await checkSetWinner(newScore, scorePlayer2);
     setScorePlayer1(newScore);
   };
-  
+
   const handleScoreChangePlayer2 = async (increment) => {
-    const newScore = increment ? scorePlayer2 + 1 : Math.max(0, scorePlayer2 - 1);
+    const newScore = increment
+      ? scorePlayer2 + 1
+      : Math.max(0, scorePlayer2 - 1);
     await checkSetWinner(scorePlayer1, newScore);
     setScorePlayer2(newScore);
   };
-  
+
   const changeServer = (player) => {
     if (player !== server) {
       setServer((prevServer) => (prevServer === player1 ? player2 : player1));
@@ -167,7 +222,10 @@ function ScoreboardBadminton() {
                 <PlayArrowIcon sx={{ color: "secondary.main" }} />
               </IconButton>
               <IconButton>
-                <SettingsIcon onClick={handleOpenSettingsModal} sx={{ color: "secondary.main" }} />
+                <SettingsIcon
+                  onClick={handleOpenSettingsModal}
+                  sx={{ color: "secondary.main" }}
+                />
               </IconButton>
             </div>
           </Stack>
@@ -354,7 +412,7 @@ function ScoreboardBadminton() {
         </Paper>
       </Grid>
       <Modal open={settingsModalOpen} onClose={handleCloseSettingsModal}>
-        <SettingsModal 
+        <SettingsModal
           open={settingsModalOpen}
           handleClose={handleCloseSettingsModal}
           saveSettings={saveSettings}

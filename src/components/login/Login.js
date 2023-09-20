@@ -86,6 +86,7 @@ function Login() {
               >
                 <MenuItem value="football">{t("football")}</MenuItem>
                 <MenuItem value="basketball">{t("basketball")}</MenuItem>
+                <MenuItem value="badminton">Badminton</MenuItem>
                 <MenuItem value="tennis">{t("tennis")}</MenuItem>
               </Select>
               <TextField

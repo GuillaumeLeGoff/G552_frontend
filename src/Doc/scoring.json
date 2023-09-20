@@ -1,12 +1,12 @@
 {
     "badminton": {
       "option1": "number_of_sets",
-      "option2": "deciding_point",
-      "option3": "tie_break",
-      "option4": "tie_break_in_final_set",
-      "option5": "games_per_set",
+      "option2": "points_per_set",
+      "option3": "max_set_points",
+      "option4": "",
+      "option5": "",
       "option6": "",
-      "option7": "set_type",
+      "option7": "server_name",
       "option8": ""
 
     },
