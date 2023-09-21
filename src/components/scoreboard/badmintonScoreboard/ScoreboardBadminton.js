@@ -31,16 +31,28 @@ import SettingsModal from "./ParamBadminton";
 import "./Badminton.css";
 
 function ScoreboardBadminton() {
-  const [player1, setPlayer1] = useState("");
+  /*   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
   const [numOfSets, setNumOfSets] = useState("");
   const [maxSetPoints, setMaxSetPoints] = useState("");
   const [numOfPoints, setNumOfPoints] = useState(0);
   const [scorePlayer1, setScorePlayer1] = useState(0);
   const [scorePlayer2, setScorePlayer2] = useState(0);
-  const [setsWonPlayer1, setSetsWonPlayer1] = useState(0);
-  const [setsWonPlayer2, setSetsWonPlayer2] = useState(0);
-  const [server, setServer] = useState("");
+  const [setsWinPlayer1, setSetsWinPlayer1] = useState(0);
+  const [setsWinPlayer2, setSetsWinPlayer2] = useState(0); */
+
+  const [gameState, setGameState] = useState({
+    player1: "",
+    player2: "",
+    numOfSets: "",
+    maxSetPoints: "",
+    numOfPoints: 0,
+    scorePlayer1: 0,
+    scorePlayer2: 0,
+    setsPlayer1: 0,
+    setsPlayer2: 0,
+    server: "",
+  });
   const [timer, setTimer] = useState(0);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -62,25 +74,26 @@ function ScoreboardBadminton() {
   const [winner, setWinner] = useState("");
 
   const getData = async () => {
-    const res = await ScoreService.getByUserId(
-      authService.getCurrentUser().user.id
-    );
+    const res = await ScoreService.getByUserId();
     const data = res.data[0];
     return data;
   };
 
   const setUsestate = async (data) => {
     console.log("data02", data);
-    setPlayer1(data.nom_team1);
-    setPlayer2(data.nom_team2);
-    setNumOfSets(data.number_of_sets);
-    setMaxSetPoints(data.max_set_points);
-    setScorePlayer1(data.score_team1);
-    setScorePlayer2(data.score_team2);
-    setSetsWonPlayer1(data.sets_team1);
-    setSetsWonPlayer2(data.sets_team2);
-    setNumOfPoints(data.points_per_set);
-    setServer(data.server_name);
+    setGameState({
+      player1: data.nom_team1,
+      player2: data.nom_team2,
+      numOfSets: data.option1,
+      maxSetPoints: data.option3,
+      numOfPoints: data.option2,
+      scorePlayer1: data.score_team1,
+      scorePlayer2: data.score_team2,
+      setsPlayer1: data.option4,
+      setsPlayer2: data.option5,
+      server: data.option7,
+    });
+
     setTimer(data.timer);
   };
 
@@ -96,7 +109,10 @@ function ScoreboardBadminton() {
         option7: data.nom_team1,
         option8: null,
       };
-      await ScoreService.updateSetting(authService.getCurrentUser().user.id, score);
+      await ScoreService.updateSettings(
+        authService.getCurrentUser().user.id,
+        score
+      );
     } catch (error) {
       console.error(
         "Erreur lors de la mise à jour de la base de données",
@@ -105,25 +121,20 @@ function ScoreboardBadminton() {
     }
   };
 
-  const checkSetWinner = async (newScorePlayer1, newScorePlayer2) => {
-    let newSetsWonPlayer1 = setsWonPlayer1;
-    let newSetsWonPlayer2 = setsWonPlayer2;
+  const checkWinner = async (newScorePlayer1, newScorePlayer2) => {
+    let newSetsWonPlayer1 = gameState.setsPlayer1;
+    let newSetsWonPlayer2 = gameState.setsPlayer2;
 
     // Mettre à jour le score et le serveur dans la base de données
-    const updateDatabase = async (
-      newScorePlayer1,
-      newScorePlayer2,
-      newSetsWonPlayer1,
-      newSetsWonPlayer2,
-      newServer
-    ) => {
+
+    const updateDatabase = async () => {
       try {
-        await ScoreService.update({
-          score_player1: newScorePlayer1,
-          score_player2: newScorePlayer2,
-          sets_won_player1: newSetsWonPlayer1,
-          sets_won_player2: newSetsWonPlayer2,
-          server_name: newServer,
+        await ScoreService.updateScores({
+          score_team1: newScorePlayer1,
+          score_team2: newScorePlayer2,
+          option4: newSetsWonPlayer1,
+          option5: newSetsWonPlayer2,
+          option7: gameState.server,
         });
       } catch (error) {
         console.error(
@@ -132,61 +143,84 @@ function ScoreboardBadminton() {
         );
       }
     };
-
     // Vérification pour le joueur 1
     if (
-      newScorePlayer1 >= numOfPoints &&
+      newScorePlayer1 >= gameState.numOfPoints &&
       newScorePlayer1 - newScorePlayer2 >= 2
     ) {
       newSetsWonPlayer1 += 1;
-      setServer(player2); // Changement de serveur
+      newScorePlayer1 = 0;
+      newScorePlayer2 = 0;
+      setGameState({ ...gameState, server: gameState.player2 });
+      changeServer(gameState.player1);
     }
 
     // Vérification pour le joueur 2
     else if (
-      newScorePlayer2 >= numOfPoints &&
+      newScorePlayer2 >= gameState.numOfPoints &&
       newScorePlayer2 - newScorePlayer1 >= 2
     ) {
       newSetsWonPlayer2 += 1;
-      setServer(player1); // Changement de serveur
+      newScorePlayer1 = 0;
+      newScorePlayer2 = 0;
+      setGameState({ ...gameState, server: gameState.player1 });
+      changeServer(gameState.player2);
     }
 
-    // Mettre à jour les états locaux et la base de données
-    await updateDatabase();
-
     // Vérifie si nous avons un gagnant
-    if (newSetsWonPlayer1 >= numOfSets) {
-      setWinner(player1);
-    } else if (newSetsWonPlayer2 >= numOfSets) {
-      setWinner(player2);
+    if (newSetsWonPlayer1 >= gameState.numOfSets) {
+      setWinner(gameState.player1);
+    } else if (newSetsWonPlayer2 >= gameState.numOfSets) {
+      setWinner(gameState.player2);
     }
 
     // Mettre à jour les états de sets gagnés
-    setSetsWonPlayer1(newSetsWonPlayer1);
-    setSetsWonPlayer2(newSetsWonPlayer2);
+    setGameState({
+      ...gameState,
+      setsPlayer1: newSetsWonPlayer1,
+      setsPlayer2: newSetsWonPlayer2,
+      scorePlayer1: newScorePlayer1,
+      scorePlayer2: newScorePlayer2,
+    });
+
+    // Mettre à jour les états locaux et la base de données
+    await updateDatabase();
   };
 
   const handleScoreChangePlayer1 = async (increment) => {
     const newScore = increment
-      ? scorePlayer1 + 1
-      : Math.max(0, scorePlayer1 - 1);
-    await checkSetWinner(newScore, scorePlayer2);
-    setScorePlayer1(newScore);
+      ? gameState.scorePlayer1 + 1
+      : Math.max(0, gameState.scorePlayer1 - 1);
+    setGameState({ ...gameState, scorePlayer1: newScore });
+
+  
+
+    await checkWinner(newScore, gameState.scorePlayer2);
   };
 
   const handleScoreChangePlayer2 = async (increment) => {
     const newScore = increment
-      ? scorePlayer2 + 1
-      : Math.max(0, scorePlayer2 - 1);
-    await checkSetWinner(scorePlayer1, newScore);
-    setScorePlayer2(newScore);
+      ? gameState.scorePlayer2 + 1
+      : Math.max(0, gameState.scorePlayer2 - 1);
+    setGameState({ ...gameState, scorePlayer2: newScore });
+
+  
+
+    await checkWinner(gameState.scorePlayer1, newScore);
   };
 
   const changeServer = (player) => {
-    if (player !== server) {
-      setServer((prevServer) => (prevServer === player1 ? player2 : player1));
+    if (player !== gameState.server) {
+      console.log("Tentative de changement de serveur depuis", gameState.server);
+      setGameState(prevState => ({
+        ...prevState,
+        server: 
+          prevState.server === prevState.player1
+            ? prevState.player2
+            : prevState.player1,
+      }));
     }
-  };
+};
 
   const handleOpenSettingsModal = () => {
     setSettingsModalOpen(true);
@@ -197,7 +231,6 @@ function ScoreboardBadminton() {
   };
 
   const saveSettings = () => {
-    // Mettre à jour les paramètres
     handleCloseSettingsModal();
   };
 
@@ -211,7 +244,7 @@ function ScoreboardBadminton() {
                 <ScoreboardIcon sx={{ color: "primary.light" }} />
               </IconButton>
               <Typography variant="h6" className="headerTitle">
-                Scoreboard
+                Scoreboard {gameState.server} {gameState.setsPlayer1}
               </Typography>
             </div>
             <div className="headerRight">
@@ -233,7 +266,7 @@ function ScoreboardBadminton() {
             <Grid container direction="row">
               <Grid className="gridItem" item xs={4}>
                 <Typography variant={largeTypo}>
-                  {player1} {winner ? "Winner" : null}
+                  {gameState.player1} {winner ? "Winner" : null}
                 </Typography>
                 <Paper
                   elevation={2}
@@ -241,7 +274,9 @@ function ScoreboardBadminton() {
                 >
                   <Box className="centered column">
                     <Typography variant={largeTypo}>Set</Typography>
-                    <Typography variant={medTypo}>{setsWonPlayer1}</Typography>
+                    <Typography variant={medTypo}>
+                      {gameState.setsPlayer1}
+                    </Typography>
                   </Box>
                 </Paper>
 
@@ -251,7 +286,9 @@ function ScoreboardBadminton() {
                 >
                   <Box className="centered column">
                     <Typography variant={largeTypo}>Score</Typography>
-                    <Typography variant={medTypo}>{scorePlayer1}</Typography>
+                    <Typography variant={medTypo}>
+                      {gameState.scorePlayer1}
+                    </Typography>
                   </Box>
                 </Paper>
                 <Box className="scoreEditBox centered">
@@ -285,12 +322,12 @@ function ScoreboardBadminton() {
                   >
                     <IconButton
                       onClick={() => {
-                        changeServer(player1);
+                        changeServer(gameState.player1);
                       }}
                     >
                       <WestIcon
                         className={
-                          server === player1
+                          gameState.server === gameState.player1
                             ? "iconServeurTrue"
                             : "iconServeurFalse"
                         }
@@ -304,12 +341,12 @@ function ScoreboardBadminton() {
                   >
                     <IconButton
                       onClick={() => {
-                        changeServer(player2);
+                        changeServer(gameState.player2);
                       }}
                     >
                       <EastIcon
                         className={
-                          server === player2
+                          gameState.server === gameState.player2
                             ? "iconServeurTrue"
                             : "iconServeurFalse"
                         }
@@ -366,14 +403,16 @@ function ScoreboardBadminton() {
                 </Paper>
               </Grid>
               <Grid className="gridItem gridItemPadding" item xs={4}>
-                <Typography variant={largeTypo}>{player2}</Typography>
+                <Typography variant={largeTypo}>{gameState.player2}</Typography>
                 <Paper
                   elevation={2}
                   className="itemPaperTypo itemPaperColor centered"
                 >
                   <Box className="centered column">
                     <Typography variant={largeTypo}>Set</Typography>
-                    <Typography variant={medTypo}>{setsWonPlayer2}</Typography>
+                    <Typography variant={medTypo}>
+                      {gameState.setsPlayer2}
+                    </Typography>
                   </Box>
                 </Paper>
 
@@ -383,7 +422,10 @@ function ScoreboardBadminton() {
                 >
                   <Box className="centered column">
                     <Typography variant={largeTypo}>Score</Typography>
-                    <Typography variant={medTypo}> {scorePlayer2}</Typography>
+                    <Typography variant={medTypo}>
+                      {" "}
+                      {gameState.scorePlayer2}
+                    </Typography>
                   </Box>
                 </Paper>
                 <Box className="scoreEditBox centered">
@@ -416,16 +458,16 @@ function ScoreboardBadminton() {
           open={settingsModalOpen}
           handleClose={handleCloseSettingsModal}
           saveSettings={saveSettings}
-          player1={player1}
-          setPlayer1={setPlayer1}
-          player2={player2}
-          setPlayer2={setPlayer2}
-          numOfSets={numOfSets}
-          setNumOfSets={setNumOfSets}
-          maxSetPoints={maxSetPoints}
-          setMaxSetPoints={setMaxSetPoints}
-          numOfPoints={numOfPoints}
-          setNumOfPoints={setNumOfPoints}
+          player1={gameState.player1}
+          setPlayer1={gameState.setPlayer1}
+          player2={gameState.player2}
+          setPlayer2={gameState.setPlayer2}
+          numOfSets={gameState.numOfSets}
+          setNumOfSets={gameState.setNumOfSets}
+          maxSetPoints={gameState.maxSetPoints}
+          setMaxSetPoints={gameState.setMaxSetPoints}
+          numOfPoints={gameState.numOfPoints}
+          setNumOfPoints={gameState.setNumOfPoints}
         />
       </Modal>
     </>

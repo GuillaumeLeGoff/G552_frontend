@@ -4,10 +4,10 @@ import "../contexts/axiosConfig";
 import authService from "./authService";
 
 const URL_API = Config.SERVER_URL;
-
+const userId = authService.getCurrentUser().user.id;
 class ScoreService {
   // Obtenir tous les scores
-  getByUserId(userId) {
+  getByUserId() {
     return axios.get(`${URL_API}/scores/${userId}`);
   }
 
@@ -16,11 +16,12 @@ class ScoreService {
     return axios.post(`${URL_API}/scores`, score);
   }
 
-  update(userId, score) {
+  updateScores(score) {
+    console.log("Mise à jour des scores", score);
     return axios.put(`${URL_API}/scores/${userId}`, score);
   }
 
-  updateSettings(userId, settings) {
+  updateSettings( settings) {
     return axios.put(`${URL_API}/scores/settings/${userId}`, settings);
   }
 

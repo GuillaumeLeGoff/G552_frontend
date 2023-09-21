@@ -3,8 +3,8 @@
       "option1": "number_of_sets",
       "option2": "points_per_set",
       "option3": "max_set_points",
-      "option4": "",
-      "option5": "",
+      "option4": "sets_team1",
+      "option5": "sets_team2",
       "option6": "",
       "option7": "server_name",
       "option8": ""

@@ -8,6 +8,7 @@ function Scoreboard() {
   const [currentUser , setCurrentUser] = useState(null);
 
   useEffect(() => {
+    console.log(authService.getCurrentUser());
     setCurrentUser(authService.getCurrentUser());
     
   }, []);
@@ -16,7 +17,7 @@ function Scoreboard() {
     <>
 
       {currentUser && currentUser.user.username === "tennis" && (<ScoreboardTennis/> ) }
-    {currentUser && currentUser.user.username === "basketball" && (<ScoreboardBadminton/> ) }
+    {currentUser && currentUser.user.username === "badminton" && (<ScoreboardBadminton/> ) }
     </>
     /* <Grid item xs={12}>
           <Paper className="mainPaperPage">
