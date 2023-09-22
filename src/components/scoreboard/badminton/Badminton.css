@@ -15,7 +15,7 @@
 }
 
 .itemPaperTypo {
-  height: 15vh;
+  height: 16vh;
   width: 100%;
 }
 
@@ -28,14 +28,13 @@
   background-color: var(--secondary-main) !important;
 }
 
-.scoreEditBox {
-  width: 100%;
-}
+
 
 .divider {
   width: 80%;
   margin-left: auto !important;
   margin-right: auto !important;
+  padding: 8px !important;
 }
 
 

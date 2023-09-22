@@ -1,36 +1,42 @@
 {
-    "badminton": {
-      "option1": "number_of_sets",
-      "option2": "points_per_set",
-      "option3": "max_set_points",
-      "option4": "sets_team1",
-      "option5": "sets_team2",
-      "option6": "",
-      "option7": "server_name",
-      "option8": ""
-
-    },
-    "volleyball": {
-      "option1": "number_of_sets",
-      "option2": "points_per_set",
-      "option3": "points_last-set",
-      "option4": "",
-      "option5": "",
-      "option6": "",
-      "option7": "",
-      "option8": ""
-    },
-
-    "indoor_soccer": {
-        "option1": "",
-        "option2": "",
-        "option3": "",
-        "option4": "",
-        "option5": "",
-        "option6": "",
-        "option7": "",
-        "option8": ""
-      }
-
-
+  "badminton": {
+    "option1": "number_of_sets",
+    "option2": "points_per_set",
+    "option3": "max_set_points",
+    "option4": "sets_team1",
+    "option5": "sets_team2",
+    "option6": "",
+    "option7": "server_name",
+    "option8": ""
+  },
+  "volleyball": {
+    "option1": "number_of_sets",
+    "option2": "points_per_set",
+    "option3": "points_last_set",
+    "option4": "",
+    "option5": "",
+    "option6": "",
+    "option7": "",
+    "option8": ""
+  },
+  "indoor_soccer": {
+    "option1": "number_of_halves",
+    "option2": "half_length",
+    "option3": "overtime_length",
+    "option4": "team1_score",
+    "option5": "team2_score",
+    "option6": "",
+    "option7": "",
+    "option8": ""
+  },
+  "basket": {
+    "option1": "team1_fouls",
+    "option2": "team2_fouls",
+    "option3": "team1_timeouts",
+    "option4": "team2_timeouts",
+    "option5": "possession",
+    "option6": "",
+    "option7": "",
+    "option8": ""
   }
+}

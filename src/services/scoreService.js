@@ -16,7 +16,7 @@ class ScoreService {
     return axios.post(`${URL_API}/scores`, score);
   }
 
-  updateScores(score) {
+  update(score) {
     console.log("Mise à jour des scores", score);
     return axios.put(`${URL_API}/scores/${userId}`, score);
   }
@@ -59,7 +59,7 @@ class ScoreService {
   // Mettre à jour le timer
   updateTimer(timer) {
     return axios.put(
-      `${URL_API}/timer/${authService.getCurrentUser().user.id}`,
+      `${URL_API}/timer/${userId}`,
       {
         timer,
       }

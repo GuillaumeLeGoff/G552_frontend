@@ -2,7 +2,8 @@ import { Box, Grid, IconButton, Paper, Stack, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import authService from "../../services/authService";
 import ScoreboardTennis from "./TennisScoreboard/ScoreboardTennis";
-import ScoreboardBadminton from "./badmintonScoreboard/ScoreboardBadminton";
+import ScoreboardBadminton from "./badminton/ScoreboardBadminton";
+import Basket from "./basket/Basket";
 
 function Scoreboard() {
   const [currentUser , setCurrentUser] = useState(null);
@@ -17,7 +18,8 @@ function Scoreboard() {
     <>
 
       {currentUser && currentUser.user.username === "tennis" && (<ScoreboardTennis/> ) }
-    {currentUser && currentUser.user.username === "badminton" && (<ScoreboardBadminton/> ) }
+    {/* {currentUser && currentUser.user.username === "badminton" && (<ScoreboardBadminton/> ) } */}
+    {currentUser && currentUser.user.username === "badminton" && (<Basket/> ) }
     </>
     /* <Grid item xs={12}>
           <Paper className="mainPaperPage">

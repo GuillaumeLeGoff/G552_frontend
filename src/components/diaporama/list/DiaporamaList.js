@@ -34,7 +34,7 @@ function DiaporamaList({ onEventClick }) {
   useEffect(() => {
     getEvent();
   }, []);
-  
+
   async function getEvent() {
     const result = await eventService.get();
     setEvent(result.data);
@@ -90,11 +90,7 @@ function DiaporamaList({ onEventClick }) {
             <IconButton disabled className="headerButton">
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
-            <Typography
-              variant="h6"
-              sx={{ color: "text.primary" }}
-              className="headerTitle"
-            >
+            <Typography variant="h6" className="headerTitle">
               {t("eventListTitle")}
             </Typography>
           </Box>
@@ -104,52 +100,51 @@ function DiaporamaList({ onEventClick }) {
             </IconButton>
           </Box>
         </Stack>
-        <Stack>
-          {event && event.length ? (
-            <Box className="containerPage">
-              {event.map((row) => (
-                <Table size="big" key={row.id}>
-                  <TableBody>
-                    <TableRow
-                      {...(isMobile
-                        ? { onClick: () => handleRowHover(row.id) }
-                        : {
-                            onMouseEnter: () => handleRowHover(row.id),
-                            onMouseLeave: () => handleRowHover(null),
-                          })}
-                      hover
-                      onClick={() => onEventClick(row.id)}
-                    >
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell sx={{ p: 0 }} align="right">
-                        {hoveredRow === row.id && (
-                          <IconButton
-                            sx={{ p: 0 }}
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openDeleteDialog(row);
-                            }}
-                          >
-                            <DeleteIcon
-                              sx={{ fontSize: 15, color: "secondary.main" }}
-                            />
-                          </IconButton>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              ))}
-            </Box>
-          ) : (
-            <Box className="infoPage">
-              <Typography sx={{ color: "text.secondary" }}>
-                {t("eventListEmptyText")}
-              </Typography>
-            </Box>
-          )}
-        </Stack>
+
+        {event && event.length ? (
+          <Box className="containerPage">
+            {event.map((row) => (
+              <Table size="big" key={row.id}>
+                <TableBody>
+                  <TableRow
+                    {...(isMobile
+                      ? { onClick: () => handleRowHover(row.id) }
+                      : {
+                          onMouseEnter: () => handleRowHover(row.id),
+                          onMouseLeave: () => handleRowHover(null),
+                        })}
+                    hover
+                    onClick={() => onEventClick(row.id)}
+                  >
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell sx={{ p: 0 }} align="right">
+                      {hoveredRow === row.id && (
+                        <IconButton
+                          sx={{ p: 0 }}
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openDeleteDialog(row);
+                          }}
+                        >
+                          <DeleteIcon
+                            sx={{ fontSize: 15, color: "secondary.main" }}
+                          />
+                        </IconButton>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            ))}
+          </Box>
+        ) : (
+          <Box className="infoPage">
+            <Typography sx={{ color: "text.secondary" }}>
+              {t("eventListEmptyText")}
+            </Typography>
+          </Box>
+        )}
       </Paper>
       <DeleteEventDialog
         open={deleteDialogOpen}

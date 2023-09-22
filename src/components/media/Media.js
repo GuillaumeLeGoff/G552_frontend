@@ -150,15 +150,16 @@ function Medias(props) {
             />
           </Box>
         </Stack>
-        <Box className="containerPage">
-          <Droppable
-            droppableId={`${props.eventMedia[1].id}`}
-            isDropDisabled={true}
-          >
-            {(provided) => (
-              <div ref={provided.innerRef}>
-                {props.eventMedia[1].medias ? (
-                  props.eventMedia[1].medias.length > 0 ? (
+
+        <Droppable
+          droppableId={`${props.eventMedia[1].id}`}
+          isDropDisabled={true}
+        >
+          {(provided) => (
+            <div ref={provided.innerRef}>
+              {props.eventMedia[1].medias ? (
+                props.eventMedia[1].medias.length > 0 ? (
+                  <Box className="containerPage">
                     <ImageList variant="masonry" cols={2} gap={8}>
                       {props.eventMedia[1].medias.map((file, index) => (
                         <ImageListItem key={file.id}>
@@ -241,19 +242,19 @@ function Medias(props) {
                         </ImageListItem>
                       ))}
                     </ImageList>
-                  ) : (
-                    <Box className="infoPage">
-                      <Typography color="text.secondary">
-                        {t("ajouterMedia")}
-                      </Typography>
-                    </Box>
-                  )
-                ) : null}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </Box>
+                  </Box>
+                ) : (
+                  <Box className="infoPage">
+                    <Typography color="text.secondary">
+                      {t("ajouterMedia")}
+                    </Typography>
+                  </Box>
+                )
+              ) : null}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </Paper>
       {/* Modal upload  */}
 
