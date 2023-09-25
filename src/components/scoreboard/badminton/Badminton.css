@@ -4,10 +4,9 @@
 
 .gridItem {
   display: flex !important;
-  justify-content: space-around !important;
+
   flex-direction: column !important;
   gap: 1vw !important;
-  padding-right: 2vw !important;
 }
 
 .gridItemPadding {

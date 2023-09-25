@@ -4,7 +4,7 @@ import "../contexts/axiosConfig";
 import authService from "./authService";
 
 const URL_API = Config.SERVER_URL;
-const userId = authService.getCurrentUser().user.id;
+const userId = authService.getCurrentUser() ? authService.getCurrentUser().user.id : null;
 class ScoreService {
   // Obtenir tous les scores
   getByUserId() {

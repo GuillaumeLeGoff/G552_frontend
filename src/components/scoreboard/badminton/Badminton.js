@@ -24,10 +24,10 @@ import SurroundSoundIcon from "@mui/icons-material/SurroundSound";
 import authService from "../../../services/authService";
 import ScoreService from "../../../services/scoreService";
 import MacroShortcut from "../MacroShortcut";
-import SettingsModal from "./ParamBadminton";
+import SettingsModal from "./BadmintonSetting";
 import "./Badminton.css";
 
-function ScoreboardBadminton() {
+function Badminton() {
   const [gameState, setGameState] = useState({
     player1: "",
     player2: "",
@@ -40,7 +40,7 @@ function ScoreboardBadminton() {
     setsPlayer2: 0,
     server: "",
   });
-  const [timer, setTimer] = useState(0);
+/*   const [timer, setTimer] = useState(0); */
   const [winner, setWinner] = useState("");
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -51,7 +51,6 @@ function ScoreboardBadminton() {
   useEffect(() => {
     getData().then((data) => {
       setData(data);
-      console.log("data01", data);
 
       if (!data.max_set_points) {
         initializeSetting(data);
@@ -79,8 +78,6 @@ function ScoreboardBadminton() {
       setsPlayer2: data.option5,
       server: data.option7,
     });
-
-    setTimer(data.timer);
   };
 
   const initializeSetting = async (data) => {
@@ -330,7 +327,7 @@ function ScoreboardBadminton() {
                       {gameState.scorePlayer1}
                     </Typography>
                   </Box>
-                </Paper>[[[[[[]]]]]]
+                </Paper>
                 <Box className="scoreEditBox centered">
                   <Paper
                     elevation={2}
@@ -508,4 +505,4 @@ function ScoreboardBadminton() {
   );
 }
 
-export default ScoreboardBadminton;
+export default Badminton;
