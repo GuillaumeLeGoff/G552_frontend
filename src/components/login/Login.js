@@ -84,6 +84,7 @@ function Login() {
                 onChange={(e) => setUser(e.target.value)}
                 required
               >
+                 <MenuItem value="handball">Handball</MenuItem>
                 <MenuItem value="volleyball">Volleyball</MenuItem>
                 <MenuItem value="futsal">Futsal</MenuItem>
                 <MenuItem value="basketball">{t("basketball")}</MenuItem>

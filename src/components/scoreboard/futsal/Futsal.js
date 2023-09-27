@@ -27,6 +27,7 @@ import PlusOneIcon from "@mui/icons-material/PlusOne";
 
 import scoreServiceInstance from "../../../services/scoreService";
 import FutsalSetting from "./FutsalSetting";
+import modeServiceInstance from "../../../services/modeService";
 
 function Futsal() {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -84,6 +85,11 @@ function Futsal() {
     setIsSettingOpen((prevState) => !prevState);
   };
 
+  function playScoring() {
+    const mode = { mode: "scoring", eventId: null };
+    modeServiceInstance.setMode(mode);
+  }
+
   return (
     <Grid item xs={12}>
       <Paper className="mainPaperPage">
@@ -104,7 +110,7 @@ function Futsal() {
               />
             </IconButton>
             <IconButton className="headerButton">
-              <PlayArrowIcon sx={{ color: "secondary.main" }} />
+              <PlayArrowIcon onClick={playScoring} sx={{ color: "secondary.main" }} />
             </IconButton>
             <IconButton className="headerButton">
               <SettingsIcon

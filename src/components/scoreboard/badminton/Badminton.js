@@ -25,7 +25,8 @@ import authService from "../../../services/authService";
 import ScoreService from "../../../services/scoreService";
 import MacroShortcut from "../MacroShortcut";
 import SettingsModal from "./BadmintonSetting";
-import "./Badminton.css";
+import modeServiceInstance from "../../../services/modeService";
+
 
 function Badminton() {
   const [gameState, setGameState] = useState({
@@ -221,6 +222,9 @@ function Badminton() {
 
   function changeServer(server) {
     setGameState({ ...gameState, server: server });
+    ScoreService.update({
+      option7: server,
+    });
   }
 
   const handleOpenSettingsModal = () => {
@@ -267,6 +271,11 @@ function Badminton() {
     }
   };
 
+  function playScoring() {
+    const mode = { mode: "scoring", eventId: null };
+    modeServiceInstance.setMode(mode);
+  }
+
   return (
     <>
       <Grid item xs={12}>
@@ -288,7 +297,7 @@ function Badminton() {
                 />
               </IconButton>
               <IconButton className="headerButton">
-                <PlayArrowIcon sx={{ color: "secondary.main" }} />
+                <PlayArrowIcon onClick={playScoring} sx={{ color: "secondary.main" }} />
               </IconButton>
               <IconButton className="headerButton">
                 <SettingsIcon

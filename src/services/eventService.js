@@ -16,13 +16,13 @@ class EventService {
     const currentUser = authService.getCurrentUser();
     const userId = currentUser?.user?.id;
     try {
-      const res = await axios.post(URL_API + "/events", {
+      const res = await axios.post(`${URL_API}/events`, {
         name: name,
         userId: userId,
       });
-     
+      return res.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
@@ -30,34 +30,30 @@ class EventService {
     const currentUser = authService.getCurrentUser();
     const userId = currentUser?.user?.id;
     try {
-      const res = await axios.get(URL_API + "/events/user/" + userId);
-
-      return res;
+      const res = await axios.get(`${URL_API}/events/user/${userId}`);
+      return res.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
   static async getById(id) {
     const currentUser = authService.getCurrentUser();
     const userId = currentUser?.user?.id;
-    const data = { userId: userId };
     try {
-      const res = await axios.get(URL_API + "/events/" + id, { params: data });
-
-      return res;
+      const res = await axios.get(`${URL_API}/events/${id}`, { params: { userId } });
+      return res.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 
   static async delete(id) {
     try {
-      const res = await axios.delete(URL_API + "/events/" + id);
-
-      return res;
+      const res = await axios.delete(`${URL_API}/events/${id}`);
+      return res.data;
     } catch (error) {
-      console.log(error);
+      throw error;
     }
   }
 }

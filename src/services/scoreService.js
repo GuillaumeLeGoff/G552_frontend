@@ -5,65 +5,87 @@ import authService from "./authService";
 
 const URL_API = Config.SERVER_URL;
 const userId = authService.getCurrentUser() ? authService.getCurrentUser().user.id : null;
+
 class ScoreService {
   // Obtenir tous les scores
-  getByUserId() {
-    return axios.get(`${URL_API}/scores/${userId}`);
+  async getByUserId() {
+    try {
+      return await axios.get(`${URL_API}/scores/${userId}`);
+    } catch (erreur) {
+      console.error("Erreur lors de la récupération des scores:", erreur);
+      throw erreur;
+    }
   }
 
   // Ajouter un score
-  addScore(score) {
-    return axios.post(`${URL_API}/scores`, score);
+  async addScore(score) {
+    try {
+      return await axios.post(`${URL_API}/scores`, score);
+    } catch (erreur) {
+      console.error("Erreur lors de l'ajout du score:", erreur);
+      throw erreur;
+    }
   }
 
-  update(score) {
-    console.log("Mise à jour des scores", score);
-    return axios.put(`${URL_API}/scores/${userId}`, score);
+  async update(score) {
+    try {
+      return await axios.put(`${URL_API}/scores/${userId}`, score);
+    } catch (erreur) {
+      console.error("Erreur lors de la mise à jour des scores:", erreur);
+      throw erreur;
+    }
   }
 
-  updateSettings( settings) {
-    return axios.put(`${URL_API}/scores/settings/${userId}`, settings);
+  async updateSettings(settings) {
+    try {
+      return await axios.put(`${URL_API}/scores/settings/${userId}`, settings);
+    } catch (erreur) {
+      console.error("Erreur lors de la mise à jour des paramètres:", erreur);
+      throw erreur;
+    }
   }
 
-  // Mettre à jour un score spécifique par ID
-  updateSpecificScore(scoreId, updatedScore) {
-    return axios.put(`${URL_API}/scores/${scoreId}`, updatedScore);
+  async updateSpecificScore(scoreId, updatedScore) {
+    try {
+      return await axios.put(`${URL_API}/scores/${scoreId}`, updatedScore);
+    } catch (erreur) {
+      console.error("Erreur lors de la mise à jour d'un score spécifique:", erreur);
+      throw erreur;
+    }
   }
 
-  // Supprimer un score spécifique par ID
-  deleteScore(scoreId) {
-    return axios.delete(`${URL_API}/scores/${scoreId}`);
+  async deleteScore(scoreId) {
+    try {
+      return await axios.delete(`${URL_API}/scores/${scoreId}`);
+    } catch (erreur) {
+      console.error("Erreur lors de la suppression d'un score:", erreur);
+      throw erreur;
+    }
   }
 
-  // Mettre à jour le score en fonction des équipes et des fautes
-  updateScore(team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2) {
-    console.log(
-      "Mise à jour du score",
-      team1,
-      team2,
-      fauteTeam1,
-      fauteTeam2,
-      nomTeam1,
-      nomTeam2
-    );
-    return axios.put(`${URL_API}/scores/1`, {
-      team1,
-      team2,
-      fauteTeam1,
-      fauteTeam2,
-      nomTeam1,
-      nomTeam2,
-    });
+  async updateScore(team1, team2, fauteTeam1, fauteTeam2, nomTeam1, nomTeam2) {
+    try {
+      return await axios.put(`${URL_API}/scores/1`, {
+        team1,
+        team2,
+        fauteTeam1,
+        fauteTeam2,
+        nomTeam1,
+        nomTeam2,
+      });
+    } catch (erreur) {
+      console.error("Erreur lors de la mise à jour du score:", erreur);
+      throw erreur;
+    }
   }
 
-  // Mettre à jour le timer
-  updateTimer(timer) {
-    return axios.put(
-      `${URL_API}/timer/${userId}`,
-      {
-        timer,
-      }
-    );
+  async updateTimer(timer) {
+    try {
+      return await axios.put(`${URL_API}/timer/${userId}`, { timer });
+    } catch (erreur) {
+      console.error("Erreur lors de la mise à jour du timer:", erreur);
+      throw erreur;
+    }
   }
 }
 

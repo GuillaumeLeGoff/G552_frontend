@@ -2,7 +2,7 @@ import axios from "axios";
 import Config from "../config/config.json";
 import authService from "./authService";
 import { useSnackbar } from "../contexts/SnackbarContext";
-import "../contexts/axiosConfig"; // Ce module n'est pas utilisé, vous pouvez le supprimer
+import "../contexts/axiosConfig";
 
 const URL_API = Config.SERVER_URL;
 

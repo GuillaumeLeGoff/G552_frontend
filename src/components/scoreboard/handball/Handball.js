@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Grid,
@@ -7,128 +8,65 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
 
-import SportsVolleyballIcon from "@mui/icons-material/SportsVolleyball";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import WestIcon from "@mui/icons-material/West";
 import EastIcon from "@mui/icons-material/East";
 import PauseIcon from "@mui/icons-material/Pause";
+import SportsHandballIcon from '@mui/icons-material/SportsHandball';
 import EditIcon from "@mui/icons-material/Edit";
 import SurroundSoundIcon from "@mui/icons-material/SurroundSound";
 import MacroShortcut from "../MacroShortcut";
+import PlusOneIcon from "@mui/icons-material/PlusOne";
 
-import ScoreService from "../../../services/scoreService";
-import VolleyballSetting from "./VolleyballSetting";
+import scoreServiceInstance from "../../../services/scoreService";
+import FutsalSetting from "./HandballSetting";
 import modeServiceInstance from "../../../services/modeService";
 
-function Volleyball() {
+function Handball() {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const largeTypo = isMobile ? "h5" : "h4";
   const medTypo = isMobile ? "h6" : "h5";
+
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [gameState, setGameState] = useState({});
+
   useEffect(() => {
     getData().then((data) => {
-      console.log(data);
       setGameState(data);
     });
   }, []);
-  /* 
-        "option1": "number_of_sets"
-        "option2": "points_per_set"
-        "option3": "points_last_set"
-        "option4": "sets_team1"
-        "option5": "sets_team2"
-*/
+
   const getData = async () => {
-    const res = await ScoreService.getByUserId();
+    const res = await scoreServiceInstance.getByUserId();
     const data = res.data[0];
     return data;
   };
 
-  const handleScoreTeam1 = (value) => {
-    const newValue = gameState.score_team1 + value;
-    if (newValue < 0) return;
-
-    const pointDifference = newValue - gameState.score_team2;
-
-    // Obtenir le score à atteindre, qui peut être différent pour le dernier set
-    const scoreToReach =
-      gameState.option4 === gameState.finalSetNumber
-        ? gameState.option3
-        : gameState.option2;
-
-    // Vérifie si le joueur 1 a au moins 2 points d'avance et a atteint le score maximum pour un set
-    if (newValue >= scoreToReach && pointDifference >= 2) {
-      const newSetTeam1 = gameState.option4 + 1;
-      setGameState({
-        ...gameState,
-        score_team1: 0,
-        score_team2: 0,
-        option4: newSetTeam1,
-      });
-      updateDB("score_team1", 0);
-      updateDB("score_team2", 0);
-      updateDB("option4", newSetTeam1);
-      return;
+  const updateGameState = async (nameValue, value) => {
+    value = value + gameState[nameValue];
+    if (value < 0) {
+      value = 0;
     }
-    // Si le joueur n'a pas encore gagné le set, mettez simplement à jour le score
-    else {
-      setGameState({
-        ...gameState,
-        score_team1: newValue,
-      });
-      updateDB("score_team1", newValue);
+    if ((nameValue === "option1" || nameValue === "option2") && value > 5) {
+      value = 0;
     }
-  };
-
-  const handleScoreTeam2 = (value) => {
-    const newValue = gameState.score_team2 + value;
-    if (newValue < 0) return;
-
-    const pointDifference = newValue - gameState.score_team1;
-
-    // Obtenir le score à atteindre, qui peut être différent pour le dernier set
-    const scoreToReach =
-      gameState.set_team2 === gameState.finalSetNumber
-        ? gameState.option3
-        : gameState.option2;
-
-    // Vérifie si le joueur 2 a au moins 2 points d'avance et a atteint le score maximum pour un set
-    if (newValue >= scoreToReach && pointDifference >= 2) {
-      const newSetTeam2 = gameState.option5 + 1;
-      setGameState({
-        ...gameState,
-        score_team2: 0,
-        score_team1: 0,
-        option5: newSetTeam2,
-      });
-      updateDB("score_team2", 0);
-      updateDB("score_team1", 0);
-      updateDB("option5", newSetTeam2);
-      return;
-    }
-    // Si le joueur n'a pas encore gagné le set, mettez simplement à jour le score
-    else {
-      setGameState({
-        ...gameState,
-        score_team2: newValue,
-      });
-      updateDB("score_team2", newValue);
-    }
+    setGameState({ ...gameState, [nameValue]: value });
+    updateDB(nameValue, value);
   };
 
   const resetGame = async () => {
     const newGameState = {
       score_team1: 0,
       score_team2: 0,
+      option1: 0,
+      option2: 0,
+      option3: 0,
       option4: 0,
-      option5: 0,
     };
 
     setGameState((prevState) => ({ ...prevState, ...newGameState }));
@@ -138,17 +76,12 @@ function Volleyball() {
   };
 
   const updateDB = async (nameValue, value) => {
-    await ScoreService.update({ [nameValue]: value });
+    await scoreServiceInstance.update({ [nameValue]: value });
   };
 
   const toggleSettingModal = () => {
     setIsSettingOpen((prevState) => !prevState);
   };
-
-  function updateServingTeam(server) {
-    setGameState({ ...gameState, option7: server });
-    updateDB("option7", server);
-  }
 
   function playScoring() {
     const mode = { mode: "scoring", eventId: null };
@@ -161,10 +94,10 @@ function Volleyball() {
         <Stack className="herderTitlePage">
           <Box className="headerLeft">
             <IconButton disabled className="headerButton">
-              <SportsVolleyballIcon sx={{ color: "primary.light" }} />
+              <SportsHandballIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              Tableau de score Volleyball
+              Tableau de score Handball
             </Typography>
           </Box>
           <Box className="headerRight">
@@ -185,12 +118,11 @@ function Volleyball() {
             </IconButton>
           </Box>
         </Stack>
-
         <Box className="containerPage">
           <Grid
             container
             justifyContent="flex-start"
-            alignItems="flex-end"
+            alignItems="flex-start"
             direction="row"
             spacing={2}
           >
@@ -199,15 +131,9 @@ function Volleyball() {
               <Paper
                 elevation={2}
                 className="itemPaperTypo itemPaperColor centered"
-              >
-                <Box className="centered column">
-                  <Typography variant={largeTypo}>Set</Typography>
-                  <Typography variant={medTypo}>{gameState.option4}</Typography>
-                </Box>
-              </Paper>
-              <Paper
-                elevation={2}
-                className="itemPaperTypo itemPaperColor centered"
+                onClick={() => {
+                  updateGameState("score_team1", 1);
+                }}
               >
                 <Box className="centered column">
                   <Typography variant={largeTypo}>Score</Typography>
@@ -221,19 +147,18 @@ function Volleyball() {
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor buttonEditMargin centered"
                   onClick={() => {
-                    handleScoreTeam1(1);
+                    updateGameState("score_team1", 1);
                   }}
                 >
                   <IconButton>
                     <AddIcon color="primary" />
                   </IconButton>
                 </Paper>
-
                 <Paper
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor centered"
                   onClick={() => {
-                    handleScoreTeam1(-1);
+                    updateGameState("score_team1", -1);
                   }}
                 >
                   <IconButton>
@@ -241,17 +166,40 @@ function Volleyball() {
                   </IconButton>
                 </Paper>
               </Box>
+             {/*  <Box className="scoreEditBox centered">
+                <Paper
+                  elevation={2}
+                  className="itemPaperTypo itemPaperColor centered"
+                  sx={{ position: "relative" }}
+                  onClick={() => {
+                    updateGameState("option1", 1);
+                  }}
+                >
+                  <Box className="centered column">
+                    <Typography variant={largeTypo}>Faute</Typography>
+                    <Typography variant={medTypo}>
+                      {gameState.option1}
+                    </Typography>
+                  </Box>
+                  <PlusOneIcon
+                    m={4}
+                    variant={medTypo}
+                    sx={{ position: "absolute", bottom: "0", right: "0" }}
+                    color="primary"
+                  />
+                </Paper>
+              </Box> */}
             </Grid>
 
             <Grid className="gridItem" item xs={4}>
-              <Box className="scoreEditBox centered">
+             {/*  <Box className="scoreEditBox centered">
                 <Paper
                   elevation={2}
                   className="buttonEdit itemPaperColor buttonEditMargin centered"
                 >
                   <IconButton
                     onClick={() => {
-                      updateServingTeam(gameState.nom_team1);
+                      updateGameState("option7", gameState.nom_team1);
                     }}
                   >
                     <WestIcon
@@ -269,7 +217,7 @@ function Volleyball() {
                 >
                   <IconButton
                     onClick={() => {
-                      updateServingTeam(gameState.nom_team2);
+                      updateGameState("option7", gameState.nom_team2);
                     }}
                   >
                     <EastIcon
@@ -281,7 +229,8 @@ function Volleyball() {
                     />
                   </IconButton>
                 </Paper>
-              </Box>
+              </Box> */}
+              
               <Paper
                 elevation={2}
                 className=" itemPaperColor buttonEdit centered"
@@ -335,15 +284,9 @@ function Volleyball() {
               <Paper
                 elevation={2}
                 className="itemPaperTypo itemPaperColor centered"
-              >
-                <Box className="centered column">
-                  <Typography variant={largeTypo}>Set</Typography>
-                  <Typography variant={medTypo}>{gameState.option5}</Typography>
-                </Box>
-              </Paper>
-              <Paper
-                elevation={2}
-                className="itemPaperTypo itemPaperColor centered"
+                onClick={() => {
+                  updateGameState("score_team2", 1);
+                }}
               >
                 <Box className="centered column">
                   <Typography variant={largeTypo}>Score</Typography>
@@ -357,7 +300,7 @@ function Volleyball() {
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor buttonEditMargin centered"
                   onClick={() => {
-                    handleScoreTeam2(1);
+                    updateGameState("score_team2", 1);
                   }}
                 >
                   <IconButton>
@@ -368,7 +311,7 @@ function Volleyball() {
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor centered"
                   onClick={() => {
-                    handleScoreTeam2(-1);
+                    updateGameState("score_team2", -1);
                   }}
                 >
                   <IconButton>
@@ -376,21 +319,44 @@ function Volleyball() {
                   </IconButton>
                 </Paper>
               </Box>
+            {/*   <Box className="scoreEditBox centered">
+                <Paper
+                  elevation={2}
+                  className="itemPaperTypo itemPaperColor centered"
+                  sx={{ position: "relative" }}
+                  onClick={() => {
+                    updateGameState("option2", 1);
+                  }}
+                >
+                  <Box className="centered column">
+                    <Typography variant={largeTypo}>Faute</Typography>{" "}
+                    <Typography variant={medTypo}>
+                      {gameState.option2}
+                    </Typography>
+                  </Box>
+                  <PlusOneIcon
+                    m={4}
+                    variant={medTypo}
+                    sx={{ position: "absolute", bottom: "0", right: "0" }}
+                    color="primary"
+                  />
+                </Paper>
+              </Box> */}
             </Grid>
           </Grid>
           <Box className="divider" />
           <MacroShortcut />
         </Box>
       </Paper>
-      <VolleyballSetting
-          open={isSettingOpen}
-          onClose={toggleSettingModal}
-          gameState={gameState}
-          setGameState={setGameState}
-          updateDB={updateDB}
+      <FutsalSetting
+        open={isSettingOpen}
+        onClose={toggleSettingModal}
+        gameState={gameState}
+        setGameState={setGameState}
+        updateDB={updateDB}
       />
     </Grid>
   );
 }
 
-export default Volleyball;
+export default Handball;

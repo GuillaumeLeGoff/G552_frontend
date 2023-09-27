@@ -5,23 +5,52 @@ import "../contexts/axiosConfig"
 const URL_API = Config.SERVER_URL;
 
 class UserService {
-  getPublicContent() {
-    return axios.get(URL_API + "all");
+  async getPublicContent() {
+    try {
+      return await axios.get(URL_API + "all");
+    } catch (erreur) {
+      console.error(erreur);
+      throw erreur;
+    }
   }
-  getUserBoard() {
-    return axios.get(URL_API + "user");
+
+  async getUserBoard() {
+    try {
+      return await axios.get(URL_API + "user");
+    } catch (erreur) {
+      console.error(erreur);
+      throw erreur;
+    }
   }
-  getAdminBoard() {
-    return axios.get(URL_API + "admin");
+
+  async getAdminBoard() {
+    try {
+      return await axios.get(URL_API + "admin");
+    } catch (erreur) {
+      console.error(erreur);
+      throw erreur;
+    }
   }
-  getSuperuserBoard() {
-    return axios.get(URL_API + "superuser");
+
+  async getSuperuserBoard() {
+    try {
+      return await axios.get(URL_API + "superuser");
+    } catch (erreur) {
+      console.error(erreur);
+      throw erreur;
+    }
   }
-  changePassword(oldPassword, newPassword,id) {
-    return axios.put(
-      URL_API + "users/"+id,
-      { oldPassword, newPassword },
-    );
+
+  async changePassword(oldPassword, newPassword, id) {
+    try {
+      return await axios.put(
+        URL_API + "users/" + id,
+        { oldPassword, newPassword },
+      );
+    } catch (erreur) {
+      console.error(erreur);
+      throw erreur;
+    }
   }
 }
 

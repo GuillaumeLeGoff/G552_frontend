@@ -5,41 +5,62 @@ import "../contexts/axiosConfig"
 
 const URL_API = Config.SERVER_URL;
 class FileService {
-  //get files
-  get() {
-    const data = {};
-    return axios.get(URL_API + "/files", JSON.stringify(data));
+  // get files
+  async get() {
+    try {
+      const res = await axios.get(`${URL_API}/files`);
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
   }
-  //update file
-  update(file) {
-    axios.put(URL_API + "/file/" + file._id, {
-      fileName: file.fileName,
-      format: file.format,
-      path: file.path,
-      duration: file.duration,
-      name: file.name,
-    });
-  }
-  //delete file
-  delete(file) {
-    axios.delete(URL_API + "/file/" + file._id).then((res) => {
-     
-    });
-  }
-  //post file
-  post(file) {
-    axios.post(URL_API + "/files", file).then((res) => {
-    
-    });
-  }
-  put(file) {
-    axios
-      .put(URL_API + "/file/" + file._id, {
+
+  // update file
+  async update(file) {
+    try {
+      const res = await axios.put(`${URL_API}/file/${file._id}`, {
+        fileName: file.fileName,
+        format: file.format,
+        path: file.path,
         duration: file.duration,
-      })
-      .then((res) => {
-   
+        name: file.name,
       });
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // delete file
+  async delete(file) {
+    try {
+      const res = await axios.delete(`${URL_API}/file/${file._id}`);
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // post file
+  async post(file) {
+    try {
+      const res = await axios.post(`${URL_API}/files`, file);
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // put file
+  async put(file) {
+    try {
+      const res = await axios.put(`${URL_API}/file/${file._id}`, {
+        duration: file.duration,
+      });
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
   }
 }
 

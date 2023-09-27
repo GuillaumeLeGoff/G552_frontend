@@ -10,7 +10,7 @@ import {
   DialogActions,
   Box,
 } from "@mui/material";
-import "./Badminton.css";
+
 
 function SettingsModal(props) {
   const { gameState, setGameState, saveSettings, open, onClose } = props;

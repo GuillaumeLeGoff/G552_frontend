@@ -6,7 +6,6 @@ const SERVER_URL = Config.SERVER_URL;
 const SIGN_IN_URL = "/auth/signin";
 const SIGN_UP_URL = "/auth/signup";
 const UPDATE_FIRST_LOGIN = "/auth/updateFirstLogin";
-const USER_URL = "/users";
 const CHANGE_PASSWORD_URL = "/auth/modifyPassword";
 
 class AuthService {
@@ -35,9 +34,14 @@ class AuthService {
 
   async logout() {
     try {
+      const response = await axios.put(`${SERVER_URL}/activeSessions/logout`, {
+      });
       localStorage.removeItem("user");
       this.currentUser = null;
-      window.location.reload();
+
+     
+
+      return response.data;
     } catch (error) {
       console.log("Error during logout:", error);
     }
@@ -58,18 +62,7 @@ class AuthService {
     }
   }
 
-  async updateUser(id, role) {
-    try {
-      const roles = [role];
-      const response = await axios.put(`${SERVER_URL}${USER_URL}/${id}`, {
-        roles,
-      });
-
-      return response.data;
-    } catch (error) {
-      console.log("Error during update:", error);
-    }
-  }
+ 
   updateAccessToken(newToken) {
     const user = JSON.parse(localStorage.getItem("user"));
     user.accessToken = newToken;

@@ -108,7 +108,7 @@ function Macro() {
                             <MenuItem value="choisir event">
                               {t("macro.none")}
                             </MenuItem>
-                            {events.map((event) => (
+                            {events && events.map((event) => (
                               <MenuItem key={event.id} value={event.id}>
                                 {event.name}
                               </MenuItem>

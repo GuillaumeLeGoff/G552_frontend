@@ -17,7 +17,10 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+
+    console.log("test",error.response);
+    if (error.response && (error.response.status === 401 || error.response.status === 500)) {
+      console.log("test02",error.response);
       authService.logout();
     }
     return Promise.reject(error);
