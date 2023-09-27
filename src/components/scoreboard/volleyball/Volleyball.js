@@ -18,19 +18,17 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import WestIcon from "@mui/icons-material/West";
 import EastIcon from "@mui/icons-material/East";
 import PauseIcon from "@mui/icons-material/Pause";
-import CircleIcon from "@mui/icons-material/Circle";
 import EditIcon from "@mui/icons-material/Edit";
 import SurroundSoundIcon from "@mui/icons-material/SurroundSound";
 import MacroShortcut from "../MacroShortcut";
-import PlusOneIcon from "@mui/icons-material/PlusOne";
 
 import scoreService from "../../../services/scoreService";
+import VolleyballSetting from "./VolleyballSetting";
 
 function Volleyball() {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const largeTypo = isMobile ? "h5" : "h4";
   const medTypo = isMobile ? "h6" : "h5";
-
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [gameState, setGameState] = useState({});
   useEffect(() => {
@@ -52,55 +50,75 @@ function Volleyball() {
     return data;
   };
 
-  const updateGameState = async (nameValue, value) => {
-  
-    setGameState({ ...gameState, [nameValue]: newValue });
-    await updateDB(nameValue, newValue);
+  const handleScoreTeam1 = (value) => {
+    const newValue = gameState.score_team1 + value;
+    if (newValue < 0) return;
 
-    // Si vous mettez à jour le score d'une équipe, vérifiez si elle a gagné un set.
-    if (nameValue === "score_team1" || nameValue === "score_team2") {
-      let newValue = value + gameState[nameValue];
-    if (newValue < 0) {
-        newValue = 0;
-        }
-        if (newValue > gameState.option2) {
-            if ( gameState.option4 + gameState.option5 + 1 === gameState.option1){
-                setGameState({ ...gameState, score_team1: 0, score_team2: 0, option: gameState.option4 + 1 });
-            if (nameValue === "score_team1"){
-                setGameState({ ...gameState, score_team1: 0, score_team2: 0, option: gameState.option4 + 1 });
-                await updateDB("score_team1", 0);
-                await updateDB("score_team2", 0);
-                await updateDB("sets_team1", gameState.sets_team1 + 1);
-            }else if (nameValue === "score_team2"){
-                setGameState({ ...gameState, score_team1: 0, score_team2: 0, option: gameState.option5 + 1 });
-                await updateDB("score_team1", 0);
-                await updateDB("score_team2", 0);
-                await updateDB("sets_team2", gameState.sets_team2 + 1);
-            }
+    const pointDifference = newValue - gameState.score_team2;
 
-      // Vérifiez si le score de l'équipe est supérieur aux points par set ou aux points du dernier set.
-      /* if (newValue >= gameState.option2 && newValue > otherTeamScore) {
-        setGameState({ ...gameState, [teamSet]: gameState[teamSet] + 1 });
-        await updateDB(teamSet, gameState[teamSet] + 1);
-        // Remettre les scores à zéro
-        setGameState({ ...gameState, score_team1: 0, score_team2: 0 });
-        await updateDB("score_team1", 0);
-        await updateDB("score_team2", 0);
-      } */
+    // Obtenir le score à atteindre, qui peut être différent pour le dernier set
+    const scoreToReach =
+      gameState.option4 === gameState.finalSetNumber
+        ? gameState.option3
+        : gameState.option2;
 
-      // Pour le dernier set
-     /*  else if (
-        gameState[teamSet] === gameState.number_of_sets - 1 &&
-        newValue >= gameState.option3 &&
-        newValue > otherTeamScore
-      ) {
-        setGameState({ ...gameState, [teamSet]: gameState[teamSet] + 1 });
-        await updateDB(teamSet, gameState[teamSet] + 1);
-        // Remettre les scores à zéro
-        setGameState({ ...gameState, score_team1: 0, score_team2: 0 });
-        await updateDB("score_team1", 0);
-        await updateDB("score_team2", 0);
-      } */
+    // Vérifie si le joueur 1 a au moins 2 points d'avance et a atteint le score maximum pour un set
+    if (newValue >= scoreToReach && pointDifference >= 2) {
+      const newSetTeam1 = gameState.option4 + 1;
+      setGameState({
+        ...gameState,
+        score_team1: 0,
+        score_team2: 0,
+        option4: newSetTeam1,
+      });
+      updateDB("score_team1", 0);
+      updateDB("score_team2", 0);
+      updateDB("option4", newSetTeam1);
+      return;
+    }
+    // Si le joueur n'a pas encore gagné le set, mettez simplement à jour le score
+    else {
+      setGameState({
+        ...gameState,
+        score_team1: newValue,
+      });
+      updateDB("score_team1", newValue);
+    }
+  };
+
+  const handleScoreTeam2 = (value) => {
+    const newValue = gameState.score_team2 + value;
+    if (newValue < 0) return;
+
+    const pointDifference = newValue - gameState.score_team1;
+
+    // Obtenir le score à atteindre, qui peut être différent pour le dernier set
+    const scoreToReach =
+      gameState.set_team2 === gameState.finalSetNumber
+        ? gameState.option3
+        : gameState.option2;
+
+    // Vérifie si le joueur 2 a au moins 2 points d'avance et a atteint le score maximum pour un set
+    if (newValue >= scoreToReach && pointDifference >= 2) {
+      const newSetTeam2 = gameState.option5 + 1;
+      setGameState({
+        ...gameState,
+        score_team2: 0,
+        score_team1: 0,
+        option5: newSetTeam2,
+      });
+      updateDB("score_team2", 0);
+      updateDB("score_team1", 0);
+      updateDB("option5", newSetTeam2);
+      return;
+    }
+    // Si le joueur n'a pas encore gagné le set, mettez simplement à jour le score
+    else {
+      setGameState({
+        ...gameState,
+        score_team2: newValue,
+      });
+      updateDB("score_team2", newValue);
     }
   };
 
@@ -108,10 +126,8 @@ function Volleyball() {
     const newGameState = {
       score_team1: 0,
       score_team2: 0,
-      option1: 0,
-      option2: 0,
-      option3: 0,
       option4: 0,
+      option5: 0,
     };
 
     setGameState((prevState) => ({ ...prevState, ...newGameState }));
@@ -194,7 +210,7 @@ function Volleyball() {
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor buttonEditMargin centered"
                   onClick={() => {
-                    updateGameState("score_team1", 1);
+                    handleScoreTeam1(1);
                   }}
                 >
                   <IconButton>
@@ -206,7 +222,7 @@ function Volleyball() {
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor centered"
                   onClick={() => {
-                    updateGameState("score_team1", -1);
+                    handleScoreTeam1(-1);
                   }}
                 >
                   <IconButton>
@@ -223,9 +239,9 @@ function Volleyball() {
                   className="buttonEdit itemPaperColor buttonEditMargin centered"
                 >
                   <IconButton
-                    onClick={() => {
+                   /*  onClick={() => {
                       updateGameState("option7", gameState.nom_team1);
-                    }}
+                    }} */
                   >
                     <WestIcon
                       className={
@@ -241,9 +257,9 @@ function Volleyball() {
                   className="buttonEdit itemPaperColor centered"
                 >
                   <IconButton
-                    onClick={() => {
+                    /* onClick={() => {
                       updateGameState("option7", gameState.nom_team2);
-                    }}
+                    }} */
                   >
                     <EastIcon
                       className={
@@ -330,7 +346,7 @@ function Volleyball() {
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor buttonEditMargin centered"
                   onClick={() => {
-                    updateGameState("score_team2", 1);
+                    handleScoreTeam2(1);
                   }}
                 >
                   <IconButton>
@@ -341,7 +357,7 @@ function Volleyball() {
                   elevation={2}
                   className="buttonEdit buttonEditTimer itemPaperColor centered"
                   onClick={() => {
-                    updateGameState("score_team2", -1);
+                    handleScoreTeam2(-1);
                   }}
                 >
                   <IconButton>
@@ -355,13 +371,13 @@ function Volleyball() {
           <MacroShortcut />
         </Box>
       </Paper>
-      {/*      <BasketballSetting
+      <VolleyballSetting
           open={isSettingOpen}
           onClose={toggleSettingModal}
           gameState={gameState}
           setGameState={setGameState}
           updateDB={updateDB}
-        /> */}
+      />
     </Grid>
   );
 }
