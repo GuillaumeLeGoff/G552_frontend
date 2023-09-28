@@ -37,7 +37,8 @@ function DiaporamaList({ onEventClick }) {
 
   async function getEvent() {
     const result = await eventService.get();
-    setEvent(result.data);
+    console.log("result", result);
+    setEvent(result);
   }
 
   async function deleteEvent() {

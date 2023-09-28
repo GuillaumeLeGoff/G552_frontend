@@ -34,14 +34,15 @@ class AuthService {
 
   async logout() {
     try {
-      const response = await axios.put(`${SERVER_URL}/activeSessions/logout`, {
-      });
+     /*  const response = await axios.put(`${SERVER_URL}/activeSessions/logout`, {
+      }); */
+
+
       localStorage.removeItem("user");
       this.currentUser = null;
+      window.location.reload();
 
-     
-
-      return response.data;
+      return;
     } catch (error) {
       console.log("Error during logout:", error);
     }

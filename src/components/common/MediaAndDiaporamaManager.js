@@ -84,12 +84,15 @@ function MediaAndDiaporamaManager() {
   }
 
   function getEvents() {
+    let newMedias
     if (id !== undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
-        console.log("Event medias:", result.data);
-        const newMedias = result.data.map((media) => {
+        console.log("result", result);
+        newMedias = result.map((media) => {
           return { ...media, id: media.event_media_id, idBdd: media.id };
-        });
+        })
+      
+      
 
         // Trier les médias en fonction de media_pos_in_event
         newMedias.sort((a, b) => a.media_pos_in_event - b.media_pos_in_event);

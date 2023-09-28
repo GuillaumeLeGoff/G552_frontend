@@ -22,7 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import eventService from "../../../services/eventService";
 import DeleteEventDialog from "../../dialogs/DeleteEventDialog";
 import DeleteMediaEventDialog from "../../dialogs/DeleteMediaEventDialog";
-import Media from "../../media/Media";
+import DiaporamaMedia from "../media/DiaporamaMedia";
 import modeServiceInstance from "../../../services/modeService";
 import DiaporamaModal from "../../dialogs/DiaporamaModal";
 import eventMediaServiceInstance from "../../../services/eventMediaService";
@@ -74,7 +74,7 @@ function DiaporamaConfig(props) {
   async function getMediasByID() {
     try {
       const result = await eventService.getById(props.id);
-      setEvent(result.data);
+      setEvent(result);
       props.getEvents();
     } catch (error) {
       console.error("Erreur lors de la récupération des médias :", error);
@@ -184,7 +184,7 @@ function DiaporamaConfig(props) {
               sx={{ color: "text.primary" }}
             >
               {/* {t("diaporama")}:  */}
-              {event.name}
+              {event && event.name}
             </Typography>
           </Box>
           <Box className="headerRight">
@@ -202,38 +202,43 @@ function DiaporamaConfig(props) {
             </IconButton>
           </Box>
         </Stack>
-        <Stack>
-          <TableContainer className="containerPage">
-            <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
-              <Droppable droppableId={`${props.eventMedia[0].id}`}>
-                {(provided, snapshot) => (
-                  <TableBody ref={provided.innerRef}>
-                    {props.eventMedia[0].medias.length ? (
-                      props.eventMedia[0].medias.map((item, index) => (
-                        <Media
-                          updateMedia={props.updateMedia}
-                          handleRowHover={handleRowHover}
-                          openDeleteDialog={openDeleteDialog}
-                          hoveredRow={hoveredRow}
-                          key={item.id}
-                          index={index}
-                          item={item}
-                        />
-                      ))
-                    ) : (
-                      <Box className="infoPage">
-                        <Typography color="text.secondary">
-                          {t("deposezDesMediasIci")}
-                        </Typography>
-                      </Box>
-                    )}
-                    {provided.placeholder}
-                  </TableBody>
-                )}
-              </Droppable>
-            </Table>
-          </TableContainer>
-        </Stack>
+
+        <Droppable droppableId={`${props.eventMedia[0]?.id}`}>
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps}>
+              {props.eventMedia[0]?.medias.length ? (
+                <Box className="containerPage">
+                  <TableContainer>
+                    <Table
+                      sx={{ borderCollapse: "separate", borderSpacing: 0 }}
+                    >
+                      <TableBody>
+                        {props.eventMedia[0].medias.map((item, index) => (
+                          <DiaporamaMedia
+                            updateMedia={props.updateMedia}
+                            handleRowHover={handleRowHover}
+                            openDeleteDialog={openDeleteDialog}
+                            hoveredRow={hoveredRow}
+                            key={item.id}
+                            index={index}
+                            item={item}
+                          />
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              ) : (
+                <Box className="infoPage">
+                  <Typography sx={{ color: "text.secondary" }}>
+                    {t("deposezDesMediasIci")}
+                  </Typography>
+                </Box>
+              )}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
       </Paper>
 
       <DiaporamaModal
