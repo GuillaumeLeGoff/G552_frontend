@@ -4,12 +4,11 @@ import Config from "../config/config.json";
 const URL_API = Config.SERVER_URL;
 
 class ActiveSessionsService {
-    
   deleteCurrentUser() {
-    return axios.delete(URL_API + "/activeSessions");
+    console.log("Logout");
+    const message = axios.put(`${URL_API}/activeSessions/logout`);
+    console.log("message", message);
   }
-
-  
 }
 const activeSessionsServiceInstance = new ActiveSessionsService();
 

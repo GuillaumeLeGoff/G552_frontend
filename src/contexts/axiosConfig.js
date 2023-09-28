@@ -17,11 +17,13 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => response,
   (error) => {
+    console.log("error.response", error.response);
+    if (error.response && (error.response.status === 401)) {
+      console.log("error.response.status === 401");
+     localStorage.removeItem("user");
+     window.location.reload();
 
-    console.log("test",error.response);
-    if (error.response && (error.response.status === 401 || error.response.status === 500)) {
-      console.log("test02",error.response);
-      authService.logout();
+      
     }
     return Promise.reject(error);
   }

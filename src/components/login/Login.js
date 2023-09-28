@@ -29,6 +29,7 @@ function Login() {
 
   function deleteUserConected() {
     ActiveSessionsService.deleteCurrentUser();
+    handleSubmit();
     closeUserConnectedDialog();
   }
 
@@ -41,7 +42,7 @@ function Login() {
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    if(e) e.preventDefault();
     try {
       await authService.login(user, password).then((response) => {
         if (response.userConected && response.userConected === true) {

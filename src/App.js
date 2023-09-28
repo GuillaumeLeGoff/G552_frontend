@@ -27,7 +27,7 @@ import "./styles/Global.css";
 
 
 function App() {
-  const [token] = useState(AuthService.getCurrentUser());
+  const [token , setToken] = useState();
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const { darkMode } = useDarkMode();
@@ -38,8 +38,8 @@ function App() {
     setProgress: setProgress,
   };
   useEffect(() => {
-    console.log(token);
-  }, [token]);
+    setToken(AuthService.getCurrentUser());
+  }, []);
 
   useEffect(() => {
     if (darkMode) {

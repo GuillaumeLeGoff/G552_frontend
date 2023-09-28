@@ -28,21 +28,32 @@ class AuthService {
 
       return response.data;
     } catch (error) {
-      console.log("Error during login:", error);
+      // Si une erreur se produit, vérifiez si c'est parce qu'un utilisateur est déjà connecté
+      console.log("Error during login:", error.response.data.error);
+      if (
+        error.response &&
+        error.response.data.error === "Un autre utilisateur est déjà connecté"
+      ) {
+        console.log("User already connected");
+        // Si c'est le cas, retournez une réponse personnalisée
+        return { userConected: true };
+      }
     }
   }
 
   async logout() {
+    console.log("Logout");
     try {
-     /*  const response = await axios.put(`${SERVER_URL}/activeSessions/logout`, {
-      }); */
-
+      const response = await axios.put(
+        `${SERVER_URL}/activeSessions/logout`,
+        {}
+      );
 
       localStorage.removeItem("user");
       this.currentUser = null;
       window.location.reload();
 
-      return;
+      return response.data;
     } catch (error) {
       console.log("Error during logout:", error);
     }
@@ -63,7 +74,6 @@ class AuthService {
     }
   }
 
- 
   updateAccessToken(newToken) {
     const user = JSON.parse(localStorage.getItem("user"));
     user.accessToken = newToken;
@@ -90,6 +100,7 @@ class AuthService {
   }
 
   getCurrentUser() {
+    console.log(localStorage.getItem("user").id);
     return JSON.parse(localStorage.getItem("user"));
   }
   async updateFirstLogin(id) {
