@@ -6,21 +6,24 @@ import {
   DialogContentText,
   Button,
 } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 
 function DisconnectDialog({ open, onClose, logout }) {
+  const { t } = useTranslation();
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>
         <DialogContentText>
-          Voulez-vous vraiment vous déconnecter ?
+          {t('doYouReallyWantToLogout')}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "secondary.main" }}>
-          Annuler
+          {t('cancel')}
         </Button>
         <Button onClick={logout} sx={{ color: "secondary.main" }}>
-          Déconnexion
+          {t('logout')}
         </Button>
       </DialogActions>
     </Dialog>

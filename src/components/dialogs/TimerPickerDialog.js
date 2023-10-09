@@ -11,8 +11,10 @@ import {
   Select,
   Box,
 } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 
 function TimerPickerDialog({ open, onClose, setTimer }) {
+  const { t } = useTranslation();
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
 
@@ -37,10 +39,10 @@ function TimerPickerDialog({ open, onClose, setTimer }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Choisir le temps</DialogTitle>
+      <DialogTitle>{t('chooseTime')}</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          Veuillez choisir les minutes et les secondes :
+      <DialogContentText>
+          {t('pleaseSelectMinutesAndSeconds')}
         </DialogContentText>
         <Box display="flex" justifyContent="center">
           <FormControl sx={{ minWidth: 120, maxWidth: 200 }}>
@@ -85,10 +87,10 @@ function TimerPickerDialog({ open, onClose, setTimer }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "primary.main"}}>
-          Annuler
+        {t('cancel')}
         </Button>
         <Button onClick={handleConfirm} sx={{ color: "secondary.main" }}>
-          Valider
+        {t('confirm')}
         </Button>
       </DialogActions>
     </Dialog>

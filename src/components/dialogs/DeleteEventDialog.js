@@ -7,22 +7,25 @@ import {
   DialogTitle,
   Button,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 function DeleteEventDialog({ open, onClose, onDelete, eventName }) {
+  const { t } = useTranslation();
+
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Confirmer la suppression</DialogTitle>
+      <DialogTitle>{t('confirmDeletion')}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Êtes-vous sûr de vouloir supprimer l'événement "{eventName}" ?
+          {t('areYouSureToDelete', { eventName: eventName })}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "secondary.main" }}>
-          Annuler
+          {t('cancel')}
         </Button>
         <Button onClick={onDelete} sx={{ color: "secondary.main" }}>
-          Supprimer
+          {t('delete')}
         </Button>
       </DialogActions>
     </Dialog>

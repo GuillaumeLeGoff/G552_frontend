@@ -11,6 +11,7 @@ import {
   Slider,
   LinearProgress,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -30,6 +31,7 @@ import veilleService from "../../services/veilleService";
 import LanguageSelector from "../common/LanguageSelector";
 
 function Profile() {
+  const { t } = useTranslation();
   const [username, setUsername] = useState("John Doe");
   const [modalOpen, setModalOpen] = useState(false);
   const [param, setParam] = useState({});
@@ -112,19 +114,22 @@ function Profile() {
                 sx={{ color: "text.primary" }}
                 className="headerTitle"
               >
-                Paramètres de {username}
+                {t("settingsOf")} {username}
               </Typography>
             </Box>
           </Stack>
           <Box
             className="containerPage"
-             sx={{ paddingLeft: { xs: 2, sm: 6 }, paddingRight: { xs: 2, sm: 6 } }}
+            sx={{
+              paddingLeft: { xs: 2, sm: 6 },
+              paddingRight: { xs: 2, sm: 6 },
+            }}
           >
             <Grid container spacing={6}>
               <Grid item xs={12} sm={6}>
                 <Stack spacing={2}>
                   <Typography variant="h6" sx={{ color: "text.secondary" }}>
-                    Application
+                    {t("application")}
                   </Typography>
                   <Stack
                     onClick={toggleModal}
@@ -143,7 +148,7 @@ function Profile() {
                         padding: "0",
                       }}
                     >
-                      Modifier son mot de passe
+                      {t("changePassword")}
                     </Typography>
                   </Stack>
                   <Stack
@@ -158,7 +163,7 @@ function Profile() {
                         <DarkModeIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
                       <Typography variant="h8" sx={{ color: "text.primary" }}>
-                        Mode sombre
+                        {t("darkMode")}
                       </Typography>
                     </Stack>
                     <Switch checked={darkMode} color="secondary" />
@@ -175,7 +180,7 @@ function Profile() {
 
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography variant="h8" sx={{ color: "text.primary" }}>
-                        Espace de stockage utilisé
+                        {t("usedStorageSpace")}
                       </Typography>
                       <LinearProgress
                         variant="determinate"
@@ -189,7 +194,7 @@ function Profile() {
                       <BugReportIcon sx={{ color: "text.secondary" }} />
                     </IconButton>
                     <Typography variant="h8" sx={{ color: "text.primary" }}>
-                      Test Panneaux
+                      {t("panelsTest")}
                     </Typography>
                   </Stack>
 
@@ -204,7 +209,7 @@ function Profile() {
                         <LanguageIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
                       <Typography variant="h8" sx={{ color: "text.primary" }}>
-                        Langues
+                        {t("languages")}
                       </Typography>
                     </Stack>
                     <LanguageSelector />
@@ -215,7 +220,7 @@ function Profile() {
                     variant="h6"
                     sx={{ mt: 2, color: "text.secondary" }}
                   >
-                    Info
+                    {t("info")}
                   </Typography>
                   <Stack direction="row" alignItems="center" spacing={3}>
                     <IconButton disabled>
@@ -228,7 +233,7 @@ function Profile() {
                 </Stack>
               </Grid>
               <Grid
-              /*   style={{
+                /*   style={{
                   paddingTop: "15px"
                 }} */
                 item
@@ -236,8 +241,8 @@ function Profile() {
                 sm={6}
               >
                 <Stack spacing={2}>
-                  <Typography variant="h6"  sx={{color: "text.secondary" }}>
-                    Compte
+                  <Typography variant="h6" sx={{ color: "text.secondary" }}>
+                    {t("account")}
                   </Typography>
                   <Stack
                     direction="row"
@@ -250,7 +255,7 @@ function Profile() {
                       <IconButton disabled>
                         <PermMediaIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
-                      <Typography>Event auto</Typography>
+                      <Typography> {t("autoEvent")}</Typography>
                     </Stack>
                     <Switch
                       color="secondary"
@@ -268,7 +273,7 @@ function Profile() {
                       <IconButton disabled>
                         <ModeNightIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
-                      <Typography>Mise en veille automatique</Typography>
+                      <Typography> {t("automaticStandby")}</Typography>
                     </Stack>
                     <Switch
                       color="secondary"

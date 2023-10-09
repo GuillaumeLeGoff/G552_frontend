@@ -7,16 +7,19 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 function AddEventDialog({ open, onClose, onAdd, name, setName }) {
+  const { t } = useTranslation();
+
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Ajouter un nouvel événement</DialogTitle>
+      <DialogTitle>{t("addNewEvent")}</DialogTitle>
       <DialogContent>
         <TextField
           fullWidth
           id="standard-basic"
-          label="Nom de l'événement"
+          label={t("eventName")}
           autoComplete="off"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -24,10 +27,10 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "secondary.main" }}>
-          Annuler
+          {t("cancel")}
         </Button>
         <Button onClick={onAdd} sx={{ color: "secondary.main" }} disabled={!name.trim()}>
-          Ajouter
+          {t("add")}
         </Button>
       </DialogActions>
     </Dialog>

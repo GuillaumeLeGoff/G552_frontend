@@ -15,8 +15,7 @@ import {
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 
-
-import UserConnectedDialog from "../dialogs/UserConnectedDialog"
+import UserConnectedDialog from "../dialogs/UserConnectedDialog";
 import ActiveSessionsService from "../../services/activeSessionsService";
 import authService from "../../services/authService";
 
@@ -42,7 +41,7 @@ function Login() {
   }
 
   async function handleSubmit(e) {
-    if(e) e.preventDefault();
+    if (e) e.preventDefault();
     try {
       await authService.login(user, password).then((response) => {
         if (response.userConected && response.userConected === true) {
@@ -85,11 +84,11 @@ function Login() {
                 onChange={(e) => setUser(e.target.value)}
                 required
               >
-                 <MenuItem value="handball">Handball</MenuItem>
-                <MenuItem value="volleyball">Volleyball</MenuItem>
-                <MenuItem value="futsal">Futsal</MenuItem>
+                <MenuItem value="handball">{t("handball")}</MenuItem>
+                <MenuItem value="volleyball">{t("volleyball")}</MenuItem>
+                <MenuItem value="futsal">{t("futsal")}</MenuItem>
+                <MenuItem value="badminton">{t("badminton")}</MenuItem>
                 <MenuItem value="basketball">{t("basketball")}</MenuItem>
-                <MenuItem value="badminton">Badminton</MenuItem>
                 <MenuItem value="tennis">{t("tennis")}</MenuItem>
               </Select>
               <TextField
