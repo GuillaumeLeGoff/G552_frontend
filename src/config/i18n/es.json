@@ -28,7 +28,7 @@
   "passwordChangedSuccessfully": "Contraseña cambiada con éxito",
   "submit": "Enviar",
   "confirmDeletion": "Confirmar eliminación",
-  "areYouSureToDelete": "¿Estás seguro de querer eliminar el evento \"{eventName}\"?",
+  "areYouSureToDelete": "¿Estás seguro de querer eliminar el evento ",
   "delete": "Eliminar",
   "confirmMediaDeletion": "Confirmar eliminación",
   "areYouSureToDeleteMedia": "¿Quieres eliminar este medio?",

@@ -17,7 +17,7 @@ function DeleteEventDialog({ open, onClose, onDelete, eventName }) {
       <DialogTitle>{t('confirmDeletion')}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {t('areYouSureToDelete', { eventName: eventName })}
+          {t('areYouSureToDelete')} <strong>{eventName}</strong> ?
         </DialogContentText>
       </DialogContent>
       <DialogActions>

@@ -6,6 +6,7 @@ const URL_API = Config.SERVER_URL;
 
 class VeilleService {
   getByUserId(id) {
+    console.log("getByUserId", id);
     const data = {};
     return axios.get(
       URL_API + "/veilles/" + id,

@@ -50,7 +50,7 @@ function Profile() {
     if (user) {
       setUsername(user.user.username);
       paramService.getByUserId(user.user.id).then((paramData) => {
-        const paramDataItem = paramData?.data?.[0] || {};
+        const paramDataItem = paramData?.[0] || {};
         setParam(paramDataItem);
 
         // Mettre à jour l'état avec les données de param
