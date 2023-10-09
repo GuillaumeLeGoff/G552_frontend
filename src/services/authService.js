@@ -100,7 +100,6 @@ class AuthService {
   }
 
   getCurrentUser() {
-    console.log(localStorage.getItem("user").id);
     return JSON.parse(localStorage.getItem("user"));
   }
   async updateFirstLogin(id) {
