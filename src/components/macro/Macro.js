@@ -33,12 +33,13 @@ function Macro() {
 
   function getEvent() {
     eventService.get().then((result) => {
-      setEvents(result.data);
+      setEvents(result);
     });
   }
 
   function getMacro() {
     macroService.getById().then((result) => {
+      
       const sortedData = result.data.sort((a, b) => a.button_id - b.button_id);
       const updatedData = sortedData.map((macro) => {
         return { ...macro, event_id: macro.event_id || 0 };
