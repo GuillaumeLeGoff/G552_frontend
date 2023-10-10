@@ -55,6 +55,9 @@ function Macro() {
     macroService.update(macro).then((result) => {});
   }
 
+  const ignoreMacrosIds = [0, 1, 2, 10, 11, 12, 13, 14];
+
+
   return (
     <Grid item>
       <Paper className="mainPaperPage">
@@ -79,7 +82,7 @@ function Macro() {
               </TableHead>
               <TableBody>
                 {macros
-                  ? macros.map((macro, index1) => (
+                  ? macros.filter(macro => !ignoreMacrosIds.includes(macro.button_id)).map((macro, index1) => (
                       <TableRow key={macro.button_id}>
                         <TableCell>{macro.button_id}</TableCell>
                         <TableCell align="right">
@@ -89,6 +92,7 @@ function Macro() {
                             value={macro.event_id || "choisir event"}
                             onChange={(e) => {
                               const updatedData = macros.map(
+                                
                                 (macro, index2) => {
                                   if (index1 === index2) {
                                     updateMacro({
