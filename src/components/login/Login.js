@@ -26,6 +26,7 @@ function Login() {
   const { t } = useTranslation();
 
   function deleteUserConected() {
+    console.log("deleteUserConected");
     ActiveSessionsService.deleteCurrentUser();
     handleSubmit();
     closeUserConnectedDialog();
@@ -120,7 +121,7 @@ function Login() {
       <UserConnectedDialog
         open={openUserConnectedDialog}
         onClose={closeUserConnectedDialog}
-        userDisconet={deleteUserConected}
+        userDisconnect={deleteUserConected}
       />
     </Grid> 
   );
