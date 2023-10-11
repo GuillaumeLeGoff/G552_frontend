@@ -14,10 +14,6 @@ import {
   FormControl,
 } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
-import CircleIcon from "@mui/icons-material/Circle";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
-import "./display.css";
 import UserConnectedDialog from "../dialogs/UserConnectedDialog";
 import ActiveSessionsService from "../../services/activeSessionsService";
 import authService from "../../services/authService";
@@ -57,45 +53,9 @@ function Login() {
   }
 
   return (
-    <div class="scoreboard">
-      <div class="team home">
-        <span class="team-score">999</span>
-        <span class="team-name">Domicile</span>
-
-        <div className="timeout ">
-          <CircleIcon className="circleIcon" />
-
-          <CircleIcon className="circleIcon" />
-
-          <CircleIcon className="circleIcon" />
-        </div>
-        <div class="timer-timeout">00:00</div>
-      </div>
-
-      <div class="middle-section">
-        <div class="period">
-          <ArrowLeftIcon />
-          <span class="period-number">1</span>
-          <ArrowRightIcon />
-        </div>
-        <div class="timer">00:00</div>
-      </div>
-
-      <div class="team guest">
-        <span class="team-score">999</span>
-        <span class="team-name">Invité</span>
-
-        <div className="timeout ">
-          <CircleIcon className="circleIcon" />
-
-          <CircleIcon className="circleIcon" />
-
-          <CircleIcon className="circleIcon" />
-        </div>
-        <div class="timer-timeout">00:00</div>
-      </div>
-    </div>
-    /*  <Grid item>
+  
+ 
+  <Grid item>
       <Paper>
         <Box className="herderTitlePage">
           <Box className="headerLeft">
@@ -162,7 +122,7 @@ function Login() {
         onClose={closeUserConnectedDialog}
         userDisconet={deleteUserConected}
       />
-    </Grid> */
+    </Grid> 
   );
 }
 
