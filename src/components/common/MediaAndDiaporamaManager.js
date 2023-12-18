@@ -10,7 +10,6 @@ import UploadService from "../../services/uploadService";
 import authService from "../../services/authService";
 import EventMediaService from "../../services/eventMediaService";
 
-
 function MediaAndDiaporamaManager() {
   const uploadService = UploadService();
 
@@ -84,15 +83,13 @@ function MediaAndDiaporamaManager() {
   }
 
   function getEvents() {
-    let newMedias
+    let newMedias;
     if (id !== undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
         console.log("result", result);
         newMedias = result.map((media) => {
           return { ...media, id: media.event_media_id, idBdd: media.id };
-        })
-      
-      
+        });
 
         // Trier les médias en fonction de media_pos_in_event
         newMedias.sort((a, b) => a.media_pos_in_event - b.media_pos_in_event);
@@ -110,17 +107,20 @@ function MediaAndDiaporamaManager() {
 
   function getMedias() {
     uploadService.get().then((result) => {
-      const newMedias = result.data.map((media) => {
-        return { ...media, id: uuidv4(), idBdd: media.id };
-      });
-      setEventMedia((prevState) => {
-        return prevState.map((column) => {
-          if (column.id === 1) {
-            return { ...column, medias: newMedias };
-          }
-          return column;
+      if (Array.isArray(result.data)) {
+        const newMedias = result.data.map((media) => {
+          return { ...media, id: uuidv4(), idBdd: media.id };
         });
-      });
+
+        setEventMedia((prevState) => {
+          return prevState.map((column) => {
+            if (column.id === 1) {
+              return { ...column, medias: newMedias };
+            }
+            return column;
+          });
+        });
+      }
     });
   }
   function closeEvent() {
