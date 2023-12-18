@@ -43,7 +43,8 @@ function Login() {
     if (e) e.preventDefault();
     try {
       await authService.login(user, password).then((response) => {
-        if (response.userConected && response.userConected === true) {
+  
+        if (response.status === 409 && response.isConnected ) {
           UserConnectedDialogOpen();
         }
       });

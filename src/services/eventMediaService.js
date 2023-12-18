@@ -1,47 +1,109 @@
-import fetchWithAuth  from '../utils/fetchWithAuth'; // Assurez-vous du chemin correct
+import fetchWithAuth from '../utils/fetchWithAuth'; // Assurez-vous du chemin correct
 
 const URL_API = process.env.REACT_APP_API_URL;
 
 class EventMediaService {
   async getAllByEvent(id) {
-    const response = await fetchWithAuth(`${URL_API}/eventmedias/event/${id}`);
-    return response.json();
+    try {
+      const response = await fetchWithAuth(`${URL_API}/eventmedias/event/${id}`);
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error('Error fetching event media', response.statusText);
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getAllByMedia(id) {
-    const response = await fetchWithAuth(`${URL_API}/eventmedias/media/${id}`);
-    return response.json();
+    try {
+      const response = await fetchWithAuth(`${URL_API}/eventmedias/media/${id}`);
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error('Error fetching media by event', response.statusText);
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   async deleteAllByMedia(id) {
-    const response = await fetchWithAuth(`${URL_API}/eventmedias/media/${id}`, {
-      method: 'DELETE',
-    });
-    return response.json();
+    try {
+      const response = await fetchWithAuth(`${URL_API}/eventmedias/media/${id}`, {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        return true;
+      } else {
+        console.error('Error deleting all media', response.statusText);
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   async create(eventMedia) {
-    const response = await fetchWithAuth(`${URL_API}/eventmedias`, {
-      method: 'POST',
-      body: JSON.stringify(eventMedia),
-    });
-    return response.json();
+    try {
+      const response = await fetchWithAuth(`${URL_API}/eventmedias`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(eventMedia),
+      });
+      if (response.ok) {
+        return true;
+      } else {
+        console.error('Error creating event media', response.statusText);
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
-
   async delete(id, mediaToDelete) {
-    const response = await fetchWithAuth(`${URL_API}/eventmedias/${id}`, {
-      method: 'DELETE',
-      body: JSON.stringify(mediaToDelete),
-    });
-    return response.json();
+    try {
+      const response = await fetchWithAuth(`${URL_API}/eventmedias/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(mediaToDelete),
+      });
+      if (response.ok) {
+        return response.status === 204;
+      } else {
+        console.error('Error deleting event media', response.statusText);
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(updates) {
-    const response = await fetchWithAuth(`${URL_API}/eventmedias/update-position`, {
-      method: 'PUT',
-      body: JSON.stringify(updates),
-    });
-    return response.json();
+    try {
+      const response = await fetchWithAuth(`${URL_API}/eventmedias/update-position`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      if (response.ok) {
+        return true
+      } else {
+        console.error('Error updating event media', response.statusText);
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 
   async updateDuration({ eventId, mediaId, duration }) {
@@ -50,12 +112,26 @@ class EventMediaService {
       mediaId,
       duration,
     };
-    const response = await fetchWithAuth(`${URL_API}/eventmedias/update-duration`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
-    return response.json();
+    try {
+      const response = await fetchWithAuth(`${URL_API}/eventmedias/update-duration`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error('Error updating media duration', response.statusText);
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 }
 
-export default EventMediaService;
+const eventMediaService = new EventMediaService();
+
+export default eventMediaService;

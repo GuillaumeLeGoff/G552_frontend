@@ -36,9 +36,9 @@ function DiaporamaList({ onEventClick }) {
   }, []);
 
   async function getEvent() {
-    const result = await eventService.get();
-    console.log("result", result);
-    setEvent(result);
+    await eventService.get().then((result) => {
+      setEvent(result);
+    });
   }
 
   async function deleteEvent() {
@@ -52,7 +52,9 @@ function DiaporamaList({ onEventClick }) {
   }
   async function addEvent() {
     try {
-      await eventService.create(name);
+      await eventService.create(name).then((result) => {
+        setEvent(result);
+      });
       toggleModal();
       getEvent();
       setName("");
@@ -119,10 +121,9 @@ function DiaporamaList({ onEventClick }) {
                   >
                     <TableCell>{row.name}</TableCell>
                     <TableCell sx={{ p: 0 }} align="right">
-                      {hoveredRow === row.id && (
+                      {(hoveredRow === row.id || isMobile) && (
                         <IconButton
-                          sx={{ p: 0 }}
-                          size="small"
+                          sx={{ pr: 1 }}
                           onClick={(e) => {
                             e.stopPropagation();
                             openDeleteDialog(row);

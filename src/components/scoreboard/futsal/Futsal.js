@@ -25,7 +25,7 @@ import SurroundSoundIcon from "@mui/icons-material/SurroundSound";
 import MacroShortcut from "../MacroShortcut";
 import PlusOneIcon from "@mui/icons-material/PlusOne";
 
-import scoreServiceInstance from "../../../services/scoreService";
+import scoreService from "../../../services/scoreService";
 import FutsalSetting from "./FutsalSetting";
 import modeServiceInstance from "../../../services/modeService";
 
@@ -36,18 +36,19 @@ function Futsal() {
 
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [gameState, setGameState] = useState({});
-
   useEffect(() => {
-    getData().then((data) => {
-      setGameState(data);
-    });
-  }, []);
+    const fetchScoring = async () => {
+      try {
+        const data = await scoreService.getByUserId();
+        console.log("data", data);
+        setGameState(data[0]);
+      } catch (error) {
+        console.error("Failed to fetch scoring", error);
+      }
+    };
 
-  const getData = async () => {
-    const res = await scoreServiceInstance.getByUserId();
-    const data = res.data[0];
-    return data;
-  };
+    fetchScoring();
+  }, []);
 
   const updateGameState = async (nameValue, value) => {
     value = value + gameState[nameValue];
@@ -78,7 +79,7 @@ function Futsal() {
   };
 
   const updateDB = async (nameValue, value) => {
-    await scoreServiceInstance.update({ [nameValue]: value });
+    await scoreService.update({ [nameValue]: value });
   };
 
   const toggleSettingModal = () => {
@@ -110,7 +111,10 @@ function Futsal() {
               />
             </IconButton>
             <IconButton className="headerButton">
-              <PlayArrowIcon onClick={playScoring} sx={{ color: "secondary.main" }} />
+              <PlayArrowIcon
+                onClick={playScoring}
+                sx={{ color: "secondary.main" }}
+              />
             </IconButton>
             <IconButton className="headerButton">
               <SettingsIcon

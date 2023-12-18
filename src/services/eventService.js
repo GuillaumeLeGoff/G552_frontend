@@ -1,6 +1,5 @@
-import fetchWithAuth  from '../utils/fetchWithAuth';
-import AuthService from "./authService";
-
+import fetchWithAuth from '../utils/fetchWithAuth';
+import AuthService from './authService';
 
 const URL_API = process.env.REACT_APP_API_URL;
 
@@ -16,7 +15,12 @@ class EventService {
         },
         body: JSON.stringify({ name, userId }),
       });
-      return response.json();
+      if (response.ok) {
+        return true;
+      } else {
+        console.error('Error creating event', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }
@@ -27,24 +31,25 @@ class EventService {
     const userId = currentUser?.user?.id;
     try {
       const response = await fetchWithAuth(`${URL_API}/events/user/${userId}`);
-      return response.json();
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error('No event found or error in response', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }
   }
-
-  static async getById(id) {
-    const currentUser = AuthService.getCurrentUser();
-    const userId = currentUser?.user?.id;
+    static async getById(id) {
     try {
-      const response = await fetchWithAuth(`${URL_API}/events/${id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userId }),
-      });
-      return response.json();
+      const response = await fetchWithAuth(`${URL_API}/events/${id}`);
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error('Event not found or error in response', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }
@@ -55,7 +60,12 @@ class EventService {
       const response = await fetchWithAuth(`${URL_API}/events/${id}`, {
         method: 'DELETE',
       });
-      return response.json();
+      if (response.ok) {
+        return true; 
+      } else {
+        console.error('Error deleting event', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }

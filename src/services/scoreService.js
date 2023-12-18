@@ -8,12 +8,13 @@ class ScoreService {
   // Get the current user's ID
   getCurrentUserId() {
     const currentUser = authService.getCurrentUser();
-    return currentUser ? currentUser.id : null; // Adjusted to match expected user object structure
+    return currentUser ?  currentUser.user.id : null; // Adjusted to match expected user object structure
   }
 
   // Get all scores for the current user
   async getByUserId() {
     const userId = this.getCurrentUserId();
+    console.log("userId", userId);
     if (!userId) {
       throw new Error("No user id found");
     }
@@ -68,5 +69,5 @@ class ScoreService {
   // Additional methods here if necessary...
 }
 
-const scoreServiceInstance = new ScoreService();
-export default scoreServiceInstance;
+const scoreService = new ScoreService();
+export default scoreService;

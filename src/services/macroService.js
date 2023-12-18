@@ -1,20 +1,24 @@
-import fetchWithAuth  from '../utils/fetchWithAuth';
+import fetchWithAuth from '../utils/fetchWithAuth';
 import authService from "./authService";
 
-const URL_API = process.env.REACT_APP_API_URL; // Utilisez l'URL de l'API à partir de la variable d'environnement
-
+const URL_API = process.env.REACT_APP_API_URL;
 
 class MacroService {
   async create(macro) {
     try {
-      const response = await fetchWithAuth(`${URL_API}`, {
+      const response = await fetchWithAuth(`${URL_API}/macros`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(macro)
       });
-      return response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Error creating macro', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }
@@ -29,7 +33,12 @@ class MacroService {
         },
         body: JSON.stringify(macro)
       });
-      return response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Error updating macro', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }
@@ -39,7 +48,12 @@ class MacroService {
     try {
       const userId = authService.getCurrentUser().user.id;
       const response = await fetchWithAuth(`${URL_API}/macros/user/${userId}`);
-      return response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Error fetching macros by id', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }
@@ -47,10 +61,15 @@ class MacroService {
 
   async delete(id) {
     try {
-      const response = await fetchWithAuth(`${URL_API}/${id}`, {
+      const response = await fetchWithAuth(`${URL_API}/macros/${id}`, {
         method: 'DELETE'
       });
-      return response.json();
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Error deleting macro', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }
@@ -58,8 +77,13 @@ class MacroService {
 
   async getByUserId(userId) {
     try {
-      const response = await fetchWithAuth(`${URL_API}/user/${userId}`);
-      return response.json();
+      const response = await fetchWithAuth(`${URL_API}/macros/user/${userId}`);
+      if (response.ok) {
+        return await response.json();
+      } else {
+        console.error('Error fetching macros by user id', response.statusText);
+        return null;
+      }
     } catch (error) {
       throw error;
     }

@@ -25,7 +25,7 @@ import DeleteMediaEventDialog from "../../dialogs/DeleteMediaEventDialog";
 import DiaporamaMedia from "../media/DiaporamaMedia";
 import modeServiceInstance from "../../../services/modeService";
 import DiaporamaModal from "../../dialogs/DiaporamaModal";
-import eventMediaServiceInstance from "../../../services/eventMediaService";
+import eventMediaService from "../../../services/eventMediaService";
 
 function DiaporamaConfig(props) {
   const { id } = useParams();
@@ -132,9 +132,10 @@ function DiaporamaConfig(props) {
   }
 
   async function deleteEventMedia() {
+
     const eventMediaDelete = props.eventMedia[0].medias[idEventMediaDelete];
     try {
-      await eventMediaServiceInstance.delete(id, eventMediaDelete);
+      await eventMediaService.delete(id, eventMediaDelete);
       await getMediasByID();
       closeDeleteDialog();
     } catch (error) {

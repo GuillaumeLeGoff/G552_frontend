@@ -86,7 +86,6 @@ function MediaAndDiaporamaManager() {
     let newMedias;
     if (id !== undefined) {
       EventMediaService.getAllByEvent(id).then((result) => {
-        console.log("result", result);
         newMedias = result.map((media) => {
           return { ...media, id: media.event_media_id, idBdd: media.id };
         });
@@ -105,24 +104,26 @@ function MediaAndDiaporamaManager() {
     }
   }
 
-  function getMedias() {
-    uploadService.get().then((result) => {
-      if (Array.isArray(result.data)) {
-        const newMedias = result.data.map((media) => {
-          return { ...media, id: uuidv4(), idBdd: media.id };
-        });
-
-        setEventMedia((prevState) => {
-          return prevState.map((column) => {
-            if (column.id === 1) {
-              return { ...column, medias: newMedias };
-            }
-            return column;
-          });
-        });
+  async function getMedias() {
+    try {
+      const result = await uploadService.get();
+      if (Array.isArray(result)) {
+        const newMedias = result.map(media => ({
+          ...media,
+          id: uuidv4(), 
+          idBdd: media.id
+        }));
+  
+        setEventMedia(prevState => prevState.map(column => {
+          return column.id === 1 ? { ...column, medias: newMedias } : column;
+        }));
       }
-    });
+    } catch (error) {
+      console.error("An error occurred while fetching medias:", error);
+    }
   }
+
+  
   function closeEvent() {
     setEventMedia((prevState) => {
       return prevState.map((column) => {
@@ -206,6 +207,7 @@ function MediaAndDiaporamaManager() {
           };
         });
         // Appel à la méthode create() pour ajouter le nouvel élément multimédia
+        console.log("item", item);
         EventMediaService.create({
           mediaId: item.idBdd,
           eventId: id,
@@ -213,16 +215,11 @@ function MediaAndDiaporamaManager() {
           userId: authService.getCurrentUser().user.id,
           media_pos_in_event: destination.index + 1,
         }).then((createResult) => {
-          console.log("Media created:", createResult);
           // Une fois que la promesse create() est résolue, appel à la méthode update() pour mettre à jour les positions des éléments multimédias
           EventMediaService.update(updates)
-            .then((updateResult) => {
-              console.log("Media positions updated:", updateResult);
+            .then(() => {
               getEvents();
             })
-            .catch((error) => {
-              console.error("Error updating media positions:", error);
-            });
         });
 
         break;

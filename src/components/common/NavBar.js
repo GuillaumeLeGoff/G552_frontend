@@ -62,8 +62,8 @@ function NavBar() {
           label="Profile"
           icon={<SettingsIcon sx={{ color: getIconColor("/profile") }} />}
         />
-
         <BottomNavigationAction
+        component={Link}
           onClick={handleLogoutDialogOpen}
           label="Déconnexion"
           icon={<LogoutIcon sx={{ color: getIconColor("/login") }} />}

@@ -16,14 +16,17 @@ class AuthService {
       });
 
       const data = await response.json();
-
+      const result = {
+        status: response.status,
+        ...data,
+      };
       if (data.accessToken) {
         localStorage.setItem("user", JSON.stringify(data));
         this.currentUser = data;
         window.location.reload();
       }
 
-      return data;
+      return result;
     } catch (error) {
       console.error("Error during login:", error);
     }
@@ -93,8 +96,7 @@ class AuthService {
   }
 
   getCurrentUser() {
-    const userStr = localStorage.getItem("user");
-    return userStr ? JSON.parse(userStr) : null;
+    return JSON.parse(localStorage.getItem("user"));
   }
 
   async updateFirstLogin(id) {

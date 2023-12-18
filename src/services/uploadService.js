@@ -14,6 +14,7 @@ function useUploadService() {
       if (!response.ok) {
         throw new Error("Error fetching data");
       }
+      console.log("response", response);
       return await response.json();
     } catch (error) {
       console.error(error);
@@ -31,7 +32,7 @@ function useUploadService() {
         throw new Error("Error deleting file");
       }
       openSnackbar("File successfully deleted", "success");
-      return await response.json();
+      return await response;
     } catch (error) {
       console.error(error);
       openSnackbar("Failed to delete file", "error");
