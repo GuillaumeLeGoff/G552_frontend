@@ -1,94 +1,91 @@
-import axios from "axios";
-import Config from "../config/config.json";
+import fetchWithAuth from "../utils/fetchWithAuth";
 import authService from "./authService";
 import { useSnackbar } from "../contexts/SnackbarContext";
-import "../contexts/axiosConfig";
 
-const URL_API = Config.SERVER_URL;
+const URL_API = process.env.REACT_APP_API_URL;
 
-function UploadService() {
+function useUploadService() {
   const { openSnackbar } = useSnackbar();
 
   async function get() {
-    const data = {};
-    return axios.get(
-      URL_API + "/medias/" + authService.getCurrentUser().user.id,
-      JSON.stringify(data)
-    );
+    const userId = authService.getCurrentUser().user.id;
+    try {
+      const response = await fetchWithAuth(`${URL_API}/medias/${userId}`);
+      if (!response.ok) {
+        throw new Error("Error fetching data");
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      openSnackbar("Failed to retrieve files", "error");
+      throw error;
+    }
   }
 
   async function deleteFile(file) {
     try {
-      openSnackbar("Le fichier a été suprimer avec succès", "success");
-      const response = await axios.delete(URL_API + "/medias/" + file.idBdd);
-
-      return response.data;
+      const response = await fetchWithAuth(`${URL_API}/medias/${file.idBdd}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error("Error deleting file");
+      }
+      openSnackbar("File successfully deleted", "success");
+      return await response.json();
     } catch (error) {
-      console.log(error);
-      openSnackbar("Le fichier n'a pas pue être suprimer", "error");
+      console.error(error);
+      openSnackbar("Failed to delete file", "error");
       throw error;
     }
   }
 
-  async function upload(setLoading, file , setprogress) {
-    console.log(file);
+  async function upload(setLoading, file, setprogress) {
+    if (file.size >= 1073741824) {
+      // 1 GB
+      openSnackbar("The file is too large (1 GB max)", "error");
+      return;
+    }
 
-  if (file.size < 1073741824) {
+    setLoading(true);
+    let formData = new FormData();
+    formData.append("file", file);
+
     try {
-      setLoading(true);
-      let formData = new FormData();
-      formData.append("file", file);
-  
-      const config = {
-        onUploadProgress: function(progressEvent) {
-          const percentCompleted = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total
-          );
-          console.log("Progression de l'upload : " + percentCompleted + "%");
-          setprogress(percentCompleted);
-        },
-        headers: {
-          "content-type": "multipart/form-data",
-        },
-      };
-  
-      const response = await axios.post(
-        URL_API +
-          "/medias/" +
-          authService.getCurrentUser().user.username +
-          "/" +
-          authService.getCurrentUser().user.id,
-        formData,
-        config
+      const username = authService.getCurrentUser().user.username;
+      const userId = authService.getCurrentUser().user.id;
+      const response = await fetchWithAuth(
+        `${URL_API}/medias/${username}/${userId}`,
+        {
+          method: "POST",
+          body: formData,
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round(
+              (progressEvent.loaded * 100) / progressEvent.total
+            );
+            setprogress(percentCompleted);
+          },
+        }
       );
-  
-      openSnackbar("Le fichier a été téléchargé avec succès", "success");
-  
-      const statut = response.status; // Récupération du statut de la requête
-      console.log(response);
+      if (!response.ok) {
+        throw new Error("Error uploading file");
+      }
+      openSnackbar("File uploaded successfully", "success");
       return {
-        data: response.data,
-        statut: statut, // Ajout du statut dans le résultat retourné
+        data: await response.json(),
+        status: response.status,
       };
     } catch (error) {
-      console.log(error);
-      openSnackbar(
-        "Une erreur s'est produite lors du téléchargement du fichier",
-        "error"
-      );
+      console.error(error);
+      openSnackbar("An error occurred during file upload", "error");
       throw error;
     } finally {
       setLoading(false);
     }
-  }else{openSnackbar(
-    "Le fichier est trop volumineux (1 GO max)","error"
-  );}
+  }
 
-  
-}
+  // ... any additional service functions
 
-  
   return { get, deleteFile, upload };
 }
 
-export default UploadService;
+export default useUploadService;

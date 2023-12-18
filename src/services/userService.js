@@ -1,13 +1,12 @@
-import axios from "axios";
-import Config from "../config/config.json";
-import "../contexts/axiosConfig"
+import fetchWithAuth from '../utils/fetchWithAuth';
 
-const URL_API = Config.SERVER_URL;
+const URL_API = process.env.REACT_APP_API_URL;
 
 class UserService {
   async getPublicContent() {
     try {
-      return await axios.get(URL_API + "all");
+      const response = await fetchWithAuth(URL_API + "all");
+      return await response.json();
     } catch (erreur) {
       console.error(erreur);
       throw erreur;
@@ -16,7 +15,8 @@ class UserService {
 
   async getUserBoard() {
     try {
-      return await axios.get(URL_API + "user");
+      const response = await fetchWithAuth(URL_API + "user");
+      return await response.json();
     } catch (erreur) {
       console.error(erreur);
       throw erreur;
@@ -25,7 +25,8 @@ class UserService {
 
   async getAdminBoard() {
     try {
-      return await axios.get(URL_API + "admin");
+      const response = await fetchWithAuth(URL_API + "admin");
+      return await response.json();
     } catch (erreur) {
       console.error(erreur);
       throw erreur;
@@ -34,7 +35,8 @@ class UserService {
 
   async getSuperuserBoard() {
     try {
-      return await axios.get(URL_API + "superuser");
+      const response = await fetchWithAuth(URL_API + "superuser");
+      return await response.json();
     } catch (erreur) {
       console.error(erreur);
       throw erreur;
@@ -43,10 +45,14 @@ class UserService {
 
   async changePassword(oldPassword, newPassword, id) {
     try {
-      return await axios.put(
-        URL_API + "users/" + id,
-        { oldPassword, newPassword },
-      );
+      const response = await fetchWithAuth(URL_API + "users/" + id, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+      return await response.json();
     } catch (erreur) {
       console.error(erreur);
       throw erreur;

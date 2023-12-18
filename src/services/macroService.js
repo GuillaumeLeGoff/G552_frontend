@@ -1,31 +1,71 @@
-import axios from "axios";
-import Config from "../config/config.json";
+import fetchWithAuth  from '../utils/fetchWithAuth';
 import authService from "./authService";
-import "../contexts/axiosConfig"
-const URL_API = Config.SERVER_URL;
+
+const URL_API = process.env.REACT_APP_API_URL; // Utilisez l'URL de l'API à partir de la variable d'environnement
+
+
 class MacroService {
-  create(macro) {
-    return axios.post(URL_API, macro);
+  async create(macro) {
+    try {
+      const response = await fetchWithAuth(`${URL_API}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(macro)
+      });
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
   }
 
-  update(macro) {
-    return axios.put(URL_API + "/macros/" + macro.button_id, macro);
+  async update(macro) {
+    try {
+      const response = await fetchWithAuth(`${URL_API}/macros/${macro.button_id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(macro)
+      });
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
   }
 
-  getById() {
-    return axios.get(
-      URL_API + "/macros/user/" + authService.getCurrentUser().user.id
-    );
+  async getById() {
+    try {
+      const userId = authService.getCurrentUser().user.id;
+      const response = await fetchWithAuth(`${URL_API}/macros/user/${userId}`);
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
   }
 
-  delete(id) {
-    return axios.delete(`${URL_API}/${id}`);
+  async delete(id) {
+    try {
+      const response = await fetchWithAuth(`${URL_API}/${id}`, {
+        method: 'DELETE'
+      });
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
   }
 
-  getByUserId(userId) {
-    return axios.get(`${URL_API}/user/${userId}`);
+  async getByUserId(userId) {
+    try {
+      const response = await fetchWithAuth(`${URL_API}/user/${userId}`);
+      return response.json();
+    } catch (error) {
+      throw error;
+    }
   }
 }
+
 const macroServiceInstance = new MacroService();
 
 export default macroServiceInstance;

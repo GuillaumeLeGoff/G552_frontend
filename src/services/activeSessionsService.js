@@ -1,12 +1,12 @@
-import Config from "../config/config.json";
+import fetchWithAuth  from '../utils/fetchWithAuth'; // Ajustez le chemin selon la structure de votre projet
 
-const URL_API = Config.SERVER_URL;
+const URL_API = process.env.REACT_APP_API_URL;
 
 class ActiveSessionsService {
   async deleteCurrentUser() {
     console.log("Logout");
     try {
-      const response = await fetch(`${URL_API}/activeSessions/logout`, {
+      const response = await fetchWithAuth(`${URL_API}/activeSessions/logout`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

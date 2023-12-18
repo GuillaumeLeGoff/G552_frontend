@@ -1,14 +1,15 @@
-import axios from "axios";
-import Config from "../config/config.json";
-import "../contexts/axiosConfig";
+import fetchWithAuth from '../utils/fetchWithAuth'; // Ensure the path is correct
 
-const URL_API = Config.SERVER_URL;
+const URL_API = process.env.REACT_APP_API_URL;
 
 class ParamService {
   async getByUserId(id) {
     try {
-      const response = await axios.get(`${URL_API}/params/user/${id}`);
-      return response.data;
+      const response = await fetchWithAuth(`${URL_API}/params/user/${id}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error(error);
       throw error;
@@ -17,8 +18,17 @@ class ParamService {
 
   async create(param) {
     try {
-      const response = await axios.post(`${URL_API}/params`, param);
-      return response.data;
+      const response = await fetchWithAuth(`${URL_API}/params`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(param),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error(error);
       throw error;
@@ -27,8 +37,17 @@ class ParamService {
 
   async update(updates) {
     try {
-      const response = await axios.put(`${URL_API}/params/updateEventAuto`, updates);
-      return response.data;
+      const response = await fetchWithAuth(`${URL_API}/params/updateEventAuto`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error(error);
       throw error;
@@ -37,8 +56,13 @@ class ParamService {
 
   async delete(id) {
     try {
-      const response = await axios.delete(`${URL_API}/params/${id}`);
-      return response.data;
+      const response = await fetchWithAuth(`${URL_API}/params/${id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
     } catch (error) {
       console.error(error);
       throw error;

@@ -1,29 +1,61 @@
-import axios from "axios";
-import Config from "../config/config.json";
-import "../contexts/axiosConfig"
+import fetchWithAuth from '../utils/fetchWithAuth';
 
-const URL_API = Config.SERVER_URL;
+const URL_API = process.env.REACT_APP_API_URL; // Make sure you have REACT_APP_API_URL in your .env file
 
 class VeilleService {
-  getByUserId(id) {
+  async getByUserId(id) {
     console.log("getByUserId", id);
-    const data = {};
-    return axios.get(
-      URL_API + "/veilles/" + id,
-      JSON.stringify(data)
-    );
+    try {
+      const response = await fetchWithAuth(`${URL_API}/veilles/${id}`);
+      return await response.json(); // Assuming fetchWithAuth returns a fetch-like Response object.
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
-  create(veille) {
-    return axios.post(URL_API + "/veilles", veille);
+  async create(veille) {
+    try {
+      const response = await fetchWithAuth(`${URL_API}/veilles`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(veille),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
-  update(updates) {
-    return axios.put(URL_API + "/veilles", updates);
+  async update(updates) {
+    try {
+      const response = await fetchWithAuth(`${URL_API}/veilles`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updates),
+      });
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
-  delete(id) {
-    return axios.delete(URL_API + "/veilles/" + id);
+  async delete(id) {
+    try {
+      const response = await fetchWithAuth(`${URL_API}/veilles/${id}`, {
+        method: 'DELETE',
+      });
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }
 

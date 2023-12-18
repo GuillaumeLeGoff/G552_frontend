@@ -1,48 +1,50 @@
-import axios from "axios";
-import PropTypes from "prop-types";
-import Config from "../config/config.json";
-import authService from "./authService";
-import "../contexts/axiosConfig"
+import fetchWithAuth  from '../utils/fetchWithAuth';
+import AuthService from "./authService";
 
-const URL_API = Config.SERVER_URL;
+
+const URL_API = process.env.REACT_APP_API_URL;
 
 class EventService {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  };
-
   static async create(name) {
-    const currentUser = authService.getCurrentUser();
+    const currentUser = AuthService.getCurrentUser();
     const userId = currentUser?.user?.id;
     try {
-      const res = await axios.post(`${URL_API}/events`, {
-        name: name,
-        userId: userId,
+      const response = await fetchWithAuth(`${URL_API}/events`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, userId }),
       });
-      return res.data;
+      return response.json();
     } catch (error) {
       throw error;
     }
   }
 
   static async get() {
-    const currentUser = authService.getCurrentUser();
+    const currentUser = AuthService.getCurrentUser();
     const userId = currentUser?.user?.id;
     try {
-      const res = await axios.get(`${URL_API}/events/user/${userId}`);
-      return res.data;
+      const response = await fetchWithAuth(`${URL_API}/events/user/${userId}`);
+      return response.json();
     } catch (error) {
       throw error;
     }
   }
 
   static async getById(id) {
-    const currentUser = authService.getCurrentUser();
+    const currentUser = AuthService.getCurrentUser();
     const userId = currentUser?.user?.id;
     try {
-      const res = await axios.get(`${URL_API}/events/${id}`, { params: { userId } });
-      return res.data;
+      const response = await fetchWithAuth(`${URL_API}/events/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId }),
+      });
+      return response.json();
     } catch (error) {
       throw error;
     }
@@ -50,8 +52,10 @@ class EventService {
 
   static async delete(id) {
     try {
-      const res = await axios.delete(`${URL_API}/events/${id}`);
-      return res.data;
+      const response = await fetchWithAuth(`${URL_API}/events/${id}`, {
+        method: 'DELETE',
+      });
+      return response.json();
     } catch (error) {
       throw error;
     }

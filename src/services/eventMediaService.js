@@ -1,97 +1,61 @@
-import axios from "axios";
-import Config from "../config/config.json";
-import "../contexts/axiosConfig";
+import fetchWithAuth  from '../utils/fetchWithAuth'; // Assurez-vous du chemin correct
 
-const URL_API = Config.SERVER_URL;
+const URL_API = process.env.REACT_APP_API_URL;
 
 class EventMediaService {
   async getAllByEvent(id) {
-    try {
-      const response = await axios.get(
-        `${URL_API}/eventmedias/event/${id}`
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await fetchWithAuth(`${URL_API}/eventmedias/event/${id}`);
+    return response.json();
   }
 
   async getAllByMedia(id) {
-    try {
-      const response = await axios.get(
-        `${URL_API}/eventmedias/media/${id}`
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await fetchWithAuth(`${URL_API}/eventmedias/media/${id}`);
+    return response.json();
   }
 
   async deleteAllByMedia(id) {
-    try {
-      const response = await axios.delete(
-        `${URL_API}/eventmedias/media/${id}`
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await fetchWithAuth(`${URL_API}/eventmedias/media/${id}`, {
+      method: 'DELETE',
+    });
+    return response.json();
   }
 
   async create(eventMedia) {
-    try {
-      const response = await axios.post(
-        `${URL_API}/eventmedias`, 
-        eventMedia
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await fetchWithAuth(`${URL_API}/eventmedias`, {
+      method: 'POST',
+      body: JSON.stringify(eventMedia),
+    });
+    return response.json();
   }
 
   async delete(id, mediaToDelete) {
-    try {
-      const response = await axios.delete(
-        `${URL_API}/eventmedias/${id}`, 
-        { data: mediaToDelete }
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await fetchWithAuth(`${URL_API}/eventmedias/${id}`, {
+      method: 'DELETE',
+      body: JSON.stringify(mediaToDelete),
+    });
+    return response.json();
   }
 
   async update(updates) {
-    try {
-      const response = await axios.put(
-        `${URL_API}/eventmedias/update-position`, 
-        updates
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const response = await fetchWithAuth(`${URL_API}/eventmedias/update-position`, {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    });
+    return response.json();
   }
 
   async updateDuration({ eventId, mediaId, duration }) {
-    try {
-      const data = {
-        eventId: eventId,
-        mediaId: mediaId,
-        duration: duration,
-      };
-      const response = await axios.put(
-        `${URL_API}/eventmedias/update-duration`, 
-        data
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
+    const data = {
+      eventId,
+      mediaId,
+      duration,
+    };
+    const response = await fetchWithAuth(`${URL_API}/eventmedias/update-duration`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    return response.json();
   }
 }
 
-const eventMediaServiceInstance = new EventMediaService();
-
-export default eventMediaServiceInstance;
+export default EventMediaService;

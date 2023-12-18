@@ -1,15 +1,14 @@
-import axios from "axios";
-import Config from "../config/config.json";
-import "../contexts/axiosConfig"
+import fetchWithAuth  from '../utils/fetchWithAuth';
 
+// Utilisez l'URL de l'API à partir de la variable d'environnement
+const URL_API = process.env.REACT_APP_API_URL;
 
-const URL_API = Config.SERVER_URL;
 class FileService {
   // get files
   async get() {
     try {
-      const res = await axios.get(`${URL_API}/files`);
-      return res.data;
+      const response = await fetchWithAuth(`${URL_API}/files`);
+      return response.json();
     } catch (error) {
       throw error;
     }
@@ -18,14 +17,20 @@ class FileService {
   // update file
   async update(file) {
     try {
-      const res = await axios.put(`${URL_API}/file/${file._id}`, {
-        fileName: file.fileName,
-        format: file.format,
-        path: file.path,
-        duration: file.duration,
-        name: file.name,
+      const response = await fetchWithAuth(`${URL_API}/file/${file._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fileName: file.fileName,
+          format: file.format,
+          path: file.path,
+          duration: file.duration,
+          name: file.name
+        })
       });
-      return res.data;
+      return response.json();
     } catch (error) {
       throw error;
     }
@@ -34,8 +39,10 @@ class FileService {
   // delete file
   async delete(file) {
     try {
-      const res = await axios.delete(`${URL_API}/file/${file._id}`);
-      return res.data;
+      const response = await fetchWithAuth(`${URL_API}/file/${file._id}`, {
+        method: 'DELETE'
+      });
+      return response.json();
     } catch (error) {
       throw error;
     }
@@ -44,8 +51,11 @@ class FileService {
   // post file
   async post(file) {
     try {
-      const res = await axios.post(`${URL_API}/files`, file);
-      return res.data;
+      const response = await fetchWithAuth(`${URL_API}/files`, {
+        method: 'POST',
+        body: file // Assuming file is already FormData if you're uploading files
+      });
+      return response.json();
     } catch (error) {
       throw error;
     }
@@ -54,10 +64,16 @@ class FileService {
   // put file
   async put(file) {
     try {
-      const res = await axios.put(`${URL_API}/file/${file._id}`, {
-        duration: file.duration,
+      const response = await fetchWithAuth(`${URL_API}/file/${file._id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          duration: file.duration
+        })
       });
-      return res.data;
+      return response.json();
     } catch (error) {
       throw error;
     }

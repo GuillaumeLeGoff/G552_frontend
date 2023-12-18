@@ -1,12 +1,6 @@
-import axios from "axios";
+import fetchWithAuth from '../utils/fetchWithAuth'; // Ajustez le chemin en fonction de la structure de votre projet
 
-import Config from "../config/config.json";
-
-const SERVER_URL = Config.SERVER_URL;
-const SIGN_IN_URL = "/auth/signin";
-const SIGN_UP_URL = "/auth/signup";
-const UPDATE_FIRST_LOGIN = "/auth/updateFirstLogin";
-const CHANGE_PASSWORD_URL = "/auth/modifyPassword";
+const URL_API = process.env.REACT_APP_API_URL;
 
 class AuthService {
   constructor() {
@@ -15,69 +9,66 @@ class AuthService {
 
   async login(username, password) {
     try {
-      const response = await axios.post(`${SERVER_URL}${SIGN_IN_URL}`, {
-        username,
-        password,
+      const response = await fetch(`${URL_API}/auth/signing`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
       });
 
-      if (response.data.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response.data));
-        this.currentUser = response.data;
+      const data = await response.json();
+
+      if (data.accessToken) {
+        localStorage.setItem("user", JSON.stringify(data));
+        this.currentUser = data;
         window.location.reload();
       }
 
-      return response.data;
+      return data;
     } catch (error) {
-      // Si une erreur se produit, vérifiez si c'est parce qu'un utilisateur est déjà connecté
-      console.log("Error during login:", error.response.data.error);
-      if (
-        error.response &&
-        error.response.data.error === "Un autre utilisateur est déjà connecté"
-      ) {
-        console.log("User already connected");
-        // Si c'est le cas, retournez une réponse personnalisée
-        return { userConected: true };
-      }
+      console.error("Error during login:", error);
     }
   }
 
   async logout() {
     console.log("Logout");
     try {
-      const response = await axios.put(
-        `${SERVER_URL}/activeSessions/logout`,
-        {}
-      );
+      const response = await fetchWithAuth(`${URL_API}/activeSessions/logout`, {
+        method: 'PUT',
+      });
+
+      const data = await response.json();
 
       localStorage.removeItem("user");
       this.currentUser = null;
       window.location.reload();
 
-      return response.data;
+      return data;
     } catch (error) {
-      console.log("Error during logout:", error);
+      console.error("Error during logout:", error);
     }
   }
 
   async register(username, password, role) {
     try {
       const roles = [role];
-      const response = await axios.post(`${SERVER_URL}${SIGN_UP_URL}`, {
-        username,
-        password,
-        roles,
+      const response = await fetch(`${URL_API}/auth/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, roles }),
       });
 
-      return response.data;
+      return await response.json();
     } catch (error) {
-      console.log("Error during registration:", error);
+      console.error("Error during registration:", error);
     }
   }
 
   updateAccessToken(newToken) {
-    const user = JSON.parse(localStorage.getItem("user"));
-    user.accessToken = newToken;
-    localStorage.setItem("user", JSON.stringify(user));
+    const user = this.getCurrentUser();
+    if (user) {
+      user.accessToken = newToken;
+      localStorage.setItem("user", JSON.stringify(user));
+    }
   }
 
   async changePassword(newPassword) {
@@ -85,32 +76,36 @@ class AuthService {
       const user = this.getCurrentUser();
 
       if (user) {
-        await axios.post(
-          `${SERVER_URL}${CHANGE_PASSWORD_URL}/${user.user.id}`,
-          { newPassword }
-        );
+        const response = await fetchWithAuth(`${URL_API}/auth/modifyPassword/${user.id}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newPassword })
+        });
+
+        return await response.json();
       } else {
         throw new Error("User not found");
       }
     } catch (error) {
-      console.log("Error during password change:", error.response.data.message);
-
+      console.error("Error during password change:", error);
       throw error;
     }
   }
 
   getCurrentUser() {
-    return JSON.parse(localStorage.getItem("user"));
+    const userStr = localStorage.getItem("user");
+    return userStr ? JSON.parse(userStr) : null;
   }
+
   async updateFirstLogin(id) {
     try {
-      const response = await axios.post(
-        `${SERVER_URL}${UPDATE_FIRST_LOGIN}/${id}`
-      );
+      const response = await fetchWithAuth(`${URL_API}/auth/updateFirstLogin/${id}`, {
+        method: 'POST',
+      });
 
-      return response.data;
+      return await response.json();
     } catch (error) {
-      console.log("Error during firstLogin:", error);
+      console.error("Error during firstLogin:", error);
     }
   }
 }

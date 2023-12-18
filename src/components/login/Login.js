@@ -26,7 +26,6 @@ function Login() {
   const { t } = useTranslation();
 
   function deleteUserConected() {
-    console.log("deleteUserConected");
     ActiveSessionsService.deleteCurrentUser();
     handleSubmit();
     closeUserConnectedDialog();
