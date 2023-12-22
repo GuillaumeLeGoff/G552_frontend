@@ -26,6 +26,7 @@ function NavBar() {
 
   function logout() {
     AuthService.logout();
+    window.location.reload();
   }
 
   function getIconColor(path) {

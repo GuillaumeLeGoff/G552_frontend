@@ -9,7 +9,7 @@ class AuthService {
 
   async login(username, password) {
     try {
-      const response = await fetch(`${URL_API}/auth/signing`, {
+      const response = await fetch(`${URL_API}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
