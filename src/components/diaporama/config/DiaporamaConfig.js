@@ -4,6 +4,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { useTranslation } from "react-i18next";
 import {
   Box,
+  CircularProgress,
   IconButton,
   Paper,
   Stack,
@@ -17,6 +18,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SlideshowIcon from "@mui/icons-material/Slideshow";
+import StopIcon from "@mui/icons-material/Stop";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import eventService from "../../../services/eventService";
@@ -26,6 +28,8 @@ import DiaporamaMedia from "../media/DiaporamaMedia";
 import modeServiceInstance from "../../../services/modeService";
 import DiaporamaModal from "../../dialogs/DiaporamaModal";
 import eventMediaService from "../../../services/eventMediaService";
+import modeService from "../../../services/modeService";
+
 
 function DiaporamaConfig(props) {
   const { id } = useParams();
@@ -41,12 +45,28 @@ function DiaporamaConfig(props) {
   const [hoveredRow, setHoveredRow] = useState(null);
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   const [isAutoPlayEnabled, setIsAutoPlayEnabled] = useState(true);
+  const [mode, setMode] = useState(null);
 
   useEffect(() => {
     props.getEvents();
     getMediasByID();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    getMode();
+  }, []);
+
+  
+  async function getMode() {
+    try {
+      const result = await modeServiceInstance.getMode();
+      setMode(result);
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     var sortedMedias = "";
@@ -157,9 +177,27 @@ function DiaporamaConfig(props) {
     props.closeEvent();
   }
 
-  function playDiapo() {
-    const mode = { mode: "diaporama", eventId: event.id };
-    modeServiceInstance.setMode(mode);
+
+  function stopEvent() {
+    const mode = { event_id: null ,mode : null };
+    try {
+      modeService.setMode(mode);
+      setMode(mode);
+    } catch (error) {
+      console.error("Erreur lors de la suppression d'un événement :", error);
+    }
+  }
+
+  function startEvent(event) {
+    console.log(event);
+    const mode = { event_id: event.id ,mode : "diaporama" };
+    try {
+      modeService.setMode(mode);
+      setMode(mode);
+      
+    } catch (error) {
+      console.error("Erreur lors de la suppression d'un événement :", error);
+    }
   }
 
   return (
@@ -198,9 +236,37 @@ function DiaporamaConfig(props) {
             <IconButton className="headerButton" onClick={openPlayModal}>
               <SlideshowIcon sx={{ color: "secondary.main" }} />
             </IconButton>
-            <IconButton className="headerButton" onClick={playDiapo}>
-              <PlayArrowIcon sx={{ color: "secondary.main" }} />
-            </IconButton>
+            {mode && mode.event_id === event.id ? (<IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              stopEvent();
+                            }}
+                          >
+                            <StopIcon
+                              sx={{ fontSize: 20, color: "secondary.main" }}
+                            />
+                            <CircularProgress
+                              size={20}
+                              sx={{
+                               
+                                position: "absolute",
+                                color: "secondary.main",
+                              }}
+                            />
+                          </IconButton>) : ( <IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              startEvent(event);
+                            }}
+                          >
+                            <PlayArrowIcon
+                              sx={{ fontSize: 20, color: "secondary.main" }}
+                            />
+                          </IconButton>) }
           </Box>
         </Stack>
 

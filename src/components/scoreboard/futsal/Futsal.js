@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Box,
+  CircularProgress,
   Grid,
   IconButton,
   Paper,
@@ -16,6 +17,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import WestIcon from "@mui/icons-material/West";
+import StopIcon from "@mui/icons-material/Stop";
 import EastIcon from "@mui/icons-material/East";
 import PauseIcon from "@mui/icons-material/Pause";
 import CircleIcon from "@mui/icons-material/Circle";
@@ -27,7 +29,7 @@ import PlusOneIcon from "@mui/icons-material/PlusOne";
 
 import scoreService from "../../../services/scoreService";
 import FutsalSetting from "./FutsalSetting";
-import modeServiceInstance from "../../../services/modeService";
+import modeService from "../../../services/modeService";
 
 function Futsal() {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -36,6 +38,7 @@ function Futsal() {
 
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const [gameState, setGameState] = useState({});
+  const [mode, setMode] = useState(null);
   useEffect(() => {
     const fetchScoring = async () => {
       try {
@@ -86,9 +89,26 @@ function Futsal() {
     setIsSettingOpen((prevState) => !prevState);
   };
 
-  function playScoring() {
-    const mode = { mode: "scoring", eventId: null };
-    modeServiceInstance.setMode(mode);
+
+  function stopScoring() {
+    const mode = { event_id: null ,mode : null };
+    try {
+      modeService.setMode(mode);
+      setMode(mode);
+    } catch (error) {
+      console.error("Erreur lors de la suppression d'un événement :", error);
+    }
+  }
+
+  function startScoring() {
+    const mode = { event_id: null ,mode : "scoring" };
+    try {
+      modeService.setMode(mode);
+      setMode(mode);
+      
+    } catch (error) {
+      console.error("Erreur lors de la suppression d'un événement :", error);
+    }
   }
 
   return (
@@ -110,12 +130,36 @@ function Futsal() {
                 sx={{ color: "secondary.main" }}
               />
             </IconButton>
-            <IconButton className="headerButton">
-              <PlayArrowIcon
-                onClick={playScoring}
-                sx={{ color: "secondary.main" }}
-              />
-            </IconButton>
+            {mode && mode.mode === "scoring" ? (<IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              stopScoring();
+                            }}
+                          >
+                            <StopIcon
+                              sx={{ fontSize: 20, color: "secondary.main" }}
+                            />
+                            <CircularProgress
+                              size={20}
+                              sx={{
+                                position: "absolute",
+                                color: "secondary.main",
+                              }}
+                            />
+                          </IconButton>) : ( <IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              startScoring();
+                            }}
+                          >
+                            <PlayArrowIcon
+                              sx={{ fontSize: 20, color: "secondary.main" }}
+                            />
+                          </IconButton>) }
             <IconButton className="headerButton">
               <SettingsIcon
                 onClick={toggleSettingModal}

@@ -22,6 +22,7 @@ import DeleteEventDialog from "../../dialogs/DeleteEventDialog";
 import AddEventDialog from "../../dialogs/AddEventDialog";
 import modeService from "../../../services/modeService";
 import StopIcon from "@mui/icons-material/Stop";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 
 function DiaporamaList({ onEventClick }) {
   const [name, setName] = useState("");
@@ -102,6 +103,29 @@ function DiaporamaList({ onEventClick }) {
     setEventToDelete(null);
   }
 
+  function stopEvent() {
+    const mode = { event_id: null ,mode : null };
+    try {
+      modeService.setMode(mode);
+      setMode(mode);
+    } catch (error) {
+      console.error("Erreur lors de la suppression d'un événement :", error);
+    }
+  }
+
+  function startEvent(event) {
+    console.log(event);
+    const mode = { event_id: event.id ,mode : "diaporama" };
+    try {
+      modeService.setMode(mode);
+      setMode(mode);
+      
+    } catch (error) {
+      console.error("Erreur lors de la suppression d'un événement :", error);
+    }
+  }
+
+
   return (
     <Box>
       <Paper className="mainPaperPage">
@@ -145,7 +169,7 @@ function DiaporamaList({ onEventClick }) {
                             size="small"
                             onClick={(e) => {
                               e.stopPropagation();
-                              
+                              stopEvent();
                             }}
                           >
                             <StopIcon
@@ -160,7 +184,18 @@ function DiaporamaList({ onEventClick }) {
                                 color: "secondary.main",
                               }}
                             />
-                          </IconButton>) : (<></>) }
+                          </IconButton>) : ( <IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              startEvent(row);
+                            }}
+                          >
+                            <PlayArrowIcon
+                              sx={{ fontSize: 15, color: "secondary.main" }}
+                            />
+                          </IconButton>) }
                        
                           <IconButton
                             sx={{ pr: 1 }}
