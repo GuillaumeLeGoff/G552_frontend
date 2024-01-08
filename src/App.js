@@ -7,8 +7,8 @@ import i18n from "./config/i18n/i18n";
 
 import { darkTheme } from "./themes/darkTheme.ts";
 import { clairTheme } from "./themes/clairTheme.ts";
-import { useDarkMode } from "./contexts/DarkModeContext";
-import { LoadingContext } from "./contexts/Context";
+import { useDarkMode } from "./contexts/DarkModeContext.js";
+import { LoadingContext } from "./contexts/Context.js";
 
 import AuthService from "./services/authService";
 import ChangePassword from "./components/login/ChangePassword";

@@ -39,19 +39,25 @@ function Macro() {
 
   function getMacro() {
     macroService.getById().then((result) => {
-      const sortedData = result.data.sort((a, b) => a.button_id - b.button_id);
+      console.log(result);
+      const sortedData = result.sort((a, b) => a.button_id - b.button_id);
       const updatedDataWithIndex = sortedData.map((macro, index) => {
-        return { ...macro, originalIndex: index, event_id: macro.event_id || 0 };
+        return {
+          ...macro,
+          originalIndex: index,
+          event_id: macro.event_id || 0,
+        };
       });
       setMacros(updatedDataWithIndex);
     });
   }
 
-  function updateMacro(macro) {
+  async function updateMacro(macro) {
     if (macro.event_id === "choisir event") {
       macro.event_id = null;
     }
-    macroService.update(macro).then((result) => {});
+    /*  macroService.update(macro).then((result) => {}); */
+    await macroService.update(macro);
   }
 
   const ignoreMacrosIds = [0, 1, 2, 10, 11, 12, 13, 14];
@@ -81,7 +87,9 @@ function Macro() {
               <TableBody>
                 {macros
                   ? macros
-                      .filter((macro) => !ignoreMacrosIds.includes(macro.button_id))
+                      .filter(
+                        (macro) => !ignoreMacrosIds.includes(macro.button_id)
+                      )
                       .map((macro) => (
                         <TableRow key={macro.button_id}>
                           <TableCell>{macro.button_id}</TableCell>
@@ -92,7 +100,9 @@ function Macro() {
                               value={macro.event_id || "choisir event"}
                               onChange={(e) => {
                                 const updatedData = macros.map((item) => {
-                                  if (macro.originalIndex === item.originalIndex) {
+                                  if (
+                                    macro.originalIndex === item.originalIndex
+                                  ) {
                                     updateMacro({
                                       ...item,
                                       event_id: e.target.value,
@@ -110,11 +120,12 @@ function Macro() {
                               <MenuItem value="choisir event">
                                 {t("macro.none")}
                               </MenuItem>
-                              {events && events.map((event) => (
-                                <MenuItem key={event.id} value={event.id}>
-                                  {event.name}
-                                </MenuItem>
-                              ))}
+                              {events &&
+                                events.map((event) => (
+                                  <MenuItem key={event.id} value={event.id}>
+                                    {event.name}
+                                  </MenuItem>
+                                ))}
                             </Select>
                           </TableCell>
                         </TableRow>

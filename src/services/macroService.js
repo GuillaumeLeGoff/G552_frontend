@@ -34,7 +34,7 @@ class MacroService {
         body: JSON.stringify(macro)
       });
       if (response.ok) {
-        return await response.json();
+        
       } else {
         console.error('Error updating macro', response.statusText);
         return null;

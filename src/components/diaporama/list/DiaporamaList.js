@@ -5,6 +5,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  CircularProgress,
   TableRow,
   Box,
 } from "@mui/material";
@@ -19,6 +20,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import eventService from "../../../services/eventService";
 import DeleteEventDialog from "../../dialogs/DeleteEventDialog";
 import AddEventDialog from "../../dialogs/AddEventDialog";
+import modeService from "../../../services/modeService";
+import StopIcon from "@mui/icons-material/Stop";
 
 function DiaporamaList({ onEventClick }) {
   const [name, setName] = useState("");
@@ -27,18 +30,32 @@ function DiaporamaList({ onEventClick }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [mode, setMode] = useState(null);
 
   const { t } = useTranslation();
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   useEffect(() => {
     getEvent();
+    getMode();
   }, []);
 
   async function getEvent() {
-    await eventService.get().then((result) => {
+    try {
+      const result = await eventService.get();
       setEvent(result);
-    });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function getMode() {
+    try {
+      const result = await modeService.getMode();
+      setMode(result);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   async function deleteEvent() {
@@ -122,17 +139,42 @@ function DiaporamaList({ onEventClick }) {
                     <TableCell>{row.name}</TableCell>
                     <TableCell sx={{ p: 0 }} align="right">
                       {(hoveredRow === row.id || isMobile) && (
-                        <IconButton
-                          sx={{ pr: 1 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openDeleteDialog(row);
-                          }}
-                        >
-                          <DeleteIcon
-                            sx={{ fontSize: 15, color: "secondary.main" }}
-                          />
-                        </IconButton>
+                        <>
+                        { mode.event_id === row.id ? (<IconButton
+                            sx={{ p: 0 }}
+                            size="small"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              
+                            }}
+                          >
+                            <StopIcon
+                              sx={{ fontSize: 15, color: "secondary.main" }}
+                            />
+                            <CircularProgress
+                              size={15}
+                              sx={{
+                                top: 0,
+                                left: 0,
+                                position: "absolute",
+                                color: "secondary.main",
+                              }}
+                            />
+                          </IconButton>) : (<></>) }
+                       
+                          <IconButton
+                            sx={{ pr: 1 }}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openDeleteDialog(row);
+                            }}
+                          >
+                            <DeleteIcon
+                              sx={{ fontSize: 15, color: "secondary.main" }}
+                            />
+                          </IconButton>
+                          
+                        </>
                       )}
                     </TableCell>
                   </TableRow>
