@@ -51,12 +51,12 @@ function NavBar() {
           label="Macro"
           icon={<KeyboardIcon sx={{ color: getIconColor("/macro") }} />}
         />
-        <BottomNavigationAction
+        {/* <BottomNavigationAction
           component={Link}
           to="/scoreboard"
           label="scoreboard"
           icon={<ScoreboardIcon sx={{ color: getIconColor("/scoreboard") }} />}
-        />
+        />*/}
         <BottomNavigationAction
           component={Link}
           to="/profile"
