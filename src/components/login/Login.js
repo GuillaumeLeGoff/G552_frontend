@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Box,
@@ -17,19 +17,39 @@ import LoginIcon from "@mui/icons-material/Login";
 import UserConnectedDialog from "../dialogs/UserConnectedDialog";
 import ActiveSessionsService from "../../services/activeSessionsService";
 import authService from "../../services/authService";
+import userService from "../../services/userService";
+import LostPasswordDialog from "../dialogs/LostPasswordDialog";
 
 function Login() {
+  const [users, setUsers] = useState("");
   const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [openUserConnectedDialog, setOpenUserConnectedDialog] = useState(false);
   const { t } = useTranslation();
+  const [openChangePassword , setOpenChangePassword] = useState(false);
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
+  async function getUsers() {
+    const result = await userService.getAll();
+    console.log("result", result);
+    setUsers(result);
+  }
 
   function deleteUserConected() {
     ActiveSessionsService.deleteCurrentUser();
     handleSubmit();
     closeUserConnectedDialog();
   }
+
+  function lostPassword () {
+    setOpenChangePassword(!openChangePassword);
+    
+  }
+
 
   function UserConnectedDialogOpen() {
     setOpenUserConnectedDialog(true);
@@ -43,8 +63,7 @@ function Login() {
     if (e) e.preventDefault();
     try {
       await authService.login(user, password).then((response) => {
-  
-        if (response.status === 409 && response.isConnected ) {
+        if (response.status === 409 && response.isConnected) {
           UserConnectedDialogOpen();
         }
       });
@@ -53,10 +72,9 @@ function Login() {
     }
   }
 
-  return (
-  
  
-  <Grid item>
+  return (
+    <Grid item>
       <Paper>
         <Box className="herderTitlePage">
           <Box className="headerLeft">
@@ -81,17 +99,18 @@ function Login() {
             <FormControl sx={{ width: "35vh" }}>
               <InputLabel>{t("usernameLabel")}</InputLabel>
               <Select
-                label={t("passwordLabel")}
+                labelId="user-select-label"
+                label={t("usernameLabel")}
                 value={user}
                 onChange={(e) => setUser(e.target.value)}
                 required
               >
-                <MenuItem value="handball">{t("handball")}</MenuItem>
-                <MenuItem value="volleyball">{t("volleyball")}</MenuItem>
-                <MenuItem value="futsal">{t("futsal")}</MenuItem>
-                <MenuItem value="badminton">{t("badminton")}</MenuItem>
-                <MenuItem value="basketball">{t("basketball")}</MenuItem>
-                <MenuItem value="tennis">{t("tennis")}</MenuItem>
+                {users &&
+                  users.map((userOption) => (
+                    <MenuItem key={userOption.id} value={userOption.username}>
+                      {userOption.username}
+                    </MenuItem>
+                  ))}
               </Select>
               <TextField
                 label={t("passwordLabel")}
@@ -101,6 +120,17 @@ function Login() {
                 required
                 margin="normal"
               />
+               <Typography
+                  variant="body2"
+                  sx={{
+                    textAlign: "center",
+                    height: "1.5em",
+                    color: "secondary.main",
+                    cursor: "pointer" 
+                  }}
+                  onClick={lostPassword} 
+                >
+                 Mot de passe oublier                </Typography>
               <Typography
                 variant="body2"
                 sx={{
@@ -111,6 +141,7 @@ function Login() {
               >
                 {error || " "}
               </Typography>
+             
               <Button type="submit" sx={{ color: "secondary.main" }}>
                 {t("loginButton")}
               </Button>
@@ -118,12 +149,17 @@ function Login() {
           </form>
         </Box>
       </Paper>
+      <LostPasswordDialog
+        open={openChangePassword}
+        onClose={() => setOpenChangePassword(false)}
+        users = {users}
+      />
       <UserConnectedDialog
         open={openUserConnectedDialog}
         onClose={closeUserConnectedDialog}
         userDisconnect={deleteUserConected}
       />
-    </Grid> 
+    </Grid>
   );
 }
 

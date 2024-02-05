@@ -164,38 +164,7 @@ function DiaporamaList({ onEventClick }) {
                     <TableCell sx={{ p: 0 }} align="right">
                       {(hoveredRow === row.id || isMobile) && (
                         <>
-                        { mode.event_id === row.id ? (<IconButton
-                            sx={{ p: 0 }}
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              stopEvent();
-                            }}
-                          >
-                            <StopIcon
-                              sx={{ fontSize: 15, color: "secondary.main" }}
-                            />
-                            <CircularProgress
-                              size={15}
-                              sx={{
-                                top: 0,
-                                left: 0,
-                                position: "absolute",
-                                color: "secondary.main",
-                              }}
-                            />
-                          </IconButton>) : ( <IconButton
-                            sx={{ p: 0 }}
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              startEvent(row);
-                            }}
-                          >
-                            <PlayArrowIcon
-                              sx={{ fontSize: 15, color: "secondary.main" }}
-                            />
-                          </IconButton>) }
+                        
                        
                           <IconButton
                             sx={{ pr: 1 }}

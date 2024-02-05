@@ -22,24 +22,23 @@ function ChangePassword() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  function handleSubmit(e) {
+ async function handleSubmit(e) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if (newPassword !== confirmPassword) {
       setError(t("passwordMismatch"));
     }
-
-    AuthService.changePassword(newPassword)
-      .then(() => {
+    try {
+       await AuthService.changePassword(newPassword)
         user.user.firstLogin = 0;
         localStorage.setItem("user", JSON.stringify(user));
         setSuccess(true);
         setError(null);
         AuthService.logout();
-      })
-      .catch((error) => {
-        setError(error.response.data.message);
-      });
+    } catch (error) {
+      console.log("error01", error);
+      setError(error);
+    }
   }
 
   function disconnect() {
@@ -100,6 +99,8 @@ function ChangePassword() {
                 >
                   {error || " "}
                 </Typography>
+
+                
                 <Button type="submit" sx={{ color: "secondary.main" }}>
                   {t("changePassword")}
                 </Button>

@@ -30,7 +30,6 @@ import DiaporamaModal from "../../dialogs/DiaporamaModal";
 import eventMediaService from "../../../services/eventMediaService";
 import modeService from "../../../services/modeService";
 
-
 function DiaporamaConfig(props) {
   const { id } = useParams();
   const { t } = useTranslation();
@@ -57,7 +56,6 @@ function DiaporamaConfig(props) {
     getMode();
   }, []);
 
-  
   async function getMode() {
     try {
       const result = await modeServiceInstance.getMode();
@@ -152,7 +150,6 @@ function DiaporamaConfig(props) {
   }
 
   async function deleteEventMedia() {
-
     const eventMediaDelete = props.eventMedia[0].medias[idEventMediaDelete];
     try {
       await eventMediaService.delete(id, eventMediaDelete);
@@ -177,9 +174,8 @@ function DiaporamaConfig(props) {
     props.closeEvent();
   }
 
-
   function stopEvent() {
-    const mode = { event_id: null ,mode : null };
+    const mode = { event_id: null, mode: null };
     try {
       modeService.setMode(mode);
       setMode(mode);
@@ -190,11 +186,10 @@ function DiaporamaConfig(props) {
 
   function startEvent(event) {
     console.log(event);
-    const mode = { event_id: event.id ,mode : "diaporama" };
+    const mode = { event_id: event.id, mode: "diaporama" };
     try {
       modeService.setMode(mode);
       setMode(mode);
-      
     } catch (error) {
       console.error("Erreur lors de la suppression d'un événement :", error);
     }
@@ -236,37 +231,6 @@ function DiaporamaConfig(props) {
             <IconButton className="headerButton" onClick={openPlayModal}>
               <SlideshowIcon sx={{ color: "secondary.main" }} />
             </IconButton>
-            {mode && mode.event_id === event.id ? (<IconButton
-                            sx={{ p: 0 }}
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              stopEvent();
-                            }}
-                          >
-                            <StopIcon
-                              sx={{ fontSize: 20, color: "secondary.main" }}
-                            />
-                            <CircularProgress
-                              size={20}
-                              sx={{
-                               
-                                position: "absolute",
-                                color: "secondary.main",
-                              }}
-                            />
-                          </IconButton>) : ( <IconButton
-                            sx={{ p: 0 }}
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              startEvent(event);
-                            }}
-                          >
-                            <PlayArrowIcon
-                              sx={{ fontSize: 20, color: "secondary.main" }}
-                            />
-                          </IconButton>) }
           </Box>
         </Stack>
 

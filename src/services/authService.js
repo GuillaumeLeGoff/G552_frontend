@@ -77,9 +77,29 @@ class AuthService {
   async changePassword(newPassword) {
     try {
       const user = this.getCurrentUser();
+      console.log("user", user);
 
       if (user) {
-        const response = await fetchWithAuth(`${URL_API}/auth/modifyPassword/${user.id}`, {
+        const response = await fetchWithAuth(`${URL_API}/auth/modifyPassword/${user.user.id}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newPassword })
+        });
+
+        return await response.json();
+      } else {
+        throw new Error("User not found");
+      }
+    } catch (error) {
+      console.error("Error during password change:", error);
+      throw error;
+    }
+  }
+
+  async lostPassword(newPassword, id) {
+    try {
+      if (id) {
+        const response = await fetchWithAuth(`${URL_API}/auth/modifyPassword/${id}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ newPassword })
