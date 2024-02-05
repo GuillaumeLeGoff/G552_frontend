@@ -6,7 +6,7 @@ class VeilleService {
   async getByUserId(id) {
     console.log("getByUserId", id);
     try {
-      const response = await fetchWithAuth(`${URL_API}/veilles/${id}`);
+      const response = await fetchWithAuth(`${URL_API}/veilles/1`);
       return await response.json(); // Assuming fetchWithAuth returns a fetch-like Response object.
     } catch (error) {
       console.error(error);

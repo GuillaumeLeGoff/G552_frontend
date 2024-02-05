@@ -10,6 +10,7 @@ import {
   Typography,
   Slider,
   LinearProgress,
+  TextField,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
@@ -57,7 +58,8 @@ function Profile() {
         veilleService
           .getByUserId(paramDataItem.veille_id)
           .then((veilleData) => {
-            setVeille(veilleData?.data || {});
+            console.log("veilleData", veilleData);
+            setVeille(veilleData || {});
 
             // Mettre à jour l'état avec les données de veille
           });
@@ -88,6 +90,13 @@ function Profile() {
     veilleService.update(updatedVeille).then((response) => {});
   };
 
+  function updatedVeille01(veille) {
+   
+    setVeille(veille);
+    console.log(veille);
+    veilleService.update(veille).then((response) => {console.log(response);});
+  }
+
   const handleSliderChange = (event, newValue) => {
     const updatedVeille = {
       ...veille,
@@ -114,7 +123,7 @@ function Profile() {
                 sx={{ color: "text.primary" }}
                 className="headerTitle"
               >
-                {t("settingsOf")} {username}
+                {t("Profile.title")}
               </Typography>
             </Box>
           </Stack>
@@ -129,7 +138,7 @@ function Profile() {
               <Grid item xs={12} sm={6}>
                 <Stack spacing={2}>
                   <Typography variant="h6" sx={{ color: "text.secondary" }}>
-                    {t("application")}
+                    {t("Profile.application")}
                   </Typography>
                   <Stack
                     onClick={toggleModal}
@@ -148,7 +157,7 @@ function Profile() {
                         padding: "0",
                       }}
                     >
-                      {t("changePassword")}
+                      {t("Profile.changePassword")}
                     </Typography>
                   </Stack>
                   <Stack
@@ -163,7 +172,7 @@ function Profile() {
                         <DarkModeIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
                       <Typography variant="h8" sx={{ color: "text.primary" }}>
-                        {t("darkMode")}
+                        {t("Profile.darkMode")}
                       </Typography>
                     </Stack>
                     <Switch checked={darkMode} color="secondary" />
@@ -180,7 +189,7 @@ function Profile() {
 
                     <Box sx={{ flexGrow: 1 }}>
                       <Typography variant="h8" sx={{ color: "text.primary" }}>
-                        {t("usedStorageSpace")}
+                        {t("Profile.usedStorageSpace")}
                       </Typography>
                       <LinearProgress
                         variant="determinate"
@@ -194,7 +203,7 @@ function Profile() {
                       <BugReportIcon sx={{ color: "text.secondary" }} />
                     </IconButton>
                     <Typography variant="h8" sx={{ color: "text.primary" }}>
-                      {t("panelsTest")}
+                      {t("Profile.panelsTest")}
                     </Typography>
                   </Stack>
 
@@ -209,7 +218,7 @@ function Profile() {
                         <LanguageIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
                       <Typography variant="h8" sx={{ color: "text.primary" }}>
-                        {t("languages")}
+                        {t("Profile.languages")}
                       </Typography>
                     </Stack>
                     <LanguageSelector />
@@ -242,9 +251,9 @@ function Profile() {
               >
                 <Stack spacing={2}>
                   <Typography variant="h6" sx={{ color: "text.secondary" }}>
-                    {t("account")}
+                    {t("Profile.account")}
                   </Typography>
-                  <Stack
+                  {/* <Stack
                     direction="row"
                     justifyContent="space-between"
                     alignItems="center"
@@ -261,7 +270,7 @@ function Profile() {
                       color="secondary"
                       checked={param.event_auto === 1}
                     />
-                  </Stack>
+                  </Stack> */}
                   <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -273,12 +282,41 @@ function Profile() {
                       <IconButton disabled>
                         <ModeNightIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
-                      <Typography> {t("automaticStandby")}</Typography>
+                      <Typography> {t("Profile.automaticStandby")}</Typography>
                     </Stack>
                     <Switch
                       color="secondary"
                       checked={veille.enable === 1}
                       onChange={handleVeilleChange}
+                    />
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={3}
+                    /*  onClick={handleVeilleChange} */
+                  >
+                    <Stack spacing={3} direction="row" alignItems="center">
+                      <IconButton disabled>
+                        <ModeNightIcon sx={{ color: "text.secondary" }} />
+                      </IconButton>
+                      <Typography>heure de restart:</Typography>
+                    </Stack>
+                    {/* textinput */}
+                  {/* to int */}
+                    <TextField
+                      type="text"
+                      value={veille.restart_at}
+                      onChange={(e) => {
+                        const updatedVeille = {
+                          ...veille,
+                          restart_at:  parseInt(e.target.value),
+                        };
+                        updatedVeille01(updatedVeille); // Assuming setVeille is the state setter function for 'veille'
+                      }}
+                      required
+                      margin="normal"
                     />
                   </Stack>
                   <Stack>

@@ -262,7 +262,7 @@ function DiaporamaConfig(props) {
               ) : (
                 <Box className="infoPage">
                   <Typography sx={{ color: "text.secondary" }}>
-                    {t("deposezDesMediasIci")}
+                    {t("Diaporama.eventListEmptyText")}
                   </Typography>
                 </Box>
               )}

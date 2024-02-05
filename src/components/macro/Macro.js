@@ -81,7 +81,7 @@ function Macro() {
               <TableHead>
                 <TableRow>
                   <TableCell>{t("macro.number")}</TableCell>
-                  <TableCell align="right">{t("macro.event")}</TableCell>
+                  <TableCell align="right">{t("macro.slideshow")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
