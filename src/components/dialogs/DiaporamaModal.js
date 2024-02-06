@@ -12,7 +12,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 function DiaporamaModal(props) {
-
   const { t } = useTranslation();
   return (
     <Modal open={props.open} onClose={props.onClose}>
@@ -35,7 +34,7 @@ function DiaporamaModal(props) {
               sx={{ color: "text.primary" }}
               className="headerTitle"
             >
-              {t("eventListTitle")}
+              {t("Diaporama.listTitle")}
             </Typography>
           </Box>
           <Box className="headerRight">
@@ -63,7 +62,7 @@ function DiaporamaModal(props) {
                   objectFit: "contain",
                 }}
                 src={props.currentMedia.path}
-                alt={`${t("media")} ${props.activeMediaIndex}`}
+                alt={`${t("Media.title")} ${props.activeMediaIndex}`}
               />
             ) : props.currentMedia.type === "video" ? (
               <Box
@@ -89,7 +88,7 @@ function DiaporamaModal(props) {
                   color: "text.secondary",
                 }}
               >
-                {t("diapo")} {props.activeMediaIndex + 1} /
+                {t("Diaporama.title")} {props.activeMediaIndex + 1} /
                 {props.eventMedia[0].medias.length}
               </Typography>
               <IconButton onClick={props.handleNextSlide}>

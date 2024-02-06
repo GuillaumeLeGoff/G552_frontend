@@ -14,12 +14,12 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{t("addNewEvent")}</DialogTitle>
+      <DialogTitle>{t("Diaporama.dialog.addNew")}</DialogTitle>
       <DialogContent>
         <TextField
           fullWidth
           id="standard-basic"
-          label={t("eventName")}
+          label={t("Diaporama.dialog.name")}
           autoComplete="off"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -27,10 +27,14 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "secondary.main" }}>
-          {t("cancel")}
+          {t("Dialog.cancel")}
         </Button>
-        <Button onClick={onAdd} sx={{ color: "secondary.main" }} disabled={!name.trim()}>
-          {t("add")}
+        <Button
+          onClick={onAdd}
+          sx={{ color: "secondary.main" }}
+          disabled={!name.trim()}
+        >
+          {t("Dialog.confirm")}
         </Button>
       </DialogActions>
     </Dialog>

@@ -9,11 +9,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next";
 
 import CloseIcon from "@mui/icons-material/Close";
 import AuthService from "../../services/authService";
-
 
 function ChangePassword() {
   const { t } = useTranslation();
@@ -22,19 +21,19 @@ function ChangePassword() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
- async function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if (newPassword !== confirmPassword) {
-      setError(t("passwordMismatch"));
+      setError(t("Login.passwordMismatch"));
     }
     try {
-       await AuthService.changePassword(newPassword)
-        user.user.firstLogin = 0;
-        localStorage.setItem("user", JSON.stringify(user));
-        setSuccess(true);
-        setError(null);
-        AuthService.logout();
+      await AuthService.changePassword(newPassword);
+      user.user.firstLogin = 0;
+      localStorage.setItem("user", JSON.stringify(user));
+      setSuccess(true);
+      setError(null);
+      AuthService.logout();
     } catch (error) {
       console.log("error01", error);
       setError(error);
@@ -62,27 +61,27 @@ function ChangePassword() {
               variant="h6"
               sx={{ color: "primary.light" }}
             >
-              {t("changePassword")}
+              {t("Login.passwordChange")}
             </Typography>
           </Box>
         </Box>
         <Box className="centeredContainer">
           {success ? (
             <Typography color="success.main" align="center">
-              {t("passwordChangeSuccess")}
+              {t("Login.passwordChangeSuccess")}
             </Typography>
           ) : (
             <form onSubmit={handleSubmit}>
               <FormControl sx={{ width: "35vh" }}>
                 <TextField
-                  label={t("newPassword")}
+                  label={t("Login.newPassword")}
                   type="password"
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
                   required
                 />
                 <TextField
-                  label={t("confirmNewPassword")}
+                  label={t("Login.confirmNewPassword")}
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
@@ -100,9 +99,8 @@ function ChangePassword() {
                   {error || " "}
                 </Typography>
 
-                
                 <Button type="submit" sx={{ color: "secondary.main" }}>
-                  {t("changePassword")}
+                  {t("Login.passwordChange")}
                 </Button>
               </FormControl>
             </form>

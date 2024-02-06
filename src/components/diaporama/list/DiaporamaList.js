@@ -1,28 +1,25 @@
-import React, { useEffect, useState } from "react";
 import {
+  Box,
   Paper,
   Stack,
   Table,
   TableBody,
   TableCell,
-  CircularProgress,
   TableRow,
-  Box,
 } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import AddIcon from "@mui/icons-material/Add";
-import PermMediaIcon from "@mui/icons-material/PermMedia";
 import DeleteIcon from "@mui/icons-material/Delete";
+import PermMediaIcon from "@mui/icons-material/PermMedia";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 
 import eventService from "../../../services/eventService";
-import DeleteEventDialog from "../../dialogs/DeleteEventDialog";
-import AddEventDialog from "../../dialogs/AddEventDialog";
 import modeService from "../../../services/modeService";
-import StopIcon from "@mui/icons-material/Stop";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import AddEventDialog from "../../dialogs/AddEventDialog";
+import DeleteEventDialog from "../../dialogs/DeleteEventDialog";
 
 function DiaporamaList({ onEventClick }) {
   const [name, setName] = useState("");
@@ -104,7 +101,7 @@ function DiaporamaList({ onEventClick }) {
   }
 
   function stopEvent() {
-    const mode = { event_id: null ,mode : null };
+    const mode = { event_id: null, mode: null };
     try {
       modeService.setMode(mode);
       setMode(mode);
@@ -115,16 +112,14 @@ function DiaporamaList({ onEventClick }) {
 
   function startEvent(event) {
     console.log(event);
-    const mode = { event_id: event.id ,mode : "diaporama" };
+    const mode = { event_id: event.id, mode: "diaporama" };
     try {
       modeService.setMode(mode);
       setMode(mode);
-      
     } catch (error) {
       console.error("Erreur lors de la suppression d'un événement :", error);
     }
   }
-
 
   return (
     <Box>
@@ -135,7 +130,7 @@ function DiaporamaList({ onEventClick }) {
               <PermMediaIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              {t("eventListTitle")}
+              {t("Diaporama.listTitle")}
             </Typography>
           </Box>
           <Box className="headerRight">
@@ -164,8 +159,6 @@ function DiaporamaList({ onEventClick }) {
                     <TableCell sx={{ p: 0 }} align="right">
                       {(hoveredRow === row.id || isMobile) && (
                         <>
-                        
-                       
                           <IconButton
                             sx={{ pr: 1 }}
                             onClick={(e) => {
@@ -177,7 +170,6 @@ function DiaporamaList({ onEventClick }) {
                               sx={{ fontSize: 15, color: "secondary.main" }}
                             />
                           </IconButton>
-                          
                         </>
                       )}
                     </TableCell>
@@ -189,7 +181,7 @@ function DiaporamaList({ onEventClick }) {
         ) : (
           <Box className="infoPage">
             <Typography sx={{ color: "text.secondary" }}>
-              {t("eventListEmptyText")}
+              {t("Diaporama.emptyListMessage")}
             </Typography>
           </Box>
         )}

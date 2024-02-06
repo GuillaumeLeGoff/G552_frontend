@@ -58,7 +58,7 @@ function LostPasswordDialog({ open, onClose, users }) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Mot de passe oublié</DialogTitle>{" "}
+      <DialogTitle>{t("Login.lostPassword")}</DialogTitle>{" "}
       {/* Utilisez t() pour traduire */}
       <DialogContent sx={{ padding: "0px 20px" }}>
         <FormControl sx={{ minWidth: "40vh" }}>
@@ -92,21 +92,21 @@ function LostPasswordDialog({ open, onClose, users }) {
           </Select>
           <TextField
             sx={{ marginTop: "16px" }}
-            label="Mot de passe administrateur"
+            label={t("Login.passwordAdmin")}
             type="password"
             value={adminPassword}
             onChange={(e) => setAdminPassword(e.target.value)}
           />
           <TextField
             sx={{ marginTop: "16px" }}
-            label={t("newPassword")}
+            label={t("Login.newPassword")}
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
           <TextField
             sx={{ marginTop: "16px" }}
-            label={t("confirmPassword")}
+            label={t("Login.confirmNewPassword")}
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -125,14 +125,14 @@ function LostPasswordDialog({ open, onClose, users }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "secondary.main" }}>
-          {t("cancel")}
+          {t("Dialog.cancel")}
         </Button>
         <Button
           onClick={handleSubmit}
           type="submit"
           sx={{ color: "secondary.main" }}
         >
-          {t("submit")}
+          {t("Dialog.confirm")}
         </Button>
       </DialogActions>
     </Dialog>

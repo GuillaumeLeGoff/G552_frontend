@@ -7,25 +7,25 @@ import {
   Button,
   DialogContentText,
 } from "@mui/material";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function DeleteMediaDialog({ open, onClose, DeleteFile, displayDialogDelete }) {
   const { t } = useTranslation();
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{t('confirmMediaDeletion')}</DialogTitle>
+      <DialogTitle>{t("Dialog.confirmDeletion")}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {t('areYouSureToDeleteMedia')}
+          {t("Media.Dialog.areYouSureToDelete")}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={displayDialogDelete} sx={{ color: "secondary.main" }}>
-          {t('cancel')}
+          {t("Dialog.cancel")}
         </Button>
         <Button onClick={DeleteFile} sx={{ color: "secondary.main" }}>
-          {t('confirm')}
+          {t("Dialog.confirm")}
         </Button>
       </DialogActions>
     </Dialog>

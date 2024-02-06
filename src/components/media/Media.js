@@ -129,7 +129,7 @@ function Medias(props) {
               <ImageIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              {t("media")}
+              {t("Media.title")}
             </Typography>
           </Box>
           <Box className="headerRight">
@@ -246,7 +246,7 @@ function Medias(props) {
                 ) : (
                   <Box className="infoPage">
                     <Typography color="text.secondary">
-                      {t("ajouterMedia")}
+                      {t("Media.add")}
                     </Typography>
                   </Box>
                 )

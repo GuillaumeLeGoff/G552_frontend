@@ -27,7 +27,7 @@ function Login() {
   const [error, setError] = useState(null);
   const [openUserConnectedDialog, setOpenUserConnectedDialog] = useState(false);
   const { t } = useTranslation();
-  const [openChangePassword , setOpenChangePassword] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
 
   useEffect(() => {
     getUsers();
@@ -45,11 +45,9 @@ function Login() {
     closeUserConnectedDialog();
   }
 
-  function lostPassword () {
+  function lostPassword() {
     setOpenChangePassword(!openChangePassword);
-    
   }
-
 
   function UserConnectedDialogOpen() {
     setOpenUserConnectedDialog(true);
@@ -68,11 +66,10 @@ function Login() {
         }
       });
     } catch (error) {
-      setError(t("loginErrorMessage"));
+      setError(t("Login.errorMessage"));
     }
   }
 
- 
   return (
     <Grid item>
       <Paper>
@@ -89,7 +86,7 @@ function Login() {
               variant="h6"
               sx={{ color: "primary.light" }}
             >
-              {t("loginTitle")}
+              {t("Login.title")}
             </Typography>
           </Box>
         </Box>
@@ -97,10 +94,10 @@ function Login() {
         <Box className="centeredContainer">
           <form onSubmit={handleSubmit}>
             <FormControl sx={{ width: "35vh" }}>
-              <InputLabel>{t("usernameLabel")}</InputLabel>
+              <InputLabel>{t("Login.username")}</InputLabel>
               <Select
                 labelId="user-select-label"
-                label={t("usernameLabel")}
+                label={t("Login.username")}
                 value={user}
                 onChange={(e) => setUser(e.target.value)}
                 required
@@ -113,24 +110,25 @@ function Login() {
                   ))}
               </Select>
               <TextField
-                label={t("passwordLabel")}
+                label={t("Login.password")}
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 margin="normal"
               />
-               <Typography
-                  variant="body2"
-                  sx={{
-                    textAlign: "center",
-                    height: "1.5em",
-                    color: "secondary.main",
-                    cursor: "pointer" 
-                  }}
-                  onClick={lostPassword} 
-                >
-                 Mot de passe oublier                </Typography>
+              <Typography
+                variant="body2"
+                sx={{
+                  textAlign: "center",
+                  height: "1.5em",
+                  color: "secondary.main",
+                  cursor: "pointer",
+                }}
+                onClick={lostPassword}
+              >
+                {t("Login.lostPassword")}
+              </Typography>
               <Typography
                 variant="body2"
                 sx={{
@@ -141,9 +139,9 @@ function Login() {
               >
                 {error || " "}
               </Typography>
-             
+
               <Button type="submit" sx={{ color: "secondary.main" }}>
-                {t("loginButton")}
+                {t("Login.loginButton")}
               </Button>
             </FormControl>
           </form>
@@ -152,7 +150,7 @@ function Login() {
       <LostPasswordDialog
         open={openChangePassword}
         onClose={() => setOpenChangePassword(false)}
-        users = {users}
+        users={users}
       />
       <UserConnectedDialog
         open={openUserConnectedDialog}

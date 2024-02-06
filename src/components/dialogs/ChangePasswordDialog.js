@@ -9,13 +9,12 @@ import {
   Typography,
   FormControl,
 } from "@mui/material";
-import { useTranslation } from 'react-i18next'; // <- Ajoutez ceci
+import { useTranslation } from "react-i18next"; // <- Ajoutez ceci
 import { useSnackbar } from "../../contexts/SnackbarContext";
 import authService from "../../services/authService";
 
-
 function ChangePasswordDialog({ open, onClose }) {
-  const { t } = useTranslation(); // 
+  const { t } = useTranslation(); //
   const { openSnackbar } = useSnackbar();
   const [error, setError] = useState(null);
   const [newPassword, setNewPassword] = useState("");
@@ -53,19 +52,20 @@ function ChangePasswordDialog({ open, onClose }) {
 
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{t('changePassword')}</DialogTitle> {/* Utilisez t() pour traduire */}
+      <DialogTitle>{t("Login.passwordChange")}</DialogTitle>{" "}
+      {/* Utilisez t() pour traduire */}
       <DialogContent sx={{ padding: "0px 20px" }}>
-        <FormControl sx={{minWidth:"40vh"}}>
+        <FormControl sx={{ minWidth: "40vh" }}>
           <TextField
             sx={{ marginTop: "16px" }}
-            label={t('newPassword')}
+            label={t("Login.newPassword")}
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
           <TextField
             sx={{ marginTop: "16px" }}
-            label={t('confirmPassword')}
+            label={t("Login.confirmPassword")}
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
@@ -84,19 +84,17 @@ function ChangePasswordDialog({ open, onClose }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "secondary.main" }}>
-        {t('cancel')}
+          {t("Dialog.cancel")}
         </Button>
         <Button
           onClick={handleSubmit}
           type="submit"
           sx={{ color: "secondary.main" }}
         >
-           {t('submit')}
+          {t("Dialog.confirm")}
         </Button>
       </DialogActions>
     </Dialog>
-
-    
   );
 }
 

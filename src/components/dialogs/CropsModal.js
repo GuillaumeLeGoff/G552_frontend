@@ -6,7 +6,7 @@ import {
   Paper,
   Stack,
   Typography,
-  Button
+  Button,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import Cropper from "react-easy-crop";
@@ -15,7 +15,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import UploadIcon from "@mui/icons-material/Upload";
 
 function CropsModal(props) {
-
   const { t } = useTranslation(); // Utilisation de useTranslation
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -88,7 +87,7 @@ function CropsModal(props) {
                 <UploadIcon sx={{ color: "primary.light" }} />
               </IconButton>
               <Typography variant="h6" className="headerTitle">
-                {t("upload")}
+                {t("Media.upload")}
               </Typography>
             </Box>
             <Box className="headerRight">
@@ -108,17 +107,17 @@ function CropsModal(props) {
                 }}
               >
                 {props.mediaType === "image" && (
-                 <Cropper
-                 image={props.imageToCrop}
-                 crop={crop}
-                 zoom={zoom}
-                 aspect={2/1}
-                 onCropChange={setCrop}
-                 onCropComplete={onCropComplete}
-                 onZoomChange={setZoom}
-                 minZoom={0.4}
-                 restrictPosition={false}
-               />
+                  <Cropper
+                    image={props.imageToCrop}
+                    crop={crop}
+                    zoom={zoom}
+                    aspect={2 / 1}
+                    onCropChange={setCrop}
+                    onCropComplete={onCropComplete}
+                    onZoomChange={setZoom}
+                    minZoom={0.4}
+                    restrictPosition={false}
+                  />
                 )}
               </Box>
 
@@ -131,7 +130,7 @@ function CropsModal(props) {
                 }}
               >
                 <Button sx={{ color: "secondary.main" }} onClick={handleUpload}>
-                  {t("upload")}
+                  {t("Dialog.save")}
                 </Button>
               </Box>
             </Box>

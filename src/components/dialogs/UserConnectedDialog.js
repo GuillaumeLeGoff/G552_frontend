@@ -7,25 +7,25 @@ import {
   Button,
   DialogContentText,
 } from "@mui/material";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 function UserConnectedDialog({ open, onClose, userDisconnect }) {
   const { t } = useTranslation();
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{t('userAlreadyConnected')}</DialogTitle>
+      <DialogTitle>{t("Login.Dialog.userAlreadyConnected")}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          {t('doYouWantToDisconnect')}
+          {t("Login.Dialog.doYouWantToDisconnect")}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} sx={{ color: "secondary.main" }}>
-          {t('no')}
+          {t("Dialog.no")}
         </Button>
         <Button onClick={userDisconnect} sx={{ color: "secondary.main" }}>
-          {t('yes')}
+          {t("Dialog.yes")}
         </Button>
       </DialogActions>
     </Dialog>
