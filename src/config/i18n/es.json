@@ -1,67 +1,72 @@
 {
-  "loginTitle": "Inicio de sesión",
-  "usernameLabel": "Usuario",
-  "passwordLabel": "Contraseña",
-  "football": "Fútbol",
-  "basketball": "Baloncesto",
-  "tennis": "Tenis",
-  "loginButton": "Iniciar sesión",
-  "loginErrorMessage": "Nombre de usuario o contraseña incorrectos",
-  "eventListTitle": "Lista de Eventos",
-  "eventListEmptyText": "Agregar un evento '+'",
-  "diaporama": "Presentación",
-  "deposezDesMediasIci": "Coloca tus medios aquí",
-  "media": "Medio",
-  "ajouterMedia": "Agregar medio \"+\"",
-  "upload": "Subir",
-  "passwordMismatch": "Las contraseñas no coinciden",
-  "changePassword": "Cambiar contraseña",
-  "passwordChangeSuccess": "La contraseña se ha cambiado correctamente",
-  "newPassword": "Nueva contraseña",
-  "confirmNewPassword": "Confirmar nueva contraseña",
-  "addNewEvent": "Agregar un nuevo evento",
-  "eventName": "Nombre del evento",
-  "cancel": "Cancelar",
-  "add": "Agregar",
-  "confirmPassword": "Confirmar contraseña",
-  "passwordsDoNotMatch": "Las contraseñas no coinciden",
-  "passwordChangedSuccessfully": "Contraseña cambiada con éxito",
-  "submit": "Enviar",
-  "confirmDeletion": "Confirmar eliminación",
-  "areYouSureToDelete": "¿Estás seguro de querer eliminar el evento ",
-  "delete": "Eliminar",
-  "confirmMediaDeletion": "Confirmar eliminación",
-  "areYouSureToDeleteMedia": "¿Quieres eliminar este medio?",
-  "confirmMediaEventDeletion": "Confirmar eliminación",
-  "areYouSureToDeleteMediaEvent": "¿Está seguro de que desea eliminar este medio?",
-  "doYouReallyWantToLogout": "¿Realmente quieres desconectarte?",
-  "chooseTime": "Elegir el tiempo",
-  "pleaseSelectMinutesAndSeconds": "Por favor, seleccione minutos y segundos:",
-  "logout": "Desconectar",
-  "confirm": "Confirmar",
-  "userAlreadyConnected": "Usuario ya conectado",
-  "doYouWantToDisconnect": "¿Quieres desconectarlo?",
-  "no": "No",
-  "yes": "Sí",
-  "settingsOf": "Configuraciones de",
-  "application": "Aplicación",
-  "darkMode": "Modo oscuro",
-  "usedStorageSpace": "Espacio de almacenamiento utilizado",
-  "panelsTest": "Prueba de paneles",
-  "languages": "Idiomas",
-  "info": "Información",
-  "account": "Cuenta",
-  "autoEvent": "Evento automático",
-  "automaticStandby": "Modo de espera automático",
-  "macro": {
+  "Macro": {
     "title": "Macro",
-    "number": "Número",
-    "event": "Evento",
-    "none": "Ninguno"
+    "number": "número",
+    "slideshow": "diapositivas",
+    "none": "ninguno"
   },
-  "profile": {
-    "settingsOf": "Configuraciones de",
+  "Profile": {
+    "title": "Configuración",
+    "application": "Aplicación",
     "changePassword": "Cambiar contraseña",
-    "darkMode": "Modo oscuro"
+    "darkMode": "Modo oscuro",
+    "usedStorageSpace": "Espacio de almacenamiento utilizado",
+    "panelsTest": "Prueba de paneles",
+    "language": "Idioma",
+    "info": "Información",
+    "account": "Cuenta",
+    "automaticStandby": "Espera automática",
+    "Dialog": {
+      "chooseTime": "Elegir tiempo",
+      "pleaseSelectMinutesAndSeconds": "Por favor seleccione minutos y segundos"
+    }
+  },
+  "Diaporama": {
+    "title": "Diaporama",
+    "emptyListMessage": "Suelta medios aquí",
+    "listTitle": "Lista de diaporamas",
+    "Dialog": {
+      "addNew": "Agregar nuevo diaporama",
+      "name": "Nombre",
+      "areYouSureToDelete": "¿Estás seguro de que quieres eliminar",
+      "areYouSureToDeleteMediaEvent": "¿Estás seguro de que quieres eliminar este evento de diaporama?"
+    }
+  },
+  "Login": {
+    "passwordMismatch": "Las contraseñas no coinciden",
+    "passwordChange": "Cambiar contraseña",
+    "passwordChangeSuccess": "Contraseña cambiada con éxito",
+    "newPassword": "Nueva contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "errorMessage": "Nombre de usuario o contraseña incorrecta",
+    "passwordAdmin": "Contraseña de administrador",
+    "title": "Iniciar sesión",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "loginButton": "Iniciar sesión",
+    "lostPassword": "¿Olvidaste tu contraseña?",
+    "Dialog": {
+      "doYouReallyWantToLogout": "¿Realmente quieres cerrar sesión?",
+      "userAlreadyConnected": "Un usuario ya está conectado",
+      "doYouWantToDisconnect": "¿Quieres desconectarlo?"
+    }
+  },
+  "Media": {
+    "title": "Medios",
+    "add": "Agregar",
+    "upload": "Subir",
+    "Dialog": {
+      "areYouSureToDelete": "¿Estás seguro de que quieres eliminar este medio?"
+    }
+  },
+  "Dialog": {
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Eliminar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "confirmDeletion": "Confirmar eliminación",
+    "yes": "Sí",
+    "no": "No"
   }
 }

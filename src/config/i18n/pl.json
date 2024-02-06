@@ -1,71 +1,72 @@
 {
-  "loginTitle": "Logowanie",
-  "usernameLabel": "Użytkownik",
-  "passwordLabel": "Hasło",
-  "football": "Piłka nożna",
-  "basketball": "Koszykówka",
-  "tennis": "Tenis",
-  "loginButton": "Zaloguj się",
-  "loginErrorMessage": "Nieprawidłowa nazwa użytkownika lub hasło",
-  "eventListTitle": "Lista Diaporamów",
-  "eventListEmptyText": "Dodaj diaporama '+'",
-  "diaporama": "Pokaz slajdów",
-  "deposezDesMediasIci": "Upuść media tutaj",
-  "media": "Media",
-  "ajouterMedia": "Dodaj media \"+\"",
-  "upload": "Prześlij",
-  "passwordMismatch": "Hasła nie są zgodne",
-  "changePassword": "Zmień hasło",
-  "passwordChangeSuccess": "Hasło zostało pomyślnie zmienione",
-  "newPassword": "Nowe hasło",
-  "confirmNewPassword": "Potwierdź nowe hasło",
-  "addNewEvent": "Dodaj nowe diaporama",
-  "eventName": "Nazwa diaporama",
-  "cancel": "Anuluj",
-  "add": "Dodaj",
-  "confirmPassword": "Potwierdź hasło",
-  "passwordsDoNotMatch": "Hasła nie są takie same",
-  "passwordChangedSuccessfully": "Hasło zostało zmienione pomyślnie",
-  "submit": "Wyślij",
-  "confirmDeletion": "Potwierdź usunięcie",
-  "areYouSureToDelete": "Czy na pewno chcesz usunąć diaporama",
-  "delete": "Usuń",
-  "confirmMediaDeletion": "Potwierdź usunięcie",
-  "areYouSureToDeleteMedia": "Czy chcesz usunąć to medium?",
-  "confirm": "Potwierdź",
-  "confirmMediaEventDeletion": "Potwierdź usunięcie",
-  "areYouSureToDeleteMediaEvent": "Czy na pewno chcesz usunąć to medium?",
-  "doYouReallyWantToLogout": "Czy na pewno chcesz się wylogować?",
-  "chooseTime": "Wybierz czas",
-  "pleaseSelectMinutesAndSeconds": "Proszę wybrać minuty i sekundy:",
-  "logout": "Wyloguj",
-  "userAlreadyConnected": "Użytkownik jest już połączony",
-  "doYouWantToDisconnect": "Czy chcesz go odłączyć?",
-  "no": "Nie",
-  "yes": "Tak",
-  "handball": "Piłka ręczna",
-  "volleyball": "Siatkówka",
-  "futsal": "Futsal",
-  "badminton": "Badminton",
-  "settingsOf": "Ustawienia dla",
-  "application": "Aplikacja",
-  "darkMode": "Tryb ciemny",
-  "usedStorageSpace": "Wykorzystane miejsce",
-  "panelsTest": "Test paneli",
-  "languages": "Języki",
-  "info": "Informacja",
-  "account": "Konto",
-  "autoEvent": "Pokaz slajdów samochodowych",
-  "automaticStandby": "Automatyczny tryb czuwania",
-  "macro": {
+  "Macro": {
     "title": "Makro",
-    "number": "Numer",
-    "event": "Diaporama",
-    "none": "Wybierz diaporama"
+    "number": "numer",
+    "slideshow": "pokaz slajdów",
+    "none": "brak"
   },
-  "profile": {
-    "settingsOf": "Ustawienia",
+  "Profile": {
+    "title": "Ustawienia",
+    "application": "Aplikacja",
     "changePassword": "Zmień hasło",
-    "darkMode": "Tryb ciemny"
+    "darkMode": "Tryb ciemny",
+    "usedStorageSpace": "Używane miejsce na dysku",
+    "panelsTest": "Test paneli",
+    "language": "Język",
+    "info": "Informacje",
+    "account": "Konto",
+    "automaticStandby": "Automatyczne oczekiwanie",
+    "Dialog": {
+      "chooseTime": "Wybierz czas",
+      "pleaseSelectMinutesAndSeconds": "Proszę wybrać minuty i sekundy"
+    }
+  },
+  "Diaporama": {
+    "title": "Pokaz slajdów",
+    "emptyListMessage": "Upuść tutaj media",
+    "listTitle": "Lista pokazów slajdów",
+    "Dialog": {
+      "addNew": "Dodaj nowy pokaz slajdów",
+      "name": "Nazwa",
+      "areYouSureToDelete": "Czy na pewno chcesz usunąć",
+      "areYouSureToDeleteMediaEvent": "Czy na pewno chcesz usunąć to wydarzenie z pokazu slajdów?"
+    }
+  },
+  "Login": {
+    "passwordMismatch": "Hasła nie pasują do siebie",
+    "passwordChange": "Zmień hasło",
+    "passwordChangeSuccess": "Hasło zmienione pomyślnie",
+    "newPassword": "Nowe hasło",
+    "confirmNewPassword": "Potwierdź nowe hasło",
+    "errorMessage": "Nieprawidłowa nazwa użytkownika lub hasło",
+    "passwordAdmin": "Hasło administratora",
+    "title": "Logowanie",
+    "username": "Nazwa użytkownika",
+    "password": "Hasło",
+    "loginButton": "Zaloguj się",
+    "lostPassword": "Zapomniałeś hasła?",
+    "Dialog": {
+      "doYouReallyWantToLogout": "Czy na pewno chcesz się wylogować?",
+      "userAlreadyConnected": "Użytkownik jest już połączony",
+      "doYouWantToDisconnect": "Czy chcesz rozłączyć?"
+    }
+  },
+  "Media": {
+    "title": "Media",
+    "add": "Dodaj",
+    "upload": "Prześlij",
+    "Dialog": {
+      "areYouSureToDelete": "Czy na pewno chcesz usunąć te media?"
+    }
+  },
+  "Dialog": {
+    "cancel": "Anuluj",
+    "confirm": "Potwierdź",
+    "delete": "Usuń",
+    "close": "Zamknij",
+    "save": "Zapisz",
+    "confirmDeletion": "Potwierdź usunięcie",
+    "yes": "Tak",
+    "no": "Nie"
   }
 }

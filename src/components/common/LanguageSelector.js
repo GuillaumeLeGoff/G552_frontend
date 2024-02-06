@@ -43,6 +43,10 @@ function LanguageSelector() {
             {/* <Box src={"/medias/flag/es.png"} alt="Español" width={20} height={20} />  */}
             Español
           </MenuItem>
+          <MenuItem value="nl">
+            {/* <Box src={"/medias/flag/nl.png"} alt="Nederlands" width={20} height={20} />  */}
+            Nederlands
+          </MenuItem>
         </Select>
       </FormControl>
     </Box>
