@@ -11,6 +11,7 @@ import {
   Slider,
   LinearProgress,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
@@ -23,6 +24,8 @@ import BugReportIcon from "@mui/icons-material/BugReport";
 import PhoneIcon from "@mui/icons-material/Phone";
 import LanguageIcon from "@mui/icons-material/Language";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import StopIcon from "@mui/icons-material/Stop";
 
 import { useDarkMode } from "../../contexts/DarkModeContext";
 import ChangePasswordDialog from "../dialogs/ChangePasswordDialog";
@@ -30,6 +33,8 @@ import authService from "../../services/authService";
 import paramService from "../../services/paramService";
 import veilleService from "../../services/veilleService";
 import LanguageSelector from "../common/LanguageSelector";
+
+import modeServiceInstance from "../../services/modeService";
 
 function Profile() {
   const { t } = useTranslation();
@@ -41,11 +46,26 @@ function Profile() {
   const usedSize = 90; // Taille utilisée en Go
   const [user, setUser] = useState(null);
   const { darkMode, setDarkMode } = useDarkMode();
+  const [mode, setMode] = useState({});
 
+  useEffect(() => {
+    modeServiceInstance.getMode().then((data) => {
+      console.log("data", data.mode);
+      setMode(data.mode);
+    });
+  }, []);
   useEffect(() => {
     const currentUser = authService.getCurrentUser();
     setUser(currentUser);
   }, []);
+
+  function setModeTest(mode) {
+    const datamode = { event_id: null, mode: mode };
+    modeServiceInstance.setMode(datamode).then((data) => {
+      console.log("data", data);
+      setMode(mode);
+    });
+  }
 
   useEffect(() => {
     if (user) {
@@ -91,10 +111,11 @@ function Profile() {
   };
 
   function updatedVeille01(veille) {
-   
     setVeille(veille);
     console.log(veille);
-    veilleService.update(veille).then((response) => {console.log(response);});
+    veilleService.update(veille).then((response) => {
+      console.log(response);
+    });
   }
 
   const handleSliderChange = (event, newValue) => {
@@ -198,13 +219,52 @@ function Profile() {
                       />
                     </Box>
                   </Stack>
-                  <Stack direction="row" alignItems="center" spacing={3}>
-                    <IconButton disabled>
-                      <BugReportIcon sx={{ color: "text.secondary" }} />
-                    </IconButton>
-                    <Typography variant="h8" sx={{ color: "text.primary" }}>
-                      {t("Profile.panelsTest")}
-                    </Typography>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={3}
+                  >
+                    <Stack spacing={3} direction="row" alignItems="center">
+                      <IconButton disabled>
+                        <BugReportIcon sx={{ color: "text.secondary" }} />
+                      </IconButton>
+                      <Typography variant="h8" sx={{ color: "text.primary" }}>
+                        {t("Profile.panelsTest")}
+                      </Typography>
+                    </Stack>
+                    {mode && mode === "test" ? (
+                      <IconButton
+                        sx={{ p: 0 }}
+                        size="big"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setModeTest(null);
+                        }}
+                      >
+                        <StopIcon sx={{ color: "secondary.main" }} />
+                        <CircularProgress
+                          size={20}
+                          sx={{
+                            left: 1.2,
+                            position: "absolute",
+                            color: "secondary.main",
+                          }}
+                        />
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        sx={{ p: 0 }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setModeTest("test");
+                        }}
+                      >
+                        <PlayArrowIcon
+                          sx={{ fontSize: 30, color: "secondary.main" }}
+                        />
+                      </IconButton>
+                    )}
                   </Stack>
 
                   <Stack
@@ -304,14 +364,14 @@ function Profile() {
                       <Typography>heure de restart:</Typography>
                     </Stack>
                     {/* textinput */}
-                  {/* to int */}
+                    {/* to int */}
                     <TextField
                       type="text"
                       value={veille.restart_at}
                       onChange={(e) => {
                         const updatedVeille = {
                           ...veille,
-                          restart_at:  parseInt(e.target.value),
+                          restart_at: parseInt(e.target.value),
                         };
                         updatedVeille01(updatedVeille); // Assuming setVeille is the state setter function for 'veille'
                       }}

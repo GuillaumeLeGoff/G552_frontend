@@ -1,17 +1,19 @@
-import fetchWithAuth  from '../utils/fetchWithAuth';
+import fetchWithAuth from "../utils/fetchWithAuth";
 const URL_API = process.env.REACT_APP_API_URL;
 class ModeService {
-
   async getMode() {
     try {
       const response = await fetchWithAuth(`${URL_API}/mode`);
-      
+
       if (response.ok) {
         const data = await response.json();
         console.log(data);
         return data;
       } else {
-        console.error('No mode found or error in response', response.statusText);
+        console.error(
+          "No mode found or error in response",
+          response.statusText
+        );
         return null;
       }
     } catch (error) {
@@ -20,17 +22,15 @@ class ModeService {
   }
 
   async setMode(mode) {
-  
-    console.log( mode);
+    console.log(JSON.stringify(mode));
     try {
       const response = await fetchWithAuth(`${URL_API}/mode/1`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(mode)
+        body: JSON.stringify(mode),
       });
-
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);

@@ -1,21 +1,38 @@
+import {
+  Box,
+  ImageList,
+  ImageListItem,
+  Paper,
+  Stack,
+  Tab,
+} from "@mui/material";
 import React, { useContext, useState } from "react";
-import { Box, ImageList, ImageListItem, Paper, Stack } from "@mui/material";
 import { Draggable, Droppable } from "react-beautiful-dnd";
-import { LoadingContext } from "../../contexts/Context";
 import { useTranslation } from "react-i18next";
+import { LoadingContext } from "../../contexts/Context";
 
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ImageIcon from "@mui/icons-material/Image";
 import PlayCircleFilledIcon from "@mui/icons-material/PlayCircleFilled";
+import SortIcon from "@mui/icons-material/Sort";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
 
 import EventMediaService from "../../services/eventMediaService";
 import UploadService from "../../services/uploadService";
-import DeleteMediaDialog from "../dialogs/DeleteMediaDialog";
 import CropsModal from "../dialogs/CropsModal";
-
+import DeleteMediaDialog from "../dialogs/DeleteMediaDialog";
+import TableRowsIcon from "@mui/icons-material/TableRows";
+import InsertPhotoIcon from "@mui/icons-material/InsertPhoto";
 function Medias(props) {
   const { t } = useTranslation(); // Utilisation de useTranslation
   const uploadService = UploadService();
@@ -30,6 +47,30 @@ function Medias(props) {
   const [longPressTimer, setLongPressTimer] = useState(null);
   const { setLoading } = useContext(LoadingContext);
   const { setProgress } = useContext(LoadingContext);
+  const [sortCriteria, setSortCriteria] = useState("recent");
+  const [viewMode, setViewMode] = useState("grid");
+
+  const toggleViewMode = () => {
+    setViewMode(viewMode === "grid" ? "table" : "grid");
+  };
+  const toggleSortCriteria = () => {
+    console.log(sortedMedia);
+    setSortCriteria(sortCriteria === "name" ? "recent" : "name");
+  };
+
+  const sortMedia = (media, criteria) => {
+    if (criteria === "name") {
+      return [...media].sort((a, b) =>
+        a.originalFileName.localeCompare(b.originalFileName)
+      );
+    } else {
+      // Assuming 'uploaded_at' is in a standard format that can be sorted directly
+      return [...media].sort(
+        (a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at)
+      );
+    }
+  };
+  const sortedMedia = sortMedia(props.eventMedia[1].medias, sortCriteria);
 
   const handleTouchStart = (imageId) => {
     clearTimeout(longPressTimer);
@@ -120,6 +161,39 @@ function Medias(props) {
     }
   }
 
+  const renderTable = (media) => {
+    return (
+      <TableContainer component={Paper}>
+        <Table aria-label="media table">
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">Name</TableCell>
+              <TableCell align="right">Type</TableCell>
+              <TableCell align="right">Date</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {media.map((file) => (
+              <TableRow
+                key={file.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell align="right">{file.originalFileName}</TableCell>
+                <TableCell align="right">{file.type}</TableCell>
+                <TableCell align="right">{file.uploaded_at}</TableCell>
+                <TableCell align="right">
+                  <IconButton onClick={() => OpenDialogDelete(file)}>
+                    <DeleteIcon color="error" />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    );
+  };
   return (
     <Box>
       <Paper className="mainPaperPage">
@@ -150,7 +224,24 @@ function Medias(props) {
             />
           </Box>
         </Stack>
-
+        <IconButton onClick={toggleViewMode}>
+          {viewMode === "grid" ? (
+            <TableRowsIcon sx={{ color: "secondary.main" }} />
+          ) : (
+            <InsertPhotoIcon sx={{ color: "secondary.main" }} />
+          )}
+          <Typography>
+            {viewMode === "grid"
+              ? "Switch to Table View"
+              : "Switch to Grid View"}
+          </Typography>
+        </IconButton>
+        <IconButton onClick={toggleSortCriteria}>
+          <SortIcon sx={{ color: "secondary.main" }} />
+          <Typography>
+            {sortCriteria === "name" ? "Most Recent" : "Name"}
+          </Typography>
+        </IconButton>
         <Droppable
           droppableId={`${props.eventMedia[1].id}`}
           isDropDisabled={true}
@@ -160,31 +251,67 @@ function Medias(props) {
               {props.eventMedia[1].medias ? (
                 props.eventMedia[1].medias.length > 0 ? (
                   <Box className="containerPage">
-                    <ImageList variant="masonry" cols={2} gap={8}>
-                      {props.eventMedia[1].medias.map((file, index) => (
-                        <ImageListItem key={file.id}>
-                          <Draggable
-                            disableInteractiveElementBlocking
-                            key={file.id}
-                            draggableId={file.id.toString()}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <React.Fragment>
-                                <Box
-                                  {...provided.draggableProps}
-                                  {...provided.dragHandleProps}
-                                  ref={provided.innerRef}
-                                  onTouchStart={() => handleTouchStart(file.id)}
-                                  onTouchEnd={handleTouchEnd}
-                                >
-                                  {file.type === "video" ? (
-                                    <Box>
+                    {viewMode === "grid" ? (
+                      <ImageList variant="masonry" cols={2} gap={8}>
+                        {sortedMedia.map((file, index) => (
+                          <ImageListItem key={file.id}>
+                            <Draggable
+                              disableInteractiveElementBlocking
+                              key={file.id}
+                              draggableId={file.id.toString()}
+                              index={index}
+                            >
+                              {(provided, snapshot) => (
+                                <React.Fragment>
+                                  <Box
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    ref={provided.innerRef}
+                                    onTouchStart={() =>
+                                      handleTouchStart(file.id)
+                                    }
+                                    onTouchEnd={handleTouchEnd}
+                                  >
+                                    {file.type === "video" ? (
+                                      <Box>
+                                        <Box
+                                          component="video"
+                                          onClick={() =>
+                                            handleImageClick(file.id)
+                                          }
+                                          alt={file.title}
+                                          sx={{
+                                            width: "100%",
+                                            opacity:
+                                              file.id === selectedImage
+                                                ? 0.75
+                                                : 1,
+                                          }}
+                                          ref={(ref) => {
+                                            if (ref && file.type === "video") {
+                                              ref.currentTime = 10;
+                                            }
+                                          }}
+                                          src={file.path}
+                                        ></Box>
+                                        <PlayCircleFilledIcon
+                                          sx={{
+                                            position: "absolute",
+                                            top: "50%",
+                                            left: "50%",
+                                            transform: "translate(-50%, -50%)",
+                                            opacity: 0.7,
+                                            fontSize: "50px",
+                                          }}
+                                        />
+                                      </Box>
+                                    ) : (
                                       <Box
-                                        component="video"
+                                        component="img"
                                         onClick={() =>
                                           handleImageClick(file.id)
                                         }
+                                        src={file.path}
                                         alt={file.title}
                                         sx={{
                                           width: "100%",
@@ -193,55 +320,29 @@ function Medias(props) {
                                               ? 0.75
                                               : 1,
                                         }}
-                                        ref={(ref) => {
-                                          if (ref && file.type === "video") {
-                                            ref.currentTime = 10;
-                                          }
-                                        }}
-                                        src={file.path}
-                                      ></Box>
-                                      <PlayCircleFilledIcon
+                                      />
+                                    )}
+                                    {file.id === selectedImage && (
+                                      <DeleteIcon
+                                        onClick={() => OpenDialogDelete(file)}
+                                        color="warning"
                                         sx={{
                                           position: "absolute",
-                                          top: "50%",
-                                          left: "50%",
-                                          transform: "translate(-50%, -50%)",
-                                          opacity: 0.7,
-                                          fontSize: "50px",
+                                          top: "5px",
+                                          right: "5px",
                                         }}
                                       />
-                                    </Box>
-                                  ) : (
-                                    <Box
-                                      component="img"
-                                      onClick={() => handleImageClick(file.id)}
-                                      src={file.path}
-                                      alt={file.title}
-                                      sx={{
-                                        width: "100%",
-                                        opacity:
-                                          file.id === selectedImage ? 0.75 : 1,
-                                      }}
-                                    />
-                                  )}
-                                  {file.id === selectedImage && (
-                                    <DeleteIcon
-                                      onClick={() => OpenDialogDelete(file)}
-                                      color="warning"
-                                      sx={{
-                                        position: "absolute",
-                                        top: "5px",
-                                        right: "5px",
-                                      }}
-                                    />
-                                  )}
-                                </Box>
-                              </React.Fragment>
-                            )}
-                          </Draggable>
-                        </ImageListItem>
-                      ))}
-                    </ImageList>
+                                    )}
+                                  </Box>
+                                </React.Fragment>
+                              )}
+                            </Draggable>
+                          </ImageListItem>
+                        ))}
+                      </ImageList>
+                    ) : (
+                      renderTable(sortedMedia)
+                    )}
                   </Box>
                 ) : (
                   <Box className="infoPage">
