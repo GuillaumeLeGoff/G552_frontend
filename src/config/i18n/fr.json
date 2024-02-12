@@ -23,10 +23,10 @@
   },
   "Diaporama": {
     "title": "Diaporama",
-    "emptyListMessage": "Déposez des médias ici",
+    "emptyListMessage": "Ajouter des diaporamas avec +",
     "listTitle": "Liste des diaporamas",
     "Dialog": {
-      "addNew": "Ajouter un nouvel diaporama",
+      "addNew": "Ajouter un nouveau diaporama",
       "name": "Nom",
       "areYouSureToDelete": "Êtes-vous sûr de vouloir supprimer",
       "areYouSureToDeleteMediaEvent": "Êtes-vous sûr de vouloir supprimer cet événement diaporama ?"

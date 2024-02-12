@@ -11,7 +11,6 @@ import ScoreboardIcon from "@mui/icons-material/Scoreboard";
 import AuthService from "../../services/authService";
 import DisconnectDialog from "../dialogs/DisconnectDialog";
 
-
 function NavBar() {
   const location = useLocation();
   const [logoutDialogOpen, setLogoutDialogOpen] = useState(false);
@@ -64,7 +63,7 @@ function NavBar() {
           icon={<SettingsIcon sx={{ color: getIconColor("/profile") }} />}
         />
         <BottomNavigationAction
-        component={Link}
+          component={Link}
           onClick={handleLogoutDialogOpen}
           label="Déconnexion"
           icon={<LogoutIcon sx={{ color: getIconColor("/login") }} />}

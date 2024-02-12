@@ -14,12 +14,12 @@ function AddEventDialog({ open, onClose, onAdd, name, setName }) {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{t("Diaporama.dialog.addNew")}</DialogTitle>
+      <DialogTitle>{t("Diaporama.Dialog.addNew")}</DialogTitle>
       <DialogContent>
         <TextField
           fullWidth
           id="standard-basic"
-          label={t("Diaporama.dialog.name")}
+          label={t("Diaporama.Dialog.name")}
           autoComplete="off"
           value={name}
           onChange={(e) => setName(e.target.value)}

@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from "react";
 import { Box, Grid, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { I18nextProvider } from "react-i18next";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import i18n from "./config/i18n/i18n";
 
-import { darkTheme } from "./themes/darkTheme.ts";
-import { clairTheme } from "./themes/clairTheme.ts";
-import { useDarkMode } from "./contexts/DarkModeContext.js";
 import { LoadingContext } from "./contexts/Context.js";
+import { useDarkMode } from "./contexts/DarkModeContext.js";
+import { clairTheme } from "./themes/clairTheme.ts";
+import { darkTheme } from "./themes/darkTheme.ts";
 
-import AuthService from "./services/authService";
-import ChangePassword from "./components/login/ChangePassword";
 import Header from "./components/common/Header";
-import Scoreboard from "./components/scoreboard/Scoreboard";
+import LoadingScreen from "./components/common/LoadingScreen";
+import MediaAndDiaporamaManager from "./components/common/MediaAndDiaporamaManager";
+import Navbar from "./components/common/NavBar";
+import ChangePassword from "./components/login/ChangePassword";
 import Login from "./components/login/Login";
 import Macro from "./components/macro/Macro";
 import Profile from "./components/profile/Profile";
-import Navbar from "./components/common/NavBar";
-import LoadingScreen from "./components/common/LoadingScreen";
-import MediaAndDiaporamaManager from "./components/common/MediaAndDiaporamaManager";
+import Scoreboard from "./components/scoreboard/Scoreboard";
+import AuthService from "./services/authService";
 
-import { switchToDarkTheme } from "./themes/darkTheme.ts";
-import { switchToClairTheme } from "./themes/clairTheme.ts";
+import Admin from "./components/Admin/Admin.js";
 import "./styles/Global.css";
-
+import { switchToClairTheme } from "./themes/clairTheme.ts";
+import { switchToDarkTheme } from "./themes/darkTheme.ts";
 
 function App() {
-  const [token , setToken] = useState();
+  const [token, setToken] = useState();
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const { darkMode } = useDarkMode();
@@ -69,7 +69,7 @@ function App() {
                 <LoadingScreen />
               </Box>
             )}
-            <Header darkMode={darkMode}/>
+            <Header darkMode={darkMode} />
             <Box className="mainContainer">
               {token && token.user.firstLogin === 1 ? (
                 <Grid
@@ -93,10 +93,14 @@ function App() {
                 <Routes>
                   <Route path="*" element={<Navigate to="/create" />} />
                   <Route path="create" element={<MediaAndDiaporamaManager />} />
-                  <Route path="create/:id" element={<MediaAndDiaporamaManager />} />
+                  <Route
+                    path="create/:id"
+                    element={<MediaAndDiaporamaManager />}
+                  />
                   <Route path="scoreboard" element={<Scoreboard />} />
                   <Route path="macro" element={<Macro />} />
                   <Route path="profile" element={<Profile />} />
+                  <Route path="admin" element={<Admin />} />
                 </Routes>
               ) : (
                 <Grid

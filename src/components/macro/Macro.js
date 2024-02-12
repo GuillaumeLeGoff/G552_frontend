@@ -71,7 +71,7 @@ function Macro() {
               <KeyboardIcon sx={{ color: "primary.light" }} />
             </IconButton>
             <Typography variant="h6" className="headerTitle">
-              {t("macro.title")}
+              {t("Macro.title")}
             </Typography>
           </Box>
         </Stack>
@@ -80,8 +80,8 @@ function Macro() {
             <Table stickyHeader size="small">
               <TableHead>
                 <TableRow>
-                  <TableCell>{t("macro.number")}</TableCell>
-                  <TableCell align="right">{t("macro.slideshow")}</TableCell>
+                  <TableCell>{t("Macro.number")}</TableCell>
+                  <TableCell align="right">{t("Macro.slideshow")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -118,7 +118,7 @@ function Macro() {
                               }}
                             >
                               <MenuItem value="choisir event">
-                                {t("macro.none")}
+                                {t("Macro.none")}
                               </MenuItem>
                               {events &&
                                 events.map((event) => (

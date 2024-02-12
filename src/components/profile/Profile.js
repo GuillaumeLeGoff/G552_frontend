@@ -296,7 +296,7 @@ function Profile() {
                       <PhoneIcon sx={{ color: "text.secondary" }} />
                     </IconButton>
                     <Typography variant="h8" sx={{ color: "text.primary" }}>
-                      0123456789
+                      +33 (0) 2 40 25 46 90
                     </Typography>
                   </Stack>
                 </Stack>
