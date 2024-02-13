@@ -361,7 +361,7 @@ function Profile() {
                       <IconButton disabled>
                         <ModeNightIcon sx={{ color: "text.secondary" }} />
                       </IconButton>
-                      <Typography>heure de restart:</Typography>
+                      <Typography>heure de restart</Typography>
                     </Stack>
                     {/* textinput */}
                     {/* to int */}

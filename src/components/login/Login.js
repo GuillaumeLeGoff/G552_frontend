@@ -34,11 +34,10 @@ function Login() {
   }, []);
 
   async function getUsers() {
-    const result = await userService.getAll();
-    console.log("result", result);
+    const result = await userService.getAll();  
     setUsers(result);
   }
-
+  
   function deleteUserConected() {
     ActiveSessionsService.deleteCurrentUser();
     handleSubmit();
