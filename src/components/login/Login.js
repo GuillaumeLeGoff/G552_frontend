@@ -34,10 +34,10 @@ function Login() {
   }, []);
 
   async function getUsers() {
-    const result = await userService.getAll();  
-    setUsers(result);
+    const result = await userService.getAll();
+    if (result) setUsers(result);
   }
-  
+
   function deleteUserConected() {
     ActiveSessionsService.deleteCurrentUser();
     handleSubmit();
@@ -102,7 +102,7 @@ function Login() {
                 required
               >
                 {users &&
-                  users.map((userOption) => (
+                  users?.map((userOption) => (
                     <MenuItem key={userOption.id} value={userOption.username}>
                       {userOption.username}
                     </MenuItem>

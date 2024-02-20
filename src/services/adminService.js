@@ -1,4 +1,4 @@
-import fetchWithAuth from '../utils/fetchWithAuth';
+import fetchWithAuth from "../utils/fetchWithAuth";
 
 const URL_API = process.env.REACT_APP_API_URL;
 
@@ -19,9 +19,9 @@ class AdminService {
   async updateAdmin(adminUpdates) {
     try {
       const response = await fetchWithAuth(`${URL_API}/admin`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(adminUpdates),
       });
